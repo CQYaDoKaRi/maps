@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>MAPS Samples</title>
+
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="lib/font-awesome.css">
+
+    <script src="js/app.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+	<div id="main">
+		<ul>
+			<!-- <li><a href="index.html#Accuracy">精度</a></li> -->
+			<li><a href="index.html#Distance">２地点間の距離を求める</a></li>
+			<li><a href="index.html#DistanceTo">ある地点から角度と距離を指定して地点を求める</a></li>
+			<li><a href="index.html#Scale">ズームレベルと縮尺</a></li>
+			<li><a href="index.html#Tile">緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める</a></li>
+			<li><a href="index.html#TileE">緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める</a></li>
+			<li><a href="index.html#DataGpx">Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示</a></li>
+		</ul>
+	</div>
+
+    <div id="Accuracy" style="padding:5px;display:none;">
+        ■　精度<br />
+        各都道府県庁を中心とした距離
+        <div id="appAccuracyMap"></div>
+	</div>
+	<div id="Distance" style="padding:5px;display:none;">
+        ■　２地点間の距離を求める<br />
+        <div>
+            <a href="http://www.gsi.go.jp/common/000195510.pdf" target="_blank">国土地理院：都道府県庁間の距離（2018/01/15）</a>
+        </div>
+        ｜　と比較すると、<br />
+        ↓　ヒュベニによる計算が国土地理の計算とほぼ一致します。<br />
+        <div style="width:100%;overflow:scroll;">
+            <div id="appDistance" style="width:1050px;"></div>
+        </div>
+        <div id="appDistanceMap"></div>
+    </div>
+    <div id="DistanceTo" style="padding:5px;display:none;">
+        ■　ある地点から角度と距離を指定して地点を求める<br />
+        <div>
+            <a href="http://www.gsi.go.jp/common/000195510.pdf" target="_blank">国土地理院：都道府県庁間の距離（2018/01/15）</a>
+        </div>
+        ｜　と比較すると、<br />
+        ↓　ヒュベニによる計算が国土地理の計算とほぼ一致します。<br />
+        <div>
+            <div style="width:100%;overflow:scroll;">
+                <div id="appDistanceTo" style="width:1420px;"></div>
+            </div>
+            <div id="appDistanceToMap"></div>
+        </div>
+    </div>
+    <div id="Scale" style="padding:5px;display:none;">
+        ■　<span id="appScaleTitle"></span><br />
+		<div id="appScaleTitleSub"></div>
+        <div id="appScale"></div>
+	</div>
+	<div id="Tile" style="padding:5px;display:none;">
+        ■　<span id="appTileTitle"></span><br />
+		<div id="appTileTitleSub"></div>
+		<div id="appTile"></div>
+    </div>
+	<div id="DataGpx" style="padding:5px;display:none;">
+        ■　<span id="appDataGpxTitle"></span><br />
+		<div id="appDataGpxTitleSub"></div>
+		<div id="appDataGpx"></div>
+	</div>
+</body>
+</html>
