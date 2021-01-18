@@ -1,22 +1,5 @@
 "use strict";
 /**
- * include
- */
-function include() {
-    const oApp = new app();
-    oApp.css("lib/leaflet.css");
-    oApp.css("lib/leaflet.awesome-markers.css");
-    oApp.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
-    oApp.js("lib/leaflet.js");
-    oApp.js("lib/leaflet.awesome-markers.js");
-    oApp.js("lib/chart.js");
-    oApp.js("js/appMapsGSI.js");
-    oApp.js("js/maps.js");
-    oApp.js("js/mapsGpxChart.js");
-    oApp.js("js/appMap.js");
-    oApp.js("js/mapsDataPrefCapital.js");
-}
-/**
  * 初期処理
  * @param id DivID
  * @returns 処理ステータス
@@ -511,7 +494,8 @@ function page() {
  * メイン
  */
 (function () {
-    include();
+    const oApp = new app();
+    oApp.include();
 })();
 /**
  * window.onload

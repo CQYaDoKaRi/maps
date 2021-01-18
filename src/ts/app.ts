@@ -49,4 +49,25 @@ class app {
 	private jsAdd(script: HTMLScriptElement): void {
 		document.getElementsByTagName("head")[0].appendChild(script);
 	}
+
+	/**
+	 * include
+	 */
+	public include(): void{
+		this.css("lib/leaflet.css");
+		this.css("lib/leaflet.awesome-markers.css");
+		this.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
+
+		this.js("lib/leaflet.js");
+		this.js("lib/leaflet.awesome-markers.js");
+		this.js("lib/chart.js");
+
+		this.js("js/appMapsGSI.js");
+
+		this.js("js/maps.js");
+		this.js("js/mapsGpxChart.js");
+
+		this.js("js/appMap.js");
+		this.js("js/mapsDataPrefCapital.js");
+	}
 }
