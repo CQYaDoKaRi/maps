@@ -21,7 +21,7 @@ enum mapsTypeTile {
 /**
  * 地図：座標
  */
-class mapsLatLon {
+export class mapsLatLon {
 	/**
 	 * 緯度
 	 */
@@ -36,7 +36,7 @@ class mapsLatLon {
 /**
  * 地図：タイル
  */
-class mapsTile {
+export class mapsTile {
 	/**
 	 * タイル座標X
 	 */
@@ -66,7 +66,7 @@ class mapsTile {
 /**
  * 地図：タイル：URL
  */
-class mapsTileUrl {
+export class mapsTileUrl {
 	/**
 	 * タイル座標
 	 */
@@ -135,7 +135,7 @@ class mapsTileUrl {
 /**
  * 地図：タイル：標高タイル
  */
-class mapsTileDem {
+export class mapsTileDem {
 	/**
 	 * タイル種別
 	 */
@@ -216,7 +216,7 @@ class mapsTileDem {
 /**
  * 地図：データ：Garmin GPSログ(GPX)
  */
-class mapsDataGpx {
+export class mapsDataGpx {
 	/**
 	 * ファイル名
 	 */
@@ -417,7 +417,7 @@ class mapsDataGpx {
 /**
  * 地図：データ：Garmin GPSログ(GPX)：ログ
  */
-class mapsDataGpxLog {
+export class mapsDataGpxLog {
 	/**
 	 * 時刻
 	 */
@@ -487,7 +487,7 @@ class mapsDataGpxLog {
 /**
  * 地図
  */
-class maps {
+export class maps {
 	/**
 	 * 楕円体
 	 */
@@ -685,12 +685,25 @@ class maps {
 	 * @returns 方位名
 	 */
 	public deg2Name(deg: number): string {
-		let ret = "N";
+		let ret: string = "N";
 
+		let f: boolean = true;
+		if(deg < 0){
+			f = false;
+		}
 		deg = Math.abs(deg);
+		if (deg > 360) {
+			deg = deg - 360 * Math.floor(deg / 360);
+		}
+		if (!f) {
+			deg = 360 - deg;
+		}
 
-		const d = 22.5 / 2;
-		for (let n = 0, _deg = d; _deg !== 360; _deg += d, n++) {
+		const d: number = 22.5;
+		for (let n: number = 0, _deg = d; _deg !== 360; _deg += d, n++) {
+			if(n === 0){
+				_deg /= 2;
+			}
 			if (deg < _deg) {
 				if (n === 0) { ret = "N"; }
 				else if (n === 1) { ret = "NNE"; }
@@ -704,10 +717,10 @@ class maps {
 				else if (n === 9) { ret = "SSW"; }
 				else if (n === 10) { ret = "SW"; }
 				else if (n === 11) { ret = "WSW"; }
-				else if (n === 12) { ret = "E"; }
-				else if (n === 13) { ret = "ENE"; }
-				else if (n === 14) { ret = "NE"; }
-				else if (n === 15) { ret = "NNE"; }
+				else if (n === 12) { ret = "W"; }
+				else if (n === 13) { ret = "WNW"; }
+				else if (n === 14) { ret = "NW"; }
+				else if (n === 15) { ret = "NNW"; }
 				break;
 			}
 		}

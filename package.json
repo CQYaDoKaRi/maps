@@ -8,7 +8,8 @@
     "tsc_build_w": "tsc -w",
     "gulp": "gulp",
     "scss_build": "gulp scss",
-    "build": "gulp build"
+    "build": "gulp build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "tsc": "^1.20150623.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.21",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
@@ -36,6 +38,8 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-uglify": "^3.0.2",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.1.3"
   }
