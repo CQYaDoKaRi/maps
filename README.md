@@ -13,9 +13,10 @@ npm install
 
 ## ビルド
 ```
-npm run build
+build.sh
 ```
-`src/ts/*.ts` のコンパイルされたファイルは、`public/*.js` へ出力される
+- `src/ts/*.ts` のコンパイルして、`public/*.js` へ出力
+- `public/*.js` のファイルを minify する
 
 ## 起動
 ```
@@ -24,3 +25,7 @@ node index.js
 
 ## 表示
 http://localhost:8080/
+
+## 表示（開発モード）
+http://localhost:8080/index.html?dev=1
+minify 前のファイルを使う

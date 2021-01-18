@@ -1,1 +1,5 @@
 node_modules
+# ts -> js
+public/js/*.js
+!public/js/app.min.js
+!public/js/index.min.js

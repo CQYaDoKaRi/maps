@@ -569,7 +569,7 @@ class maps {
 		/**
 		 * タイルサイズ[px]
 		 */
-		SIZE : 256
+		SIZE: 256
 
 		/**
 		 * 赤道直径（ズームレベル０の横幅）
@@ -585,9 +585,9 @@ class maps {
 		 * 標高タイル用
 		 */
 		, pow2_8: Math.pow(2, 8)
-		, pow2_16 : Math.pow(2, 16)
-		, pow2_23 : Math.pow(2, 23)
-		, pow2_24 : Math.pow(2, 24)
+		, pow2_16: Math.pow(2, 16)
+		, pow2_23: Math.pow(2, 23)
+		, pow2_24: Math.pow(2, 24)
 	}
 
 	/**
