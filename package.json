@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "tsc_build": "tsc",
-    "tsc_build_w": "tsc -w", 
+    "tsc_build_w": "tsc -w",
     "gulp": "gulp",
-    "build" : "gulp build"
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,12 @@
     "tsc": "^1.20150623.0"
   },
   "devDependencies": {
+    "@types/node": "^14.14.21",
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
     "gulp-typescript": "^6.0.0-alpha.1",
+    "gulp-uglify": "^3.0.2",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.1.3"
   }

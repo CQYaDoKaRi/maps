@@ -8,8 +8,8 @@
 /**
  * アプリケーション：地図
  */
-class appMap {
-    constructor(i, lat, lon, z, options) {
+var appMap = /** @class */ (function () {
+    function appMap(i, lat, lon, z, options) {
         this.oMap = null;
         this.iMapApp = "";
         this.lat = 0;
@@ -43,62 +43,63 @@ class appMap {
      * @param lon 経度
      * @param z ズームレベル
      */
-    view(lat, lon, z) {
+    appMap.prototype.view = function (lat, lon, z) {
         if (!this.oMap) {
             return;
         }
         this.oMap.setView([lat, lon], z);
-    }
+    };
     /**
      * リサイズ
      * @param w 幅[px]
      * @param h 高[px]
      */
-    resize(w, h) {
+    appMap.prototype.resize = function (w, h) {
         if (this.oMapApp) {
             this.oMapApp.style.width = this.options.w + "px";
             this.oMapApp.style.height = this.options.h + "px";
         }
-    }
+    };
     /**
      * ポイント
      * @param lat 緯度
      * @param lon 経度
      * @param options オプション
      */
-    point(lat, lon, options) {
+    appMap.prototype.point = function (lat, lon, options) {
         if (!this.oMap) {
             return;
         }
         if (!options.color) {
             options.color = "bule";
         }
-        const _options = {
+        var _options = {
             prefix: "glyphicon",
             icon: "lock",
             markerColor: options.color,
             extraClasses: "glyphicons-custom"
         };
-        const o = L.marker([lat, lon], { icon: L.AwesomeMarkers.icon(options) }).addTo(this.oMap);
+        var o = L.marker([lat, lon], { icon: L.AwesomeMarkers.icon(options) }).addTo(this.oMap);
         if (options.popup) {
             o.bindPopup(options.popup);
         }
-    }
+    };
     /**
      * アーク
      * @param coordinates 座標
      * @param options オプション
      */
-    arc(coordinates, options) {
+    appMap.prototype.arc = function (coordinates, options) {
         if (!this.oMap) {
             return;
         }
         if (!options.color) {
             options.color = "bule";
         }
-        const o = L.polyline(coordinates, { color: options.color }).addTo(this.oMap);
+        var o = L.polyline(coordinates, { color: options.color }).addTo(this.oMap);
         if (options.popup) {
             o.bindPopup(options.popup);
         }
-    }
-}
+    };
+    return appMap;
+}());

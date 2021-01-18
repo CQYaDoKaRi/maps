@@ -605,14 +605,6 @@ function page() : void {
 }
 
 /**
- * メイン
- */
-(function() {
-	const oApp: app = new app();
-	oApp.include();
-})();
-
-/**
  * window.onload
  */
 window.onload = () => {

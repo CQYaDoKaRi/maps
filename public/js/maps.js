@@ -20,8 +20,8 @@ var mapsTypeTile;
 /**
  * 地図：座標
  */
-class mapsLatLon {
-    constructor() {
+var mapsLatLon = /** @class */ (function () {
+    function mapsLatLon() {
         /**
          * 緯度
          */
@@ -31,12 +31,13 @@ class mapsLatLon {
          */
         this.lon = 0.0;
     }
-}
+    return mapsLatLon;
+}());
 /**
  * 地図：タイル
  */
-class mapsTile {
-    constructor() {
+var mapsTile = /** @class */ (function () {
+    function mapsTile() {
         /**
          * タイル座標X
          */
@@ -58,12 +59,13 @@ class mapsTile {
          */
         this.px_y = 0;
     }
-}
+    return mapsTile;
+}());
 /**
  * 地図：タイル：URL
  */
-class mapsTileUrl {
-    constructor() {
+var mapsTileUrl = /** @class */ (function () {
+    function mapsTileUrl() {
         /**
          * タイル座標
          */
@@ -90,13 +92,13 @@ class mapsTileUrl {
      * @param type 種別
      * @param ext 拡張子
      */
-    set(x, y, z, url, type, ext) {
+    mapsTileUrl.prototype.set = function (x, y, z, url, type, ext) {
         this.tile = new mapsTile();
         this.tile.x = x;
         this.tile.y = y;
         this.tile.z = z;
         this.setUrl(url, type, ext);
-    }
+    };
     /**
      * 設定：タイル
      * @param tile タイル座標
@@ -104,29 +106,30 @@ class mapsTileUrl {
      * @param type 種別
      * @param ext 拡張子
      */
-    setTile(tile, url, type, ext) {
+    mapsTileUrl.prototype.setTile = function (tile, url, type, ext) {
         this.tile = tile;
         this.setUrl(url, type, ext);
-    }
+    };
     /**
      * 設定：URL
      * @param url URL( / で終わること)
      * @param type 種別
      * @param ext 拡張子
      */
-    setUrl(url, type, ext) {
+    mapsTileUrl.prototype.setUrl = function (url, type, ext) {
         if (!this.tile) {
             return;
         }
         this.type = type;
         this.ext = ext;
         this.url = url + this.type + "/" + this.tile.z + "/" + this.tile.x + "/" + this.tile.y + "." + this.ext;
-    }
-}
+    };
+    return mapsTileUrl;
+}());
 /**
  * 地図：タイル：標高タイル
  */
-class mapsTileDem {
+var mapsTileDem = /** @class */ (function () {
     /**
      * constructor
      * @param tile タイル情報
@@ -134,7 +137,7 @@ class mapsTileDem {
      * @param t タイル種別
      * @param e 標高(m)
      */
-    constructor(tile, t, url, data, e) {
+    function mapsTileDem(tile, t, url, data, e) {
         /**
          * タイル種別
          */
@@ -176,15 +179,16 @@ class mapsTileDem {
      * 標高データ取得
      * @returns 標高データ配列
      */
-    getDem() {
-        let ret = [];
+    mapsTileDem.prototype.getDem = function () {
+        var _this = this;
+        var ret = [];
         if (this.t == mapsTypeTile.TXT) {
             if (this.dem.length === 0) {
                 this.dem = Array(this.demTxt.length);
-                this.demTxt.map((dem, n, demTxt) => {
-                    this.dem[n] = NaN;
+                this.demTxt.map(function (dem, n, demTxt) {
+                    _this.dem[n] = NaN;
                     if (/^[+,-]?([1-9]\d*|0)(\.\d+)?$/.test(dem)) {
-                        this.dem[n] = parseFloat(dem);
+                        _this.dem[n] = parseFloat(dem);
                     }
                 });
             }
@@ -193,18 +197,20 @@ class mapsTileDem {
             ret = this.dem;
         }
         return ret;
-    }
-}
+    };
+    return mapsTileDem;
+}());
 /**
  * 地図：データ：Garmin GPSログ(GPX)
  */
-class mapsDataGpx {
+var mapsDataGpx = /** @class */ (function () {
     /**
      * constructor
      * @param src ファイル名
      * @param data GPSログ（GPX）
      */
-    constructor(src, data) {
+    function mapsDataGpx(src, data) {
+        var _this = this;
         /**
          * ファイル名
          */
@@ -245,18 +251,18 @@ class mapsDataGpx {
         if (data !== null && typeof data === "string") {
             this.xml = new DOMParser().parseFromString(data, "text/xml");
             this.read(this.xml);
-            this.logs.map((log, n, logs) => {
-                if (this.logsBoundsS > log.lat) {
-                    this.logsBoundsS = log.lat;
+            this.logs.map(function (log, n, logs) {
+                if (_this.logsBoundsS > log.lat) {
+                    _this.logsBoundsS = log.lat;
                 }
-                if (this.logsBoundsN < log.lat) {
-                    this.logsBoundsN = log.lat;
+                if (_this.logsBoundsN < log.lat) {
+                    _this.logsBoundsN = log.lat;
                 }
-                if (this.logsBoundsE < log.lon) {
-                    this.logsBoundsE = log.lon;
+                if (_this.logsBoundsE < log.lon) {
+                    _this.logsBoundsE = log.lon;
                 }
-                if (this.logsBoundsW > log.lon) {
-                    this.logsBoundsW = log.lon;
+                if (_this.logsBoundsW > log.lon) {
+                    _this.logsBoundsW = log.lon;
                 }
             });
         }
@@ -265,33 +271,33 @@ class mapsDataGpx {
      * 読み込み
      * @param node データ
      */
-    read(node) {
+    mapsDataGpx.prototype.read = function (node) {
         if (this.xml !== null) {
-            let n = 0;
+            var n = 0;
             if (node.nodeName === "name") {
                 this.name = node.textContent;
             }
             else if (node.nodeName === "trkseg") {
-                const oMap = new maps();
-                let distance = 0;
+                var oMap = new maps();
+                var distance = 0;
                 for (n = 0; n < node.childNodes.length; n++) {
-                    const nodeLogs = node.childNodes[n];
+                    var nodeLogs = node.childNodes[n];
                     if (nodeLogs.nodeName === "trkpt") {
-                        const nodeLogsTrkpt = nodeLogs.attributes;
+                        var nodeLogsTrkpt = nodeLogs.attributes;
                         if (typeof nodeLogsTrkpt["lat"] === "object" && typeof nodeLogsTrkpt["lon"] === "object") {
-                            const trkpt = new mapsDataGpxLog(parseFloat(nodeLogsTrkpt.lat.value), parseFloat(nodeLogsTrkpt.lon.value));
-                            for (let nn = 0; nn < nodeLogs.childNodes.length; nn++) {
-                                const nodeLogsInfo = nodeLogs.childNodes[nn];
+                            var trkpt = new mapsDataGpxLog(parseFloat(nodeLogsTrkpt.lat.value), parseFloat(nodeLogsTrkpt.lon.value));
+                            for (var nn = 0; nn < nodeLogs.childNodes.length; nn++) {
+                                var nodeLogsInfo = nodeLogs.childNodes[nn];
                                 if (nodeLogsInfo.childNodes.length > 0) {
-                                    const nodeLogsInfoData = nodeLogsInfo.childNodes[0];
+                                    var nodeLogsInfoData = nodeLogsInfo.childNodes[0];
                                     if (nodeLogsInfo.nodeName === "time") {
                                         trkpt.time = new Date(nodeLogsInfoData.nodeValue);
-                                        const time_year = "" + trkpt.time.getFullYear();
-                                        const time_month = ("0" + trkpt.time.getMonth()).slice(-2);
-                                        const time_day = ("0" + trkpt.time.getDate()).slice(-2);
-                                        const time_hour = ("0" + trkpt.time.getHours()).slice(-2);
-                                        const time_minute = ("0" + trkpt.time.getMinutes()).slice(-2);
-                                        const time_second = ("0" + trkpt.time.getSeconds()).slice(-2);
+                                        var time_year = "" + trkpt.time.getFullYear();
+                                        var time_month = ("0" + trkpt.time.getMonth()).slice(-2);
+                                        var time_day = ("0" + trkpt.time.getDate()).slice(-2);
+                                        var time_hour = ("0" + trkpt.time.getHours()).slice(-2);
+                                        var time_minute = ("0" + trkpt.time.getMinutes()).slice(-2);
+                                        var time_second = ("0" + trkpt.time.getSeconds()).slice(-2);
                                         trkpt.timeFormatJP = time_year + "年" + time_month + "月" + time_day + "日 " + time_hour + "時" + time_minute + "分" + time_second + "秒";
                                     }
                                     else if (nodeLogsInfo.nodeName === "ele") {
@@ -302,10 +308,10 @@ class mapsDataGpx {
                             this.logs.push(trkpt);
                             if (this.logs.length > 1) {
                                 n = this.logs.length - 1;
-                                const logN = this.logs[n];
-                                const logP = this.logs[n - 1];
+                                var logN = this.logs[n];
+                                var logP = this.logs[n - 1];
                                 if (logN.time && logP.time) {
-                                    let tm = Math.ceil((logN.time.getTime() - logP.time.getTime()) / 1000);
+                                    var tm = Math.ceil((logN.time.getTime() - logP.time.getTime()) / 1000);
                                     if (this.logsTMS < tm) {
                                         if (tm > 60) {
                                             tm = 60;
@@ -329,9 +335,9 @@ class mapsDataGpx {
                                 logN.incline = logN.e / distance;
                                 logN.incline = Math.ceil(logN.incline * 100) / 100;
                                 // 速度
-                                const _distance = Math.abs(logN.distance - logP.distance) / 1000;
+                                var _distance = Math.abs(logN.distance - logP.distance) / 1000;
                                 if (logN.time && logP.time) {
-                                    let _time = Math.ceil((logN.time.getTime() - logP.time.getTime()) / 1000);
+                                    var _time = Math.ceil((logN.time.getTime() - logP.time.getTime()) / 1000);
                                     if (_time > 0) {
                                         _time = _time / 60 / 60; // h
                                     }
@@ -348,36 +354,37 @@ class mapsDataGpx {
                 this.read(node.childNodes[n]);
             }
         }
-    }
+    };
     /**
      * 名前
      */
-    getName() {
+    mapsDataGpx.prototype.getName = function () {
         return this.name;
-    }
+    };
     /**
      * ログ
      */
-    getLogs() {
+    mapsDataGpx.prototype.getLogs = function () {
         return this.logs;
-    }
+    };
     /**
      * ログ
      */
-    getlogsTMS() {
+    mapsDataGpx.prototype.getlogsTMS = function () {
         return this.logsTMS;
-    }
-}
+    };
+    return mapsDataGpx;
+}());
 /**
  * 地図：データ：Garmin GPSログ(GPX)：ログ
  */
-class mapsDataGpxLog {
+var mapsDataGpxLog = /** @class */ (function () {
     /**
      * constructor
      * @param lat 緯度
      * @param lon 経度
      */
-    constructor(lat, lon) {
+    function mapsDataGpxLog(lat, lon) {
         /**
          * 時刻
          */
@@ -425,15 +432,16 @@ class mapsDataGpxLog {
         this.lat = lat;
         this.lon = lon;
     }
-}
+    return mapsDataGpxLog;
+}());
 /**
  * 地図
  */
-class maps {
+var maps = /** @class */ (function () {
     /**
      * constructor
      */
-    constructor() {
+    function maps() {
         /**
          * 楕円体
          */
@@ -547,75 +555,75 @@ class maps {
      * @param x radian
      * @returns
      */
-    asinh(x) {
+    maps.prototype.asinh = function (x) {
         return Math.log(x + Math.sqrt(x * x + 1.0));
-    }
+    };
     /**
      * 逆双曲線余弦
      * @param x radian
      * @returns
      */
-    acosh(x) {
+    maps.prototype.acosh = function (x) {
         return Math.log(x + Math.sqrt(x * x - 1.0));
-    }
+    };
     /**
      * 逆双曲線正接
      * @param x radian
      * @returns radian
      */
-    atanh(x) {
+    maps.prototype.atanh = function (x) {
         return 0.5 * Math.log((1.0 + x) / (1.0 - x));
-    }
+    };
     /**
      * 逆双曲線余割
      * @param x radian
      * @returns radian
      */
-    acsch(x) {
+    maps.prototype.acsch = function (x) {
         return this.asinh(1 / x);
-    }
+    };
     /**
      * 逆双曲線正割
      * @param x radian
      * @returns radian
      */
-    asech(x) {
+    maps.prototype.asech = function (x) {
         return this.acosh(1 / x);
-    }
+    };
     /**
      * 逆双曲線余接
      * @param x radian
      * @returns radian
      */
-    acoth(x) {
+    maps.prototype.acoth = function (x) {
         return this.atanh(1 / x);
-    }
+    };
     /**
      * 度(degree)をradianに変換
      * @param deg degree
      * @return radian
      */
-    deg2rad(deg) {
+    maps.prototype.deg2rad = function (deg) {
         return deg / 180 * Math.PI;
-    }
+    };
     /**
      * radianを度(degree)に変換
      * @param rad radian
      * @return degree
      */
-    rad2deg(rad) {
+    maps.prototype.rad2deg = function (rad) {
         return rad * 180 / Math.PI;
-    }
+    };
     /**
      * 方位角を方位名(略字)に変換
      * @param deg degree
      * @returns 方位名
      */
-    deg2Name(deg) {
-        let ret = "N";
+    maps.prototype.deg2Name = function (deg) {
+        var ret = "N";
         deg = Math.abs(deg);
-        const d = 22.5 / 2;
-        for (let n = 0, _deg = d; _deg !== 360; _deg += d, n++) {
+        var d = 22.5 / 2;
+        for (var n = 0, _deg = d; _deg !== 360; _deg += d, n++) {
             if (deg < _deg) {
                 if (n === 0) {
                     ret = "N";
@@ -669,49 +677,49 @@ class maps {
             }
         }
         return ret;
-    }
+    };
     /**
      * 楕円体モデル
      * @param t "ja"=日本測地系, else=GSR80
      */
-    Locale(t) {
+    maps.prototype.Locale = function (t) {
         if (t === "ja") {
             this.EARTH_LOCALE = t;
         }
         else {
             this.EARTH_LOCALE = "";
         }
-    }
+    };
     /**
      * 日本測地系→世界測地系：1次式（Google maps）
      * @param lat 緯度
      * @param lon 経度
      * @returns 緯度経度
      */
-    tky2jgdG(lat, lon) {
-        const ret = {
+    maps.prototype.tky2jgdG = function (lat, lon) {
+        var ret = {
             lat: 0,
             lon: 0
         };
         ret.lat = lat - lat * 0.00010695 + lon * 0.000017464 + 0.0046017;
         ret.lon = lon - lat * 0.000046038 - lon * 0.000083043 + 0.01004;
         return ret;
-    }
+    };
     /**
      * 世界測地系→日本測地系：1次式（Google maps）
      * @param lat 緯度
      * @param lon 経度
      * @returns 緯度経度
      */
-    jgd2tkyG(lat, lon) {
-        const ret = {
+    maps.prototype.jgd2tkyG = function (lat, lon) {
+        var ret = {
             lat: 0,
             lon: 0
         };
         ret.lat = lat + 0.000106961 * lat - 0.000017467 * lon - 0.004602017;
         ret.lon = lon + 0.000046047 * lat + 0.000083049 * lon - 0.010041046;
         return ret;
-    }
+    };
     /**
      * ２地点間の距離（球面三角法）
      * @param lat1 緯度１
@@ -720,9 +728,9 @@ class maps {
      * @param lon2 経度２
      * @returns 距離(m)
      */
-    distanceT(lat1, lon1, lat2, lon2) {
+    maps.prototype.distanceT = function (lat1, lon1, lat2, lon2) {
         return this.distance(mapsTypeDistance.SphericalTrigonometry, lat1, lon1, lat2, lon2);
-    }
+    };
     /**
      * ２地点間の距離（ヒュベニ）
      * @param lat1 緯度１
@@ -731,9 +739,9 @@ class maps {
      * @param lon2 経度２
      * @returns 距離(m)
      */
-    distanceH(lat1, lon1, lat2, lon2) {
+    maps.prototype.distanceH = function (lat1, lon1, lat2, lon2) {
         return this.distance(mapsTypeDistance.Hubeny, lat1, lon1, lat2, lon2);
-    }
+    };
     /**
      * ２地点間の距離（測地線航海算法）
      * @param lat1 緯度１
@@ -742,9 +750,9 @@ class maps {
      * @param lon2 経度２
      * @returns 距離(m)
      */
-    distanceS(lat1, lon1, lat2, lon2) {
+    maps.prototype.distanceS = function (lat1, lon1, lat2, lon2) {
         return this.distance(mapsTypeDistance.GeodesicSailing, lat1, lon1, lat2, lon2);
-    }
+    };
     /**
      * ２地点間の距離
      * @param type 計算方法
@@ -754,19 +762,19 @@ class maps {
      * @param lon2 経度２
      * @return 距離(m)
      */
-    distance(type, lat1, lon1, lat2, lon2) {
-        let ret = 0;
-        const A = this.EARTH["A" + this.EARTH_LOCALE];
-        const BdivA = this.EARTH["BdivA" + this.EARTH_LOCALE];
-        const F = this.EARTH["F" + this.EARTH_LOCALE];
-        const E2 = this.EARTH["E2" + this.EARTH_LOCALE];
-        const A1E2 = this.EARTH["A1E2" + this.EARTH_LOCALE];
+    maps.prototype.distance = function (type, lat1, lon1, lat2, lon2) {
+        var ret = 0;
+        var A = this.EARTH["A" + this.EARTH_LOCALE];
+        var BdivA = this.EARTH["BdivA" + this.EARTH_LOCALE];
+        var F = this.EARTH["F" + this.EARTH_LOCALE];
+        var E2 = this.EARTH["E2" + this.EARTH_LOCALE];
+        var A1E2 = this.EARTH["A1E2" + this.EARTH_LOCALE];
         lat1 = this.deg2rad(lat1);
         lon1 = this.deg2rad(lon1);
         lat2 = this.deg2rad(lat2);
         lon2 = this.deg2rad(lon2);
-        let lat = lat1 - lat2;
-        let lon = lon1 - lon2;
+        var lat = lat1 - lat2;
+        var lon = lon1 - lon2;
         // 球面三角法
         // https://ja.wikipedia.org/wiki/%E7%90%83%E9%9D%A2%E4%B8%89%E8%A7%92%E6%B3%95
         if (type === mapsTypeDistance.SphericalTrigonometry) {
@@ -777,31 +785,31 @@ class maps {
         }
         // ヒュベニ
         else if (type === mapsTypeDistance.Hubeny) {
-            const latAvg = (lat1 + lat2) / 2.0;
-            const latSin = Math.sin(latAvg);
-            const W = 1.0 - E2 * (latSin * latSin);
+            var latAvg = (lat1 + lat2) / 2.0;
+            var latSin = Math.sin(latAvg);
+            var W = 1.0 - E2 * (latSin * latSin);
             // 子午線曲率半径(m)
-            const M = A1E2 / (Math.sqrt(W) * W);
+            var M = A1E2 / (Math.sqrt(W) * W);
             // 卯酉線曲率半径
-            const N = A / Math.sqrt(W);
+            var N = A / Math.sqrt(W);
             lat = M * lat;
             lon = N * Math.cos(latAvg) * lon;
             return Math.sqrt((lat * lat) + (lon * lon));
         }
         // 測地線航海算法
         else if (type === mapsTypeDistance.GeodesicSailing) {
-            const p1 = Math.atan(BdivA) * Math.tan(lat1);
-            const p2 = Math.atan(BdivA) * Math.tan(lat2);
-            const sd = Math.acos(Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(lon));
-            const sdCos = Math.cos(sd / 2);
-            const sdSin = Math.sin(sd / 2);
-            const c = (Math.sin(sd) - sd) * Math.pow(Math.sin(p1) + Math.sin(p2), 2) / sdCos / sdCos;
-            const s = (Math.sin(sd) + sd) * Math.pow(Math.sin(p1) - Math.sin(p2), 2) / sdSin / sdSin;
-            const delta = F / 8.0 * (c - s);
+            var p1 = Math.atan(BdivA) * Math.tan(lat1);
+            var p2 = Math.atan(BdivA) * Math.tan(lat2);
+            var sd = Math.acos(Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(lon));
+            var sdCos = Math.cos(sd / 2);
+            var sdSin = Math.sin(sd / 2);
+            var c = (Math.sin(sd) - sd) * Math.pow(Math.sin(p1) + Math.sin(p2), 2) / sdCos / sdCos;
+            var s = (Math.sin(sd) + sd) * Math.pow(Math.sin(p1) - Math.sin(p2), 2) / sdSin / sdSin;
+            var delta = F / 8.0 * (c - s);
             ret = A * (sd + delta);
         }
         return ret;
-    }
+    };
     /**
      * 角度・距離から地点を求める
      * @param lat 緯度
@@ -810,28 +818,28 @@ class maps {
      * @param len 距離(m)
      * @return 緯度経度
      */
-    distanceTo(lat, lon, a, len) {
-        const ret = {
+    maps.prototype.distanceTo = function (lat, lon, a, len) {
+        var ret = {
             lat: 0,
             lon: 0
         };
-        const A = this.EARTH["A" + this.EARTH_LOCALE];
-        const B = this.EARTH["B" + this.EARTH_LOCALE];
-        const F = this.EARTH["F" + this.EARTH_LOCALE];
+        var A = this.EARTH["A" + this.EARTH_LOCALE];
+        var B = this.EARTH["B" + this.EARTH_LOCALE];
+        var F = this.EARTH["F" + this.EARTH_LOCALE];
         lat = this.deg2rad(lat);
         lon = this.deg2rad(lon);
         a = this.deg2rad(a);
-        const u1 = Math.atan((1 - F) * Math.tan(lat));
-        const s1 = Math.atan(Math.tan(u1) / Math.cos(a));
-        const ua = Math.asin(Math.cos(u1) * Math.sin(a));
-        const u2 = Math.pow(Math.cos(ua), 2) * (Math.pow(A, 2) - Math.pow(B, 2)) / Math.pow(B, 2);
-        const u2A = 1 + (u2 / 16384) * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)));
-        const u2B = (u2 / 1024) * (256 + u2 * (-128 + u2 * (74 - 47 * u2)));
-        let s = len / B / u2A;
-        let ss;
-        let x;
-        let y;
-        let _s;
+        var u1 = Math.atan((1 - F) * Math.tan(lat));
+        var s1 = Math.atan(Math.tan(u1) / Math.cos(a));
+        var ua = Math.asin(Math.cos(u1) * Math.sin(a));
+        var u2 = Math.pow(Math.cos(ua), 2) * (Math.pow(A, 2) - Math.pow(B, 2)) / Math.pow(B, 2);
+        var u2A = 1 + (u2 / 16384) * (4096 + u2 * (-768 + u2 * (320 - 175 * u2)));
+        var u2B = (u2 / 1024) * (256 + u2 * (-128 + u2 * (74 - 47 * u2)));
+        var s = len / B / u2A;
+        var ss;
+        var x;
+        var y;
+        var _s;
         do {
             _s = s;
             ss = 2 * s1 + s;
@@ -840,14 +848,14 @@ class maps {
         } while (Math.abs(_s - s) > 1e-9);
         x = Math.sin(u1) * Math.cos(s) + Math.cos(u1) * Math.sin(s) * Math.cos(a);
         y = (1 - F) * Math.pow(Math.pow(Math.sin(ua), 2) + Math.pow(Math.sin(u1) * Math.sin(s) - Math.cos(u1) * Math.cos(s) * Math.cos(a), 2), 0.5);
-        const l = Math.atan(Math.sin(s) * Math.sin(a) / (Math.cos(u1) * Math.cos(s) - Math.sin(u1) * Math.sin(s) * Math.cos(a)));
-        const c = (F / 16) * Math.pow(Math.cos(ua), 2) * (4 + F * (4 - 3 * Math.pow(Math.cos(ua), 2)));
-        const z = Math.cos(ss) + c * Math.cos(s) * (-1 + 2 * Math.pow(Math.cos(ss), 2));
-        const lonTo = l - (1 - c) * F * Math.sin(ua) * (s + c * Math.sin(s) * z);
+        var l = Math.atan(Math.sin(s) * Math.sin(a) / (Math.cos(u1) * Math.cos(s) - Math.sin(u1) * Math.sin(s) * Math.cos(a)));
+        var c = (F / 16) * Math.pow(Math.cos(ua), 2) * (4 + F * (4 - 3 * Math.pow(Math.cos(ua), 2)));
+        var z = Math.cos(ss) + c * Math.cos(s) * (-1 + 2 * Math.pow(Math.cos(ss), 2));
+        var lonTo = l - (1 - c) * F * Math.sin(ua) * (s + c * Math.sin(s) * z);
         ret.lat = this.rad2deg(Math.atan(x / y));
         ret.lon = this.rad2deg(lon + lonTo);
         return ret;
-    }
+    };
     /**
      * ２地点間の角度
      * @param lat1 緯度１
@@ -856,32 +864,32 @@ class maps {
      * @param lon2 経度２
      * @return 角度
      */
-    direction(lat1, lon1, lat2, lon2) {
+    maps.prototype.direction = function (lat1, lon1, lat2, lon2) {
         //https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
         //https://en.wikipedia.org/wiki/Vincenty%27s_formulae
-        const F = this.EARTH["F" + this.EARTH_LOCALE];
+        var F = this.EARTH["F" + this.EARTH_LOCALE];
         lat1 = this.deg2rad(lat1);
         lon1 = this.deg2rad(lon1);
         lat2 = this.deg2rad(lat2);
         lon2 = this.deg2rad(lon2);
-        const lond = lon2 - lon1;
-        const u1Tan = (1 - F) * Math.tan(lat1), cosU1 = 1 / Math.sqrt((1 + u1Tan * u1Tan));
-        const u2Tan = (1 - F) * Math.tan(lat2), cosU2 = 1 / Math.sqrt((1 + u2Tan * u2Tan));
-        const u1Sin = u1Tan * cosU1;
-        const u2Sin = u2Tan * cosU2;
-        let s;
-        let sSin;
-        let sCos;
-        let _s = lond;
-        let _s2;
-        let _s2Sin;
-        let _s2Cos;
-        let _aTan2;
-        let _aSin;
-        let _aCos;
-        let _aCosU;
-        let _c;
-        let _n = 0;
+        var lond = lon2 - lon1;
+        var u1Tan = (1 - F) * Math.tan(lat1), cosU1 = 1 / Math.sqrt((1 + u1Tan * u1Tan));
+        var u2Tan = (1 - F) * Math.tan(lat2), cosU2 = 1 / Math.sqrt((1 + u2Tan * u2Tan));
+        var u1Sin = u1Tan * cosU1;
+        var u2Sin = u2Tan * cosU2;
+        var s;
+        var sSin;
+        var sCos;
+        var _s = lond;
+        var _s2;
+        var _s2Sin;
+        var _s2Cos;
+        var _aTan2;
+        var _aSin;
+        var _aCos;
+        var _aCosU;
+        var _c;
+        var _n = 0;
         do {
             sSin = Math.sin(_s);
             sCos = Math.cos(_s);
@@ -906,7 +914,7 @@ class maps {
             }
         } while (Math.abs(_s - s) > 1e-12);
         return this.rad2deg(Math.atan2(cosU2 * sSin, cosU1 * u2Sin - u1Sin * cosU2 * sCos));
-    }
+    };
     /**
      * タイル座標を取得
      * @param lat 緯度
@@ -914,24 +922,24 @@ class maps {
      * @param z タイル座標Z
      * @returns タイル座標
      */
-    tile(lat, lon, z) {
-        const ret = new mapsTile();
-        const lng_rad = lon * Math.PI / 180;
-        const lat_rad = lat * Math.PI / 180;
-        const R = 128 / Math.PI;
-        const worldCoordX = R * (lng_rad + Math.PI);
-        const pixelCoordX = worldCoordX * Math.pow(2, z);
-        const tileCoordX = Math.floor(pixelCoordX / this.TILE.SIZE);
-        const worldCoordY = -R / 2 * Math.log((1 + Math.sin(lat_rad)) / (1 - Math.sin(lat_rad))) + 128;
-        const pixelCoordY = worldCoordY * Math.pow(2, z);
-        const tileCoordY = Math.floor(pixelCoordY / this.TILE.SIZE);
+    maps.prototype.tile = function (lat, lon, z) {
+        var ret = new mapsTile();
+        var lng_rad = lon * Math.PI / 180;
+        var lat_rad = lat * Math.PI / 180;
+        var R = 128 / Math.PI;
+        var worldCoordX = R * (lng_rad + Math.PI);
+        var pixelCoordX = worldCoordX * Math.pow(2, z);
+        var tileCoordX = Math.floor(pixelCoordX / this.TILE.SIZE);
+        var worldCoordY = -R / 2 * Math.log((1 + Math.sin(lat_rad)) / (1 - Math.sin(lat_rad))) + 128;
+        var pixelCoordY = worldCoordY * Math.pow(2, z);
+        var tileCoordY = Math.floor(pixelCoordY / this.TILE.SIZE);
         ret.x = tileCoordX;
         ret.px_x = Math.floor(pixelCoordX - tileCoordX * this.TILE.SIZE);
         ret.y = tileCoordY;
         ret.px_y = Math.floor(pixelCoordY - tileCoordY * this.TILE.SIZE);
         ret.z = z;
         return ret;
-    }
+    };
     /**
      * タイル座標から緯度経度を取得
      * @param x タイル座標X
@@ -939,13 +947,13 @@ class maps {
      * @param z タイル座標Z
      * @returns 緯度経度
      */
-    tile2LatLng(x, y, z) {
-        const ret = new mapsLatLon();
-        const n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
+    maps.prototype.tile2LatLng = function (x, y, z) {
+        var ret = new mapsLatLon();
+        var n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
         ret.lon = x / Math.pow(2, z) * 360 - 180;
         ret.lat = 180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
         return ret;
-    }
+    };
     /**
      * タイル座標のズームレベルから縮尺を取得
      * @param z タイル座標Z
@@ -953,9 +961,9 @@ class maps {
      * @param dpi 解像度
      * @returns 縮尺
      */
-    tileScale(z, lat, dpi) {
+    maps.prototype.tileScale = function (z, lat, dpi) {
         return this.TILE.A * Math.sin(this.deg2rad(90 - lat)) / Math.pow(2, z) / this.TILE.SIZE * dpi / this.TILE.unitI2M;
-    }
+    };
     /**
      * タイル座標のズームレベルを変更した場合のタイル座標を取得
      * @param x タイル座標X
@@ -964,26 +972,26 @@ class maps {
      * @param toz 変更するズームレベル
      * @returns タイル情報
      */
-    tile2z(x, y, z, toz) {
-        const ret = new mapsTile();
-        const scale = Math.pow(2, z - toz);
+    maps.prototype.tile2z = function (x, y, z, toz) {
+        var ret = new mapsTile();
+        var scale = Math.pow(2, z - toz);
         x = Math.floor((x * this.TILE.SIZE / scale) / this.TILE.SIZE);
         y = Math.floor((y * this.TILE.SIZE / scale) / this.TILE.SIZE);
         ret.x = x;
         ret.y = y;
         ret.z = toz;
         return ret;
-    }
+    };
     /**
      * 標高タイルから標高データを取得
      * @param tile タイル座標
      * @param t タイル種別
      * @returns Promise<mapsTileDem>
      */
-    tileDem(tile, t) {
-        let ret = null;
-        const key = Date.now();
-        let f = true;
+    maps.prototype.tileDem = function (tile, t) {
+        var ret = null;
+        var key = Date.now();
+        var f = true;
         if (t === mapsTypeTile.TXT) {
             this.TILE_DEM_URL[key] = this.tileDemUrlTxt(tile.x, tile.y, tile.z);
         }
@@ -997,15 +1005,15 @@ class maps {
             ret = this.tileDemRequest(key, tile, t, false);
         }
         return ret;
-    }
+    };
     /**
      * 標高タイルから標高データを取得（TXT形式）
      * @param tile タイル座標
      * @returns Promise<mapsTileDem>
      */
-    tileDemTxt(tile) {
+    maps.prototype.tileDemTxt = function (tile) {
         return this.tileDem(tile, mapsTypeTile.TXT);
-    }
+    };
     /**
      * 標高タイルから標高データを取得（PNG形式）
      * 説明：
@@ -1013,9 +1021,9 @@ class maps {
      * @param tile タイル座標
      * @returns Promise<mapsTileDem>
      */
-    tileDemPng(tile) {
+    maps.prototype.tileDemPng = function (tile) {
         return this.tileDem(tile, mapsTypeTile.PNG);
-    }
+    };
     /**
      * 標高タイルから標高データを取得[Ajax]
      * @param key 処理キー
@@ -1024,68 +1032,69 @@ class maps {
      * @param f Call フラグ
      * @returns Promise<mapsTileDem>
      */
-    tileDemRequest(key, tile, t, f) {
-        return new Promise((resolve, reject) => {
-            if (key in this.TILE_DEM_URL) {
+    maps.prototype.tileDemRequest = function (key, tile, t, f) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (key in _this.TILE_DEM_URL) {
                 if (f === true) {
-                    this.TILE_DEM_URL[key].shift();
+                    _this.TILE_DEM_URL[key].shift();
                 }
-                const dems = this.TILE_DEM_URL[key];
+                var dems = _this.TILE_DEM_URL[key];
                 if (dems.length > 0) {
-                    const url = dems[0].url;
+                    var url_1 = dems[0].url;
                     if (t === mapsTypeTile.TXT) {
-                        fetch(url, {
+                        fetch(url_1, {
                             method: "GET"
-                        }).then(response => {
+                        }).then(function (response) {
                             if (response.status === 200) {
-                                response.text().then(text => {
-                                    let dem = [];
-                                    let e = NaN;
+                                response.text().then(function (text) {
+                                    var dem = [];
+                                    var e = NaN;
                                     if (text.length > 0) {
                                         dem = text.replace(/\r\n/g, "\n").replace(/\n/g, ",").slice(0, -1).split(",");
-                                        e = this.tileDemData2ETxt(dem, tile.px_x, tile.px_y);
+                                        e = _this.tileDemData2ETxt(dem, tile.px_x, tile.px_y);
                                     }
-                                    delete this.TILE_DEM_URL[key];
-                                    resolve(new mapsTileDem(tile, t, url, dem, e));
+                                    delete _this.TILE_DEM_URL[key];
+                                    resolve(new mapsTileDem(tile, t, url_1, dem, e));
                                 });
                             }
-                        }).catch(error => {
-                            this.tileDemRequest(key, tile, t, true);
+                        }).catch(function (error) {
+                            _this.tileDemRequest(key, tile, t, true);
                         });
                     }
                     else if (t === mapsTypeTile.PNG) {
-                        const oImg = document.createElement("img");
-                        oImg.onload = () => {
-                            let dem = [];
-                            let e = NaN;
-                            const oCanvas = document.createElement("canvas");
+                        var oImg_1 = document.createElement("img");
+                        oImg_1.onload = function () {
+                            var dem = [];
+                            var e = NaN;
+                            var oCanvas = document.createElement("canvas");
                             oCanvas.width = 256;
                             oCanvas.height = 256;
-                            const oCanvasCTX = oCanvas.getContext("2d");
+                            var oCanvasCTX = oCanvas.getContext("2d");
                             if (oCanvasCTX) {
-                                oCanvasCTX.drawImage(oImg, 0, 0, 256, 256);
-                                const data = oCanvasCTX.getImageData(0, 0, 256, 256).data;
+                                oCanvasCTX.drawImage(oImg_1, 0, 0, 256, 256);
+                                var data = oCanvasCTX.getImageData(0, 0, 256, 256).data;
                                 if (data.length > 0) {
-                                    dem = this.tileDemDataPng(data, tile.x, tile.y, tile.z);
-                                    e = this.tileDemData2E(dem, tile.px_x, tile.px_y);
+                                    dem = _this.tileDemDataPng(data, tile.x, tile.y, tile.z);
+                                    e = _this.tileDemData2E(dem, tile.px_x, tile.px_y);
                                 }
                             }
-                            delete this.TILE_DEM_URL[key];
-                            resolve(new mapsTileDem(tile, t, url, dem, e));
+                            delete _this.TILE_DEM_URL[key];
+                            resolve(new mapsTileDem(tile, t, url_1, dem, e));
                         };
-                        oImg.onerror = () => {
-                            this.tileDemRequest(key, tile, t, true);
+                        oImg_1.onerror = function () {
+                            _this.tileDemRequest(key, tile, t, true);
                         };
-                        oImg.crossOrigin = "anonymous";
-                        oImg.src = url;
+                        oImg_1.crossOrigin = "anonymous";
+                        oImg_1.src = url_1;
                     }
                 }
                 else {
-                    delete this.TILE_DEM_URL[key];
+                    delete _this.TILE_DEM_URL[key];
                 }
             }
         });
-    }
+    };
     /**
      * 標高タイルURLを取得
      * 説明：
@@ -1099,11 +1108,11 @@ class maps {
      * @param t タイル種別
      * @returns 標高タイル情報(配列)
      */
-    tileDemUrl(x, y, z, t) {
-        const ret = [];
-        const url = "https://cyberjapandata.gsi.go.jp/xyz/";
-        let urlType = "_png";
-        let urlExt = "png";
+    maps.prototype.tileDemUrl = function (x, y, z, t) {
+        var ret = [];
+        var url = "https://cyberjapandata.gsi.go.jp/xyz/";
+        var urlType = "_png";
+        var urlExt = "png";
         if (t === mapsTypeTile.TXT) {
             urlType = "";
             urlExt = "txt";
@@ -1144,26 +1153,26 @@ class maps {
             );
             */
         }
-        const fScale8 = this.TILE_DEM.Scale8 ? this.tileDemUrlExist(this.TILE_DEM.Scale8, x, y, z, 8) : false;
-        const fScale9 = this.TILE_DEM.Scale9 ? this.tileDemUrlExist(this.TILE_DEM.Scale9, x, y, z, 9) : false;
+        var fScale8 = this.TILE_DEM.Scale8 ? this.tileDemUrlExist(this.TILE_DEM.Scale8, x, y, z, 8) : false;
+        var fScale9 = this.TILE_DEM.Scale9 ? this.tileDemUrlExist(this.TILE_DEM.Scale9, x, y, z, 9) : false;
         //const fScale10 = this.TILE_DEM.Scale10 ? this.tileDemUrlExist(this.TILE_DEM.Scale10, x, y, z, 10) : false;
         if (z >= 9) {
             if (!fScale9) {
                 if (z >= 15) {
-                    const tile = this.tile2z(x, y, z, 15);
+                    var tile = this.tile2z(x, y, z, 15);
                     {
-                        const tileUrl = new mapsTileUrl();
-                        tileUrl.setTile(tile, url, "dem5a" + urlType, urlExt);
-                        ret.push(tileUrl);
+                        var tileUrl_1 = new mapsTileUrl();
+                        tileUrl_1.setTile(tile, url, "dem5a" + urlType, urlExt);
+                        ret.push(tileUrl_1);
                     }
                     {
-                        const tileUrl = new mapsTileUrl();
-                        tileUrl.setTile(tile, url, "dem5b" + urlType, urlExt);
-                        ret.push(tileUrl);
+                        var tileUrl_2 = new mapsTileUrl();
+                        tileUrl_2.setTile(tile, url, "dem5b" + urlType, urlExt);
+                        ret.push(tileUrl_2);
                     }
                 }
             }
-            const tileUrl = new mapsTileUrl();
+            var tileUrl = new mapsTileUrl();
             if (z >= 14) {
                 tileUrl.tile = this.tile2z(x, y, z, 14);
             }
@@ -1177,12 +1186,12 @@ class maps {
             ret.push(tileUrl);
         }
         if (z <= 8 || !fScale8 || fScale9) {
-            const tileUrl = new mapsTileUrl();
+            var tileUrl = new mapsTileUrl();
             tileUrl.set(x, y, z, url, "demgm" + urlType, urlExt);
             ret.push(tileUrl);
         }
         return ret;
-    }
+    };
     /**
      * 標高タイルURLを取得（TXT形式)
      * @param x タイル座標X
@@ -1190,9 +1199,9 @@ class maps {
      * @param z タイル座標Z
      * @returns 標高タイル情報(配列)
      */
-    tileDemUrlTxt(x, y, z) {
+    maps.prototype.tileDemUrlTxt = function (x, y, z) {
         return this.tileDemUrl(x, y, z, mapsTypeTile.TXT);
-    }
+    };
     /**
      * 標高タイルURLを取得（PNG形式)
      * @param x タイル座標X
@@ -1200,21 +1209,21 @@ class maps {
      * @param z タイル座標Z
      * @returns 標高タイル情報(配列)
      */
-    tileDemUrlPng(x, y, z) {
+    maps.prototype.tileDemUrlPng = function (x, y, z) {
         return this.tileDemUrl(x, y, z, mapsTypeTile.PNG);
-    }
+    };
     /**
      * 標高タイルURLを取得（初期処理）
      * @param d タイルURLデータ
      * @returns エリア
      */
-    tileDemUrlInit(d) {
-        const ret = {};
-        d.map((key, n, d) => {
+    maps.prototype.tileDemUrlInit = function (d) {
+        var ret = {};
+        d.map(function (key, n, d) {
             ret[key] = true;
         });
         return ret;
-    }
+    };
     /**
      * 標高タイルURLを取得（判定）
      * @param area エリア
@@ -1224,15 +1233,15 @@ class maps {
      * @param toz 変更するズームレベル
      * @returns タイルURL
      */
-    tileDemUrlExist(area, x, y, z, toz) {
-        const tile = this.tile2z(x, y, z, toz);
+    maps.prototype.tileDemUrlExist = function (area, x, y, z, toz) {
+        var tile = this.tile2z(x, y, z, toz);
         if (tile.z + "/" + tile.x + "/" + tile.y in area) {
             return true;
         }
         else {
             return false;
         }
-    }
+    };
     /**
      * 標高タイルデータ（PNG形式）から標高データ配列を取得
      * @param data 標高データ（PNG形式の配列）
@@ -1241,18 +1250,18 @@ class maps {
      * @param z タイル座標Z
      * @returns 標高データ配列
      */
-    tileDemDataPng(data, x, y, z) {
-        const ret = Array(this.TILE.SIZE * this.TILE.SIZE);
-        let n = 0;
-        for (let iy = 0; iy < this.TILE.SIZE; ++iy) {
-            for (let ix = 0; ix < this.TILE.SIZE; ++ix) {
-                let i = (iy * this.TILE.SIZE * 4) + (ix * 4);
-                const r = data[i + 0];
-                const g = data[i + 1];
-                const b = data[i + 2];
+    maps.prototype.tileDemDataPng = function (data, x, y, z) {
+        var ret = Array(this.TILE.SIZE * this.TILE.SIZE);
+        var n = 0;
+        for (var iy = 0; iy < this.TILE.SIZE; ++iy) {
+            for (var ix = 0; ix < this.TILE.SIZE; ++ix) {
+                var i = (iy * this.TILE.SIZE * 4) + (ix * 4);
+                var r = data[i + 0];
+                var g = data[i + 1];
+                var b = data[i + 2];
                 if (r != 128 || g != 0 || b != 0) {
-                    const d = r * this.TILE.pow2_16 + g * this.TILE.pow2_8 + b;
-                    let h = (d < this.TILE.pow2_23) ? d : d - this.TILE.pow2_24;
+                    var d = r * this.TILE.pow2_16 + g * this.TILE.pow2_8 + b;
+                    var h = (d < this.TILE.pow2_23) ? d : d - this.TILE.pow2_24;
                     if (h == -this.TILE.pow2_23) {
                         h = 0;
                     }
@@ -1268,7 +1277,7 @@ class maps {
             }
         }
         return ret;
-    }
+    };
     /**
      * 標高タイルデータ（標高データ数値配列）から標高を取得
      * @param data 標高データ配列
@@ -1276,18 +1285,18 @@ class maps {
      * @param px_y タイル内座標Y[pixel]
      * @returns 標高(m)
      */
-    tileDemData2E(data, px_x, px_y) {
-        let ret = 0;
+    maps.prototype.tileDemData2E = function (data, px_x, px_y) {
+        var ret = 0;
         if (Array.isArray(data)) {
             if (data.length === this.TILE.SIZE * this.TILE.SIZE) {
-                const i = (px_y * this.TILE.SIZE) + (px_x);
+                var i = (px_y * this.TILE.SIZE) + (px_x);
                 if (i < data.length) {
                     ret = data[i];
                 }
             }
         }
         return ret;
-    }
+    };
     /**
      * 標高タイルデータ（標高データ文字配列）から標高を取得
      * @param data 標高データ配列
@@ -1295,11 +1304,11 @@ class maps {
      * @param px_y タイル内座標Y[pixel]
      * @returns 標高(m)
      */
-    tileDemData2ETxt(data, px_x, px_y) {
-        let ret = NaN;
+    maps.prototype.tileDemData2ETxt = function (data, px_x, px_y) {
+        var ret = NaN;
         if (Array.isArray(data)) {
             if (data.length === this.TILE.SIZE * this.TILE.SIZE) {
-                const i = (px_y * this.TILE.SIZE) + (px_x);
+                var i = (px_y * this.TILE.SIZE) + (px_x);
                 if (i < data.length) {
                     if (/^[+,-]?([1-9]\d*|0)(\.\d+)?$/.test(data[i])) {
                         ret = parseFloat(data[i]);
@@ -1308,19 +1317,19 @@ class maps {
             }
         }
         return ret;
-    }
+    };
     /**
      * Garmin GPSログ(GPX)を取得
      * @param url GPXファイル
      * @returns Promise<mapsDataGpx>
      */
-    gpx(url) {
-        return new Promise((resolve, reject) => {
+    maps.prototype.gpx = function (url) {
+        return new Promise(function (resolve, reject) {
             fetch(url, {
                 method: "GET"
-            }).then(response => {
+            }).then(function (response) {
                 if (response.status === 200) {
-                    response.text().then(text => {
+                    response.text().then(function (text) {
                         if (text.length > 0) {
                             resolve(new mapsDataGpx(url, text));
                         }
@@ -1329,9 +1338,10 @@ class maps {
                 else {
                     resolve(new mapsDataGpx(url, null));
                 }
-            }).catch(error => {
+            }).catch(function (error) {
                 resolve(new mapsDataGpx(url, null));
             });
         });
-    }
-}
+    };
+    return maps;
+}());

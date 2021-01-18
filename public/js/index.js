@@ -5,7 +5,7 @@
  * @returns 処理ステータス
  */
 function init(id) {
-    const oDiv = document.getElementById(id);
+    var oDiv = document.getElementById(id);
     if (oDiv) {
         if (oDiv.getAttribute("data-init") === "true") {
             return false;
@@ -21,26 +21,26 @@ function init(id) {
  * ページ
  */
 function page() {
-    const oMaps = new maps();
-    let oAppMap = null;
-    const oappMapsGSI = new appMapsGSI(oMaps);
-    let vDiv = ["Accuracy", "Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
-    const fDiv = {};
-    vDiv.map((key, n, vDiv) => {
+    var oMaps = new maps();
+    var oAppMap = null;
+    var oappMapsGSI = new appMapsGSI(oMaps);
+    var vDiv = ["Accuracy", "Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
+    var fDiv = {};
+    vDiv.map(function (key, n, vDiv) {
         fDiv[key] = false;
-        const oDiv = document.getElementById(key);
+        var oDiv = document.getElementById(key);
         if (oDiv) {
             oDiv.style.display = "none";
         }
     });
-    let vHash = window.location.hash;
-    let vHashDiv = "";
+    var vHash = window.location.hash;
+    var vHashDiv = "";
     if (vHash.length > 0) {
         vHash = vHashDiv = vHash.substring(1);
         if (vHash === "TileE") {
             vHashDiv = "Tile";
         }
-        const oDiv = document.getElementById(vHashDiv);
+        var oDiv = document.getElementById(vHashDiv);
         if (oDiv !== null) {
             oDiv.style.display = "block";
             fDiv[vHash] = true;
@@ -48,8 +48,8 @@ function page() {
         }
     }
     if (vDiv !== null) {
-        vDiv.map((key, n, vDiv) => {
-            const oDiv = document.getElementById(key);
+        vDiv.map(function (key, n, vDiv) {
+            var oDiv = document.getElementById(key);
             if (oDiv !== null) {
                 oDiv.style.display = "none";
                 fDiv[key] = false;
@@ -58,10 +58,10 @@ function page() {
     }
     /*==============================================================================================*/
     // 地図
-    let _MapLat = 35.681236;
-    let _MapLon = 139.767125;
-    let _MapZ = 5;
-    let _MapOptions = {};
+    var _MapLat = 35.681236;
+    var _MapLon = 139.767125;
+    var _MapZ = 5;
+    var _MapOptions = {};
     _MapOptions.w = 100;
     _MapOptions.wUnit = "%";
     _MapOptions.h = 600;
@@ -72,43 +72,43 @@ function page() {
         if (!init("Accuracy")) {
             return;
         }
-        const oMapsDataPrefCapital = new mapsDataPrefCapital();
-        const dmapsDataPrefCapital = oMapsDataPrefCapital.get();
+        var oMapsDataPrefCapital = new mapsDataPrefCapital();
+        var dmapsDataPrefCapital = oMapsDataPrefCapital.get();
         oAppMap = new appMap("appAccuracyMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-        const distanceTo = [10, 100, 1000, 10000, 100000];
-        dmapsDataPrefCapital.map((item, n, dmapsDataPrefCapital) => {
+        var distanceTo_1 = [10, 100, 1000, 10000, 100000];
+        dmapsDataPrefCapital.map(function (item, n, dmapsDataPrefCapital) {
             if (!oAppMap) {
                 return;
             }
-            const pref = item.pref;
-            const lat = item.lat;
-            const lon = item.lon;
-            let options = {};
-            distanceTo.map((distance, n, distanceTo) => {
+            var pref = item.pref;
+            var lat = item.lat;
+            var lon = item.lon;
+            var options = {};
+            distanceTo_1.map(function (distance, n, distanceTo) {
                 if (!oAppMap) {
                     return;
                 }
-                for (let i = 0; i < 2; i++) {
-                    let a = 0;
-                    const atob = [];
-                    const atob_item = new Array(2);
+                for (var i = 0; i < 2; i++) {
+                    var a = 0;
+                    var atob_1 = [];
+                    var atob_item = new Array(2);
                     atob_item[0] = lat;
                     atob_item[1] = lon;
-                    atob.push(atob_item);
+                    atob_1.push(atob_item);
                     if (i === 0) {
                         a = 0;
                     }
                     else if (i === 1) {
                         a = 180;
                     }
-                    const c = oMaps.distanceTo(lat, lon, a, distance);
+                    var c = oMaps.distanceTo(lat, lon, a, distance);
                     options.color = "blue";
                     options.popup = "<ol style=\"list-style-type: none;\"><li>" + pref + "から" + distance.toLocaleString() + "m" + "</li><li>緯度：" + lat + "</li><li>経度：" + lon + "</li></ol>";
                     oAppMap.point(c.lat, lon, options);
-                    atob.push(new Array(c.lat, lon));
+                    atob_1.push(new Array(c.lat, lon));
                     options = {};
                     options.color = "#4169e1";
-                    oAppMap.arc(atob, options);
+                    oAppMap.arc(atob_1, options);
                 }
             });
             options.color = "red";
@@ -119,15 +119,15 @@ function page() {
     /*==============================================================================================*/
     // ２地点間の距離＆ある地点から角度と距離を指定して地点を求める
     if (fDiv["Distance"] === true || fDiv["DistanceTo"] === true) {
-        const oMapsDataPrefCapital = new mapsDataPrefCapital();
-        const dmapsDataPrefCapital = oMapsDataPrefCapital.get();
-        const base = 12;
-        const item_base = dmapsDataPrefCapital[base];
-        for (let t = 0; t < 2; t++) {
-            let oDiv = null;
+        var oMapsDataPrefCapital = new mapsDataPrefCapital();
+        var dmapsDataPrefCapital = oMapsDataPrefCapital.get();
+        var base_1 = 12;
+        var item_base_1 = dmapsDataPrefCapital[base_1];
+        var _loop_1 = function (t) {
+            var oDiv = null;
             if (t === 0) {
                 if (!init("Distance")) {
-                    return;
+                    return { value: void 0 };
                 }
                 // ２地点間の距離を求める
                 oDiv = document.getElementById("appDistance");
@@ -135,28 +135,28 @@ function page() {
             }
             else if (t === 1) {
                 if (!init("appDistanceTo")) {
-                    return;
+                    return { value: void 0 };
                 }
                 // ある地点から角度と距離を指定して地点を求める
                 oDiv = document.getElementById("appDistanceTo");
                 oAppMap = new appMap("appDistanceToMap", _MapLat, _MapLon, _MapZ, _MapOptions);
             }
             if (!oDiv || !oAppMap) {
-                return;
+                return { value: void 0 };
             }
-            const oDivTitle = document.createElement("div");
-            oDivTitle.innerHTML = item_base.pref + "からの距離";
+            var oDivTitle = document.createElement("div");
+            oDivTitle.innerHTML = item_base_1.pref + "からの距離";
             oDiv.appendChild(oDivTitle);
-            let dl = document.createElement("dl");
-            let dt = document.createElement("dt");
-            let dd_lat = document.createElement("dd");
-            let dd_lon = document.createElement("dd");
-            let dd_distT = document.createElement("dd");
-            let dd_distH = document.createElement("dd");
-            let dd_distS = document.createElement("dd");
-            let dd_a = document.createElement("dd");
-            let dd_c_lat = document.createElement("dd");
-            let dd_c_lon = document.createElement("dd");
+            var dl = document.createElement("dl");
+            var dt = document.createElement("dt");
+            var dd_lat = document.createElement("dd");
+            var dd_lon = document.createElement("dd");
+            var dd_distT = document.createElement("dd");
+            var dd_distH = document.createElement("dd");
+            var dd_distS = document.createElement("dd");
+            var dd_a = document.createElement("dd");
+            var dd_c_lat = document.createElement("dd");
+            var dd_c_lon = document.createElement("dd");
             dt.innerHTML = "県庁";
             dd_lat.innerHTML = "緯度";
             dd_lon.innerHTML = "経度";
@@ -180,15 +180,15 @@ function page() {
                 dl.appendChild(dd_c_lon);
             }
             oDiv.appendChild(dl);
-            let options = {};
+            var options = {};
             options.color = "red";
-            options.popup = item_base.pref;
-            oAppMap.point(item_base.lat, item_base.lon, options);
-            dmapsDataPrefCapital.map((item, n, dmapsDataPrefCapital) => {
+            options.popup = item_base_1.pref;
+            oAppMap.point(item_base_1.lat, item_base_1.lon, options);
+            dmapsDataPrefCapital.map(function (item, n, dmapsDataPrefCapital) {
                 if (!oDiv || !oAppMap) {
                     return;
                 }
-                if (n !== base) {
+                if (n !== base_1) {
                     dl = document.createElement("dl");
                     dt = document.createElement("dt");
                     dd_lat = document.createElement("dd");
@@ -200,13 +200,13 @@ function page() {
                     dd_c_lat = document.createElement("dd");
                     dd_c_lon = document.createElement("dd");
                     if (t === 0) {
-                        item.distT = oMaps.distanceT(item_base.lat, item_base.lon, item.lat, item.lon);
-                        item.distH = oMaps.distanceH(item_base.lat, item_base.lon, item.lat, item.lon);
-                        item.distS = oMaps.distanceS(item_base.lat, item_base.lon, item.lat, item.lon);
-                        item.a = oMaps.direction(item_base.lat, item_base.lon, item.lat, item.lon);
+                        item.distT = oMaps.distanceT(item_base_1.lat, item_base_1.lon, item.lat, item.lon);
+                        item.distH = oMaps.distanceH(item_base_1.lat, item_base_1.lon, item.lat, item.lon);
+                        item.distS = oMaps.distanceS(item_base_1.lat, item_base_1.lon, item.lat, item.lon);
+                        item.a = oMaps.direction(item_base_1.lat, item_base_1.lon, item.lat, item.lon);
                     }
                     else if (t === 1) {
-                        const c = oMaps.distanceTo(item_base.lat, item_base.lon, item.a, item.distH);
+                        var c = oMaps.distanceTo(item_base_1.lat, item_base_1.lon, item.a, item.distH);
                         item.c_lat = c.lat;
                         item.c_lon = c.lon;
                         dd_c_lat.innerHTML = "" + item.c_lat;
@@ -238,18 +238,23 @@ function page() {
                     if (t === 1) {
                         options = {};
                         options.color = "green";
-                        options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
+                        options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base_1.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
                         oAppMap.point(item.c_lat, item.c_lon, options);
                     }
-                    const atob = [];
-                    atob.push(new Array(item_base.lat, item_base.lon));
-                    atob.push(new Array(item.lat, item.lon));
+                    var atob_2 = [];
+                    atob_2.push(new Array(item_base_1.lat, item_base_1.lon));
+                    atob_2.push(new Array(item.lat, item.lon));
                     options = {};
                     options.color = "#4169e1";
-                    options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
-                    oAppMap.arc(atob, options);
+                    options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base_1.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
+                    oAppMap.arc(atob_2, options);
                 }
             });
+        };
+        for (var t = 0; t < 2; t++) {
+            var state_1 = _loop_1(t);
+            if (typeof state_1 === "object")
+                return state_1.value;
         }
     }
     /*==============================================================================================*/
@@ -258,32 +263,32 @@ function page() {
         if (!init("Scale")) {
             return;
         }
-        const vDPI = 96;
-        const vTitle = "ズームレベルと縮尺";
+        var vDPI = 96;
+        var vTitle = "ズームレベルと縮尺";
         _MapLat = 35.65809922;
         _MapLon = 139.741357472;
-        const oDiv = document.getElementById("Scale");
+        var oDiv = document.getElementById("Scale");
         if (oDiv) {
             oDiv.style.width = "800px";
         }
-        const oDivTitle = document.getElementById("appScaleTitle");
+        var oDivTitle = document.getElementById("appScaleTitle");
         if (oDivTitle) {
             oDivTitle.innerHTML = vTitle;
         }
-        const oDivTitleSub = document.getElementById("appScaleTitleSub");
+        var oDivTitleSub = document.getElementById("appScaleTitleSub");
         if (oDivTitleSub) {
             oDivTitleSub.innerHTML = "日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ " + _MapLat + " ]、解像度 [ " + vDPI + " ] dpi で計算";
         }
-        const oTable = document.createElement("table");
-        let oTableTr = document.createElement("tr");
-        let oTableTd = document.createElement("th");
+        var oTable = document.createElement("table");
+        var oTableTr = document.createElement("tr");
+        var oTableTd = document.createElement("th");
         oTableTd.innerHTML = "ズームレベル";
         oTableTr.append(oTableTd);
         oTableTd = document.createElement("th");
         oTableTd.innerHTML = "縮尺";
         oTableTr.append(oTableTd);
         oTable.append(oTableTr);
-        for (let i = 0; i < 29; i++) {
+        for (var i = 0; i < 29; i++) {
             oTableTr = document.createElement("tr");
             oTableTd = document.createElement("td");
             oTableTd.innerHTML = "" + i;
@@ -303,20 +308,20 @@ function page() {
         _MapZ = 4;
         _MapLat = 35.360771305;
         _MapLon = 138.7273035;
-        let vTitle = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める";
+        var vTitle = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める";
         if (vHash === "" || vHash === "TileE") {
             vTitle = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める";
         }
-        let vUrl = "";
-        let oDiv = document.getElementById("Tile");
+        var vUrl = "";
+        var oDiv = document.getElementById("Tile");
         if (oDiv) {
             oDiv.style.width = "900px";
         }
-        const oDivTitle = document.getElementById("appTileTitle");
+        var oDivTitle = document.getElementById("appTileTitle");
         if (oDivTitle) {
             oDivTitle.innerHTML = vTitle;
         }
-        const oDivTitleSub = document.getElementById("appTileTitleSub");
+        var oDivTitleSub = document.getElementById("appTileTitleSub");
         if (oDivTitleSub) {
             oDivTitleSub.innerHTML = "富士山山頂の緯度[ " + _MapLat + " ]、緯度 [ " + _MapLon + " ] からタイルとタイル情報を計算";
         }
@@ -325,15 +330,15 @@ function page() {
             return;
         }
         oappMapsGSI.setDiv(oDiv);
-        for (let i = _MapZ; i < 19; i++) {
-            const vTile = oMaps.tile(_MapLat, _MapLon, i);
-            let vTileLatLon = null;
+        for (var i = _MapZ; i < 19; i++) {
+            var vTile = oMaps.tile(_MapLat, _MapLon, i);
+            var vTileLatLon = null;
             vUrl = "https://cyberjapandata.gsi.go.jp/xyz/std/" + vTile.z + "/" + vTile.x + "/" + vTile.y + ".png";
-            const oTable = document.createElement("table");
+            var oTable = document.createElement("table");
             oTable.style.width = "890px";
             //
-            let oTableTr = document.createElement("tr");
-            let oTableTd = document.createElement("th");
+            var oTableTr = document.createElement("tr");
+            var oTableTd = document.createElement("th");
             oTableTd.style.textAlign = "left";
             oTableTd.innerHTML = "ズームレベル";
             oTableTr.append(oTableTd);
@@ -394,23 +399,23 @@ function page() {
                 oTableTr.append(oTableTd);
                 oTable.append(oTableTr);
             }
-            const oImg = document.createElement("img");
+            var oImg = document.createElement("img");
             oappMapsGSI.setTile(oImg, vTile);
             oImg.src = vUrl;
-            oImg.onload = (e) => {
+            oImg.onload = function (e) {
                 oappMapsGSI.Symbol(24, 24);
             };
             oDiv.append(oTable);
             oDiv.append(oImg);
             if (vHash === "" || vHash === "TileE") {
                 if (oMaps) {
-                    const oMapTileDem = oMaps.tileDemTxt(vTile);
+                    var oMapTileDem = oMaps.tileDemTxt(vTile);
                     if (oMapTileDem) {
-                        oMapTileDem.then((data) => {
+                        oMapTileDem.then(function (data) {
                             if (!data.tile) {
                                 return;
                             }
-                            const o = document.getElementById("appTileDem" + data.tile.z + "Txt");
+                            var o = document.getElementById("appTileDem" + data.tile.z + "Txt");
                             if (!o) {
                                 return;
                             }
@@ -422,13 +427,13 @@ function page() {
                             }
                         });
                     }
-                    const oMapTileDemPng = oMaps.tileDemPng(vTile);
+                    var oMapTileDemPng = oMaps.tileDemPng(vTile);
                     if (oMapTileDemPng) {
-                        oMapTileDemPng.then((data) => {
+                        oMapTileDemPng.then(function (data) {
                             if (!data.tile) {
                                 return;
                             }
-                            const o = document.getElementById("appTileDem" + data.tile.z + "Png");
+                            var o = document.getElementById("appTileDem" + data.tile.z + "Png");
                             if (!o) {
                                 return;
                             }
@@ -450,62 +455,55 @@ function page() {
         if (!init("DataGpx")) {
             return;
         }
-        const vTitle = "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示";
-        const oDivTitle = document.getElementById("appDataGpxTitle");
+        var vTitle = "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示";
+        var oDivTitle = document.getElementById("appDataGpxTitle");
         if (oDivTitle) {
             oDivTitle.innerHTML = vTitle;
         }
-        const oDiv = document.getElementById("appDataGpx");
+        var oDiv = document.getElementById("appDataGpx");
         if (oDiv) {
             //
-            const oDiv20190519 = document.createElement("div");
-            const oDiv20190519_Title = document.createElement("div");
-            oDiv.appendChild(oDiv20190519_Title);
-            oDiv.appendChild(oDiv20190519);
-            oMaps.gpx("./data/20190519.gpx").then((data) => {
-                oDiv20190519_Title.innerHTML = data.getName();
-                const o = new mapsDataGpxChart(oDiv20190519, data);
+            var oDiv20190519_1 = document.createElement("div");
+            var oDiv20190519_Title_1 = document.createElement("div");
+            oDiv.appendChild(oDiv20190519_Title_1);
+            oDiv.appendChild(oDiv20190519_1);
+            oMaps.gpx("./data/20190519.gpx").then(function (data) {
+                oDiv20190519_Title_1.innerHTML = data.getName();
+                var o = new mapsDataGpxChart(oDiv20190519_1, data);
                 o.refresh(1100, 500, 150);
             });
             //
-            const oDiv20190428 = document.createElement("div");
-            const oDiv20190428_Title = document.createElement("div");
-            oDiv.appendChild(oDiv20190428_Title);
-            oDiv.appendChild(oDiv20190428);
-            oMaps.gpx("./data/20190428.gpx").then((data) => {
-                oDiv20190428_Title.innerHTML = data.getName();
-                const o = new mapsDataGpxChart(oDiv20190428, data);
+            var oDiv20190428_1 = document.createElement("div");
+            var oDiv20190428_Title_1 = document.createElement("div");
+            oDiv.appendChild(oDiv20190428_Title_1);
+            oDiv.appendChild(oDiv20190428_1);
+            oMaps.gpx("./data/20190428.gpx").then(function (data) {
+                oDiv20190428_Title_1.innerHTML = data.getName();
+                var o = new mapsDataGpxChart(oDiv20190428_1, data);
                 o.refresh(1100, 500, 150);
             });
             //
-            const oDiv20180811 = document.createElement("div");
-            const oDiv20180811_Title = document.createElement("div");
-            oDiv.appendChild(oDiv20180811_Title);
-            oDiv.appendChild(oDiv20180811);
-            oMaps.gpx("./data/20180811.gpx").then((data) => {
-                oDiv20180811_Title.innerHTML = data.getName();
-                const o = new mapsDataGpxChart(oDiv20180811, data);
+            var oDiv20180811_1 = document.createElement("div");
+            var oDiv20180811_Title_1 = document.createElement("div");
+            oDiv.appendChild(oDiv20180811_Title_1);
+            oDiv.appendChild(oDiv20180811_1);
+            oMaps.gpx("./data/20180811.gpx").then(function (data) {
+                oDiv20180811_Title_1.innerHTML = data.getName();
+                var o = new mapsDataGpxChart(oDiv20180811_1, data);
                 o.refresh(1100, 500, 150);
             });
         }
     }
 }
 /**
- * メイン
- */
-(function () {
-    const oApp = new app();
-    oApp.include();
-})();
-/**
  * window.onload
  */
-window.onload = () => {
+window.onload = function () {
     page();
 };
 /**
  * window.onhashchange
  */
-window.onhashchange = () => {
+window.onhashchange = function () {
     page();
 };

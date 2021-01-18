@@ -2,8 +2,8 @@
 /**
  * ChartJS.Index
  */
-class ChartIndex {
-    constructor() {
+var ChartIndex = /** @class */ (function () {
+    function ChartIndex() {
         this.init = false;
         this.index = 0;
         this.datasetIndex = 0;
@@ -12,19 +12,21 @@ class ChartIndex {
         this._active_index = 0;
         this._active_datasetIndex = 0;
     }
-}
+    return ChartIndex;
+}());
 /**
  * 地図：データ：Garmin GPSログ(GPX)：標高図
  *  ver:5.0.13 -> http://fontawesome.io/
  *  ver:2.7.2  -> http://www.chartjs.org/
  */
-class mapsDataGpxChart {
+var mapsDataGpxChart = /** @class */ (function () {
     /**
      * constructor
      * @param o Div Object
      * @param data : GPXデータ
      */
-    constructor(o, data) {
+    function mapsDataGpxChart(o, data) {
+        var _this_1 = this;
         /**
          * DIV
          */
@@ -75,9 +77,9 @@ class mapsDataGpxChart {
          * args
          *  Object eHover : コールバック関数
          */
-        this.setEventHover = (fnc) => {
-            if (this.fChartHoverCallback !== fnc) {
-                this.fChartHoverCallback = fnc;
+        this.setEventHover = function (fnc) {
+            if (_this_1.fChartHoverCallback !== fnc) {
+                _this_1.fChartHoverCallback = fnc;
             }
         };
         this.o = o;
@@ -87,22 +89,23 @@ class mapsDataGpxChart {
     /**
      * 生成
      */
-    create() {
+    mapsDataGpxChart.prototype.create = function () {
+        var _this_1 = this;
         if (!this.o) {
             return;
         }
         this.o.innerHTML = "";
-        let fCreate = false;
+        var fCreate = false;
         if (this.oChart === null) {
             fCreate = true;
             if (this.data) {
-                this.data.getLogs().map((log, n, data) => {
-                    this.vChartCanvasData.push(log.e);
-                    this.vChartCanvasDataLabels.push("" + Math.ceil(log.distance / 1000));
-                    this.vChartCanvasDataLabelsDistance.push("" + Math.ceil(log.distance * 1000) / 1000);
+                this.data.getLogs().map(function (log, n, data) {
+                    _this_1.vChartCanvasData.push(log.e);
+                    _this_1.vChartCanvasDataLabels.push("" + Math.ceil(log.distance / 1000));
+                    _this_1.vChartCanvasDataLabelsDistance.push("" + Math.ceil(log.distance * 1000) / 1000);
                 });
             }
-            let vScreenDisplay = "none";
+            var vScreenDisplay = "none";
             if (this.fScreen === true) {
                 vScreenDisplay = "block";
             }
@@ -111,20 +114,20 @@ class mapsDataGpxChart {
             this.oScreen.style.display = vScreenDisplay;
             this.oScreen.style.textAlign = "right";
             this.oScreen.innerHTML = "<i class=\"fas fa-thumbtack\"></i>";
-            this.oScreen.addEventListener("click", (e) => {
-                return _this.eChartClick(e, null);
+            this.oScreen.addEventListener("click", function (e) {
+                return _this_2.eChartClick(e, null);
             });
             this.oChart = document.createElement("div");
             this.oChart.style.position = "relative";
             this.oChartCanvas = document.createElement("canvas");
             this.oChartCanvas.style.display = "none";
-            this.oScreen.addEventListener("mouseout", (e) => {
-                return _this.eHoverOut(e);
+            this.oScreen.addEventListener("mouseout", function (e) {
+                return _this_2.eHoverOut(e);
             });
             this.oChart.append(this.oChartCanvas);
             // <- ChartJS - JavaScript
-            const oChartCanvas2D = this.oChartCanvas.getContext("2d");
-            let _this = this;
+            var oChartCanvas2D = this.oChartCanvas.getContext("2d");
+            var _this_2 = this;
             this.oChartCanvasData = new Chart(oChartCanvas2D, {
                 type: "line",
                 data: {
@@ -152,7 +155,7 @@ class mapsDataGpxChart {
                                     minRotation: 0,
                                     maxRotation: 0,
                                     autoSkip: true,
-                                    callback: (value) => {
+                                    callback: function (value) {
                                         if (value === "-") {
                                             return "";
                                         }
@@ -169,7 +172,7 @@ class mapsDataGpxChart {
                                     minRotation: 0,
                                     maxRoDtation: 0,
                                     autoSkip: true,
-                                    callback: (value) => {
+                                    callback: function (value) {
                                         return value.toLocaleString() + " m";
                                     }
                                 }
@@ -187,22 +190,22 @@ class mapsDataGpxChart {
                         enabled: true,
                         mode: "nearest",
                         callbacks: {
-                            title: (i, data) => {
+                            title: function (i, data) {
                                 return "";
                             },
-                            label: (i, data) => {
+                            label: function (i, data) {
                                 return "";
                             },
-                            afterBody: (i, data) => {
-                                return _this.eChartToolTipData(i, data);
+                            afterBody: function (i, data) {
+                                return _this_2.eChartToolTipData(i, data);
                             }
                         }
                     },
-                    onHover: (e, i) => {
-                        return _this.eChartHover(e, i);
+                    onHover: function (e, i) {
+                        return _this_2.eChartHover(e, i);
                     },
-                    onClick: (e, i) => {
-                        return _this.eChartClick(e, i);
+                    onClick: function (e, i) {
+                        return _this_2.eChartClick(e, i);
                     }
                 }
             });
@@ -214,23 +217,23 @@ class mapsDataGpxChart {
                 this.o.parentElement.append(this.oScreen);
             }
         }
-    }
+    };
     /**
      * イベント：HoverOut
      * @param e MouseEvent
      */
-    eHoverOut(e) {
+    mapsDataGpxChart.prototype.eHoverOut = function (e) {
         if (!this.fScreen) {
             this.toolTip(null);
         }
-    }
+    };
     /**
      * イベント：Chart - Hover
      * @param e MouseEvent
      * @param i データインデックス
      * @returns イベントステータス
      */
-    eChartHover(e, i) {
+    mapsDataGpxChart.prototype.eChartHover = function (e, i) {
         if (!this.fScreen) {
             if (i.length > 0) {
                 // ツールチップ
@@ -239,29 +242,29 @@ class mapsDataGpxChart {
             }
         }
         return true;
-    }
+    };
     /**
      * イベント：Chart - Hover - callback
      * @param i データインデックス
      */
-    eChartHoverCallback(i) {
+    mapsDataGpxChart.prototype.eChartHoverCallback = function (i) {
         if (this.fChartHoverCallback !== null) {
-            let data = this.eChartToolTipDataLog(i);
-            let args = [];
+            var data = this.eChartToolTipDataLog(i);
+            var args = [];
             args.push(data);
             this.fChartHoverCallback.apply(this, args);
         }
-    }
+    };
     /**
      * イベント：Chart - Click
      * @param e MouseEvent
      * @param i データインデックス
      * @returns イベントステータス
      */
-    eChartClick(e, i) {
+    mapsDataGpxChart.prototype.eChartClick = function (e, i) {
         this.fScreen = !this.fScreen;
-        let vDisplay = "none";
-        let vMode = "nearest";
+        var vDisplay = "none";
+        var vMode = "nearest";
         if (this.fScreen) {
             vDisplay = "block";
             vMode = null;
@@ -270,14 +273,14 @@ class mapsDataGpxChart {
         this.oChartCanvasData.update();
         if (i !== null) {
             if (i.length > 0) {
-                let _i = i[0];
+                var _i = i[0];
                 this.oChartCanvasData.tooltip._active_datasetIndex = _i._datasetIndex;
                 this.oChartCanvasData.tooltip._active_index = _i._index;
             }
             if (typeof this.oChartCanvasData.tooltip._active_index === "number"
                 &&
                     typeof this.oChartCanvasData.tooltip._active_datasetIndex === "number") {
-                let _i = new ChartIndex();
+                var _i = new ChartIndex();
                 _i._index = this.oChartCanvasData.tooltip._active_index;
                 _i._datasetIndex = this.oChartCanvasData.tooltip._active_datasetIndex;
                 this.toolTip(_i);
@@ -287,16 +290,16 @@ class mapsDataGpxChart {
             this.oScreen.style.display = vDisplay;
         }
         return false;
-    }
+    };
     /**
      * ツールチップ
      * @param データインデックス
      */
-    toolTip(i) {
+    mapsDataGpxChart.prototype.toolTip = function (i) {
         if (this.oChartCanvasData !== null) {
-            let fOpen = false;
-            let iData = null;
-            let iDataSet = null;
+            var fOpen_1 = false;
+            var iData = null;
+            var iDataSet = null;
             if (!this.oChartCanvasData.tooltip._active) {
                 this.oChartCanvasData.tooltip._active = new Array();
             }
@@ -309,26 +312,26 @@ class mapsDataGpxChart {
                 }
             }
             else {
-                fOpen = true;
+                fOpen_1 = true;
                 iData = i._index;
                 iDataSet = i._datasetIndex;
             }
             if (iData !== null
                 &&
                     iDataSet !== null) {
-                let vData = this.oChartCanvasData.getDatasetMeta(iDataSet).data[iData];
-                let fSingle = true;
+                var vData_1 = this.oChartCanvasData.getDatasetMeta(iDataSet).data[iData];
+                var fSingle = true;
                 // ツールチップ：単一
                 if (fSingle) {
-                    if (fOpen) {
+                    if (fOpen_1) {
                         this.oChartCanvasData.tooltip._active = [];
                     }
                 }
                 // ツールチップ：複数
-                this.oChartCanvasData.tooltip._active.some((o, n, data) => {
-                    if (o._index === vData._index) {
-                        if (fOpen) {
-                            vData = null;
+                this.oChartCanvasData.tooltip._active.some(function (o, n, data) {
+                    if (o._index === vData_1._index) {
+                        if (fOpen_1) {
+                            vData_1 = null;
                         }
                         else {
                             data._active.splice(n, 1);
@@ -339,10 +342,10 @@ class mapsDataGpxChart {
                 i = new ChartIndex();
                 i._index = iData;
                 i._datasetIndex = iDataSet;
-                if (vData !== null) {
+                if (vData_1 !== null) {
                     i.init = true;
-                    if (fOpen) {
-                        this.oChartCanvasData.tooltip._active.push(vData);
+                    if (fOpen_1) {
+                        this.oChartCanvasData.tooltip._active.push(vData_1);
                     }
                     this.oChartCanvasData.tooltip._active_datasetIndex = iDataSet;
                     this.oChartCanvasData.tooltip._active_index = iData;
@@ -352,21 +355,22 @@ class mapsDataGpxChart {
                 this.oChartCanvasData.draw();
             }
         }
-    }
+    };
     /**
      * ツールチップ：描画
      * @param データインデックス
      */
-    toolTipDraw(i) {
+    mapsDataGpxChart.prototype.toolTipDraw = function (i) {
+        var _this_1 = this;
         // 描画処理：呼び出し
         if (i === null) {
             if (this.vChartCanvasData_DrawTM !== null) {
                 clearTimeout(this.vChartCanvasData_DrawTM);
                 this.vChartCanvasData_DrawTM = null;
             }
-            this.vChartCanvasData_DrawTM = setTimeout((o) => {
+            this.vChartCanvasData_DrawTM = setTimeout(function (o) {
                 if (o.oChartCanvasData_Active !== null) {
-                    o.toolTipDraw(this.oChartCanvasData_Active);
+                    o.toolTipDraw(_this_1.oChartCanvasData_Active);
                 }
             }, 300, this);
         }
@@ -391,28 +395,28 @@ class mapsDataGpxChart {
                 this.eChartHoverCallback(i);
             }
         }
-    }
+    };
     /**
      * ツールチップ：データ
      * @param i データインデックス
      * @param data データ.datasets, labels
      * @returns ツールチップ
      */
-    eChartToolTipData(i, data) {
+    mapsDataGpxChart.prototype.eChartToolTipData = function (i, data) {
         return this.eChartToolTipDataLog(i[0]).text;
-    }
+    };
     /**
      * ツールチップ：データ
      * @param i データインデックス
      * @returns データ
      */
-    eChartToolTipDataLog(i) {
-        let ret = new mapsDataGpxChartData();
+    mapsDataGpxChart.prototype.eChartToolTipDataLog = function (i) {
+        var ret = new mapsDataGpxChartData();
         if (this.data) {
-            let dataLogs = this.data.getLogs();
-            let dataLog = dataLogs[i.index];
-            let incline = "";
-            let direction = "";
+            var dataLogs = this.data.getLogs();
+            var dataLog = dataLogs[i.index];
+            var incline = "";
+            var direction = "";
             if (dataLog.distanceText !== "") {
                 incline = "" + dataLog.incline;
                 direction = dataLog.direction + "°" + "(" + dataLog.directionName + ")";
@@ -428,14 +432,14 @@ class mapsDataGpxChart {
             ret.text.push("方向：" + direction);
         }
         return ret;
-    }
+    };
     /* 描画
      *  @param w  幅[px]
      *  @param h  高[px]
      *  @param wx 横グリッド幅[px]
      */
-    refresh(w, h, wx) {
-        let n = Math.floor(w / wx);
+    mapsDataGpxChart.prototype.refresh = function (w, h, wx) {
+        var n = Math.floor(w / wx);
         w = wx * n;
         n += 1;
         if (this.oChart) {
@@ -454,36 +458,37 @@ class mapsDataGpxChart {
             this.oChartCanvas.style.display = "block";
         }
         this.toolTipDraw(null);
-    }
+    };
     /** 選択
      * @time 時間
      */
-    selectTime(time) {
+    mapsDataGpxChart.prototype.selectTime = function (time) {
+        var _this_1 = this;
         this.fScreen = false;
-        let i = new ChartIndex();
+        var i = new ChartIndex();
         if (this.data) {
-            this.data.getLogs().some((o, n, data) => {
+            this.data.getLogs().some(function (o, n, data) {
                 if (o.time === time) {
-                    this.fScreen = true;
+                    _this_1.fScreen = true;
                 }
                 else {
-                    if (this.data) {
-                        let timeGPX_S = o.time;
-                        let timeGPX_E = o.time;
+                    if (_this_1.data) {
+                        var timeGPX_S = o.time;
+                        var timeGPX_E = o.time;
                         if (timeGPX_S) {
-                            timeGPX_S.setSeconds(timeGPX_S.getSeconds() - this.data.getlogsTMS());
+                            timeGPX_S.setSeconds(timeGPX_S.getSeconds() - _this_1.data.getlogsTMS());
                         }
                         if (timeGPX_E) {
-                            timeGPX_E.setSeconds(timeGPX_E.getSeconds() + this.data.getlogsTMS());
+                            timeGPX_E.setSeconds(timeGPX_E.getSeconds() + _this_1.data.getlogsTMS());
                         }
                         if (timeGPX_S && timeGPX_E) {
                             if (timeGPX_S <= time && timeGPX_E >= time) {
-                                this.fScreen = true;
+                                _this_1.fScreen = true;
                             }
                         }
                     }
                 }
-                if (this.fScreen) {
+                if (_this_1.fScreen) {
                     i._index = n;
                     return true;
                 }
@@ -497,13 +502,14 @@ class mapsDataGpxChart {
             this.toolTip(null);
         }
         this.toolTipDraw(i);
-    }
-}
+    };
+    return mapsDataGpxChart;
+}());
 /**
  * 地図：データ：Garmin GPSログ(GPX)：標高図 -> データ
  */
-class mapsDataGpxChartData {
-    constructor() {
+var mapsDataGpxChartData = /** @class */ (function () {
+    function mapsDataGpxChartData() {
         /**
          * データ
          */
@@ -513,4 +519,5 @@ class mapsDataGpxChartData {
          */
         this.text = [];
     }
-}
+    return mapsDataGpxChartData;
+}());

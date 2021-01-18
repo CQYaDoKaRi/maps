@@ -2,8 +2,8 @@
 /**
  * 地図：データ：都道府県庁：項目
  */
-class mapsDataPrefCapitalItem {
-    constructor() {
+var mapsDataPrefCapitalItem = /** @class */ (function () {
+    function mapsDataPrefCapitalItem() {
         this.pref = "";
         this.addr = "";
         this.lat = 0.0;
@@ -15,15 +15,16 @@ class mapsDataPrefCapitalItem {
         this.c_lat = 0.0;
         this.c_lon = 0.0;
     }
-}
+    return mapsDataPrefCapitalItem;
+}());
 /**
  * 地図：データ：都道府県庁
  */
-class mapsDataPrefCapital {
+var mapsDataPrefCapital = /** @class */ (function () {
     /**
      * コンストラクタ
      */
-    constructor() {
+    function mapsDataPrefCapital() {
         this.d = [];
         this.set("北海道", "北海道札幌市中央区北3条西6丁目", 43.064301, 141.346874);
         this.set("青森県", "青森県青森市長島1-1-1", 40.824622, 140.740598);
@@ -80,7 +81,7 @@ class mapsDataPrefCapital {
      * @param lat 緯度
      * @param lon 経度
      */
-    set(pref, addr, lat, lon) {
+    mapsDataPrefCapital.prototype.set = function (pref, addr, lat, lon) {
         this.d.push({
             pref: pref,
             addr: addr,
@@ -93,12 +94,13 @@ class mapsDataPrefCapital {
             c_lat: 0.0,
             c_lon: 0.0
         });
-    }
+    };
     /**
      * 取得
      * @returns データ
      */
-    get() {
+    mapsDataPrefCapital.prototype.get = function () {
         return this.d;
-    }
-}
+    };
+    return mapsDataPrefCapital;
+}());
