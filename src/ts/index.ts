@@ -1,93 +1,24 @@
-var oApp = new app();
-
-oApp.css("lib/leaflet.css");
-oApp.css("lib/leaflet.awesome-markers.css");
-oApp.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
-
-oApp.js("lib/leaflet.js");
-oApp.js("lib/leaflet.awesome-markers.js");
-oApp.js("lib/chart.js");
-
-oApp.js("js/maps.js");
-oApp.js("js/mapsGpxChart.js");
-
-oApp.js("js/appMap.js");
-oApp.js("js/mapsDataPrefCapital.js");
-
 /**
- * 地理院タイル
+ * include
  */
-class appMapsGSI {
-	private oMaps: maps | null = null;
-	private oDiv: HTMLElement | null = null;
-	private oImg: HTMLImageElement[] = [];
-	private oImgPos: mapsTile[] = [];
-	private n: number = 0;
+function include() {
+	const oApp: app = new app();
 
-	/**
-	 * constructor
-	 * @param oMaps
-	 */
-	constructor(oMaps: maps) {
-		this.oMaps = oMaps;
-	}
+	oApp.css("lib/leaflet.css");
+	oApp.css("lib/leaflet.awesome-markers.css");
+	oApp.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
 
-	/**
-	 * 設定：DIV
-	 * @param o Divオブジェクト
-	 */
-	public setDiv(o: HTMLElement): void {
-		this.oDiv = o;
-		this.oImg = [];
-		this.oImgPos = [];
-		this.n = 0;
-	}
+	oApp.js("lib/leaflet.js");
+	oApp.js("lib/leaflet.awesome-markers.js");
+	oApp.js("lib/chart.js");
 
-	/**
-	 * 設定：タイル
-	 * @param o タイル画像オブジェクト
-	 * @param pos タイル座標情報
-	 */
-	public setTile(o: HTMLImageElement, pos: mapsTile): void {
-		this.oImg.push(o);
-		this.oImgPos.push(pos);
-	}
+	oApp.js("js/appMapsGSI.js");
 
-	/**
-	 * シンボル生成
-	 * @param w シンボル幅[px]
-	 * @param h シンボル高[px]
-	 */
-	public Symbol(w: number, h: number): void {
-		this.n++;
-		if (this.oImg.length === this.n) {
-			this.oImg.map((o: HTMLImageElement, n: number, oImg: HTMLImageElement[]) => {
-				const vImgR: ClientRect = o.getBoundingClientRect();
+	oApp.js("js/maps.js");
+	oApp.js("js/mapsGpxChart.js");
 
-				const vImgY: number = vImgR.top + window.pageYOffset;
-				const vImgX: number = vImgR.left + window.pageXOffset;
-				const oImgP: HTMLElement = document.createElement("div");
-				oImgP.innerHTML = "▲";
-				oImgP.style.fontSize = "24px";
-				oImgP.style.color = "#FF0000";
-				oImgP.style.position = "absolute";
-				oImgP.style.top = (vImgY + this.oImgPos[n].px_y - (w * 0.5)) + "px";
-				oImgP.style.left = (vImgX + this.oImgPos[n].px_x - (h * 0.5)) + "px";
-
-				if(this.oDiv) {
-					this.oDiv.append(oImgP);
-				}
-			});
-		}
-	}
-}
-
-window.onload = () => {
-	page();
-}
-
-window.onhashchange = () => {
-	page();
+	oApp.js("js/appMap.js");
+	oApp.js("js/mapsDataPrefCapital.js");
 }
 
 /**
@@ -694,4 +625,25 @@ function page() : void {
 			);
 		}
 	}
+}
+
+/**
+ * メイン
+ */
+(function() {
+	include();
+})();
+
+/**
+ * window.onload
+ */
+window.onload = () => {
+	page();
+}
+
+/**
+ * window.onhashchange
+ */
+window.onhashchange = () => {
+	page();
 }

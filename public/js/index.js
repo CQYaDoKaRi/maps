@@ -1,82 +1,21 @@
 "use strict";
-var oApp = new app();
-oApp.css("lib/leaflet.css");
-oApp.css("lib/leaflet.awesome-markers.css");
-oApp.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
-oApp.js("lib/leaflet.js");
-oApp.js("lib/leaflet.awesome-markers.js");
-oApp.js("lib/chart.js");
-oApp.js("js/maps.js");
-oApp.js("js/mapsGpxChart.js");
-oApp.js("js/appMap.js");
-oApp.js("js/mapsDataPrefCapital.js");
 /**
- * 地理院タイル
+ * include
  */
-class appMapsGSI {
-    /**
-     * constructor
-     * @param oMaps
-     */
-    constructor(oMaps) {
-        this.oMaps = null;
-        this.oDiv = null;
-        this.oImg = [];
-        this.oImgPos = [];
-        this.n = 0;
-        this.oMaps = oMaps;
-    }
-    /**
-     * 設定：DIV
-     * @param o Divオブジェクト
-     */
-    setDiv(o) {
-        this.oDiv = o;
-        this.oImg = [];
-        this.oImgPos = [];
-        this.n = 0;
-    }
-    /**
-     * 設定：タイル
-     * @param o タイル画像オブジェクト
-     * @param pos タイル座標情報
-     */
-    setTile(o, pos) {
-        this.oImg.push(o);
-        this.oImgPos.push(pos);
-    }
-    /**
-     * シンボル生成
-     * @param w シンボル幅[px]
-     * @param h シンボル高[px]
-     */
-    Symbol(w, h) {
-        this.n++;
-        if (this.oImg.length === this.n) {
-            this.oImg.map((o, n, oImg) => {
-                const vImgR = o.getBoundingClientRect();
-                const vImgY = vImgR.top + window.pageYOffset;
-                const vImgX = vImgR.left + window.pageXOffset;
-                const oImgP = document.createElement("div");
-                oImgP.innerHTML = "▲";
-                oImgP.style.fontSize = "24px";
-                oImgP.style.color = "#FF0000";
-                oImgP.style.position = "absolute";
-                oImgP.style.top = (vImgY + this.oImgPos[n].px_y - (w * 0.5)) + "px";
-                oImgP.style.left = (vImgX + this.oImgPos[n].px_x - (h * 0.5)) + "px";
-                if (this.oDiv) {
-                    this.oDiv.append(oImgP);
-                }
-            });
-        }
-    }
+function include() {
+    const oApp = new app();
+    oApp.css("lib/leaflet.css");
+    oApp.css("lib/leaflet.awesome-markers.css");
+    oApp.css("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
+    oApp.js("lib/leaflet.js");
+    oApp.js("lib/leaflet.awesome-markers.js");
+    oApp.js("lib/chart.js");
+    oApp.js("js/appMapsGSI.js");
+    oApp.js("js/maps.js");
+    oApp.js("js/mapsGpxChart.js");
+    oApp.js("js/appMap.js");
+    oApp.js("js/mapsDataPrefCapital.js");
 }
-window.onload = () => {
-    page();
-};
-window.onhashchange = () => {
-    page();
-};
 /**
  * 初期処理
  * @param id DivID
@@ -568,3 +507,21 @@ function page() {
         }
     }
 }
+/**
+ * メイン
+ */
+(function () {
+    include();
+})();
+/**
+ * window.onload
+ */
+window.onload = () => {
+    page();
+};
+/**
+ * window.onhashchange
+ */
+window.onhashchange = () => {
+    page();
+};
