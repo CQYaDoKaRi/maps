@@ -15,8 +15,17 @@ npm install
 ```
 build.sh
 ```
-- `src/ts/*.ts` のコンパイルして、`public/*.js` へ出力
-- `public/*.js` のファイルを minify する
+- `src/ts/*.ts` のコンパイルして、`public/js/*.js` へ出力
+- `public/js/*.js`、`public/lib/*.js` のファイルを minify して、`public/js/*.min.js` へ出力
+- `src/scss/*.scss` のコンパイルして、`public/css/*.css` へ出力
+- `public/css/*.css`、`public/lib/*.css` のファイルを minify して、`public/css/*.min.css` へ出力
+
+## ビルド（開発モード）
+```
+build.sh dev
+```
+- `src/scss/*.scss` のコンパイルして、`public/css/*.css` へ出力
+- `src/ts/*.ts` のコンパイル、変更を監視して、`public/js/*.js` へ出力
 
 ## 起動
 ```

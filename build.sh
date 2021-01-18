@@ -16,6 +16,7 @@ if [ "${TYPE}" = "ver" ]; then
         ver
 # build for dev
 elif [ "${TYPE}" = "dev" ]; then
+	npm run scss_build
 	npm run tsc_build
         npm run tsc_build_w
 # build for release

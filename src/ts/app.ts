@@ -41,12 +41,28 @@ class app {
 	}
 
     /**
-     * CSS読み込み
+     * CSS
      * @param src ソースパス
      */
 	public css(src: string): void{
 		this._css.push(src);
+		this.documentCss(src);
+	}
 
+    /**
+     * CSS for lib
+     * @param src ソースパス
+     */
+	public cssLib(src: string): void{
+		this._cssLib.push(src);
+		this.documentCss(src);
+	}
+
+    /**
+     * document - CSS
+     * @param src ソースパス
+     */
+	public documentCss(src: string): void{
 		if (typeof document !== "undefined" && document) {
 			const head: HTMLElement = document.getElementsByTagName("head")[0];
 			const link: HTMLLinkElement = document.createElement("link");
@@ -59,22 +75,28 @@ class app {
 	}
 
     /**
-     * CSS読み込み for lib
-     * @param src ソースパス
-     */
-	public cssLib(src: string): void{
-		this._cssLib.push(src);
-
-		this.css(src);
-	}
-
-    /**
-     * JavaScript読み込み
+     * JavaScript
      * @param src ソースパス
      */
 	public js(src: string): void {
 		this._js.push(src);
+		this.documentJs(src);
+	}
 
+    /**
+     * JavaScript for lib
+     * @param src ソースパス
+     */
+	public jsLib(src: string): void {
+		this._jsLib.push(src);
+		this.documentJs(src);
+	}
+
+    /**
+     * document - JavaScript
+     * @param src ソースパス
+     */
+	private documentJs(src: string): void {
 		if (typeof document !== "undefined" && document) {
 			const script: HTMLScriptElement = document.createElement("script");
 			script.defer = true;
@@ -85,32 +107,22 @@ class app {
 				}
 
 				if (this.SCRIPT.length > 0) {
-					this.jsAdd(this.SCRIPT[0]);
+					this.documentJsAdd(this.SCRIPT[0]);
 				}
 			};
 
 			this.SCRIPT.push(script);
 			if (this.SCRIPT.length === 1) {
-				this.jsAdd(this.SCRIPT[0]);
+				this.documentJsAdd(this.SCRIPT[0]);
 			}
 		}
 	}
 
     /**
-     * JavaScript読み込み for lib
-     * @param src ソースパス
-     */
-	public jsLib(src: string): void {
-		this._jsLib.push(src);
-
-		this.js(src);
-	}
-
-    /**
-     * JavaScript追加
+     * document - JavaScript - 追加
      * @param script Script(JavaScript)オブジェクト
      */
-	private jsAdd(script: HTMLScriptElement): void {
+	private documentJsAdd(script: HTMLScriptElement): void {
 		document.getElementsByTagName("head")[0].appendChild(script);
 	}
 
@@ -128,7 +140,9 @@ class app {
 	public includeCss(): void{
 		this.cssLib("lib/leaflet.css");
 		this.cssLib("lib/leaflet.awesome-markers.css");
-		this.cssLib("https://use.fontawesome.com/releases/v5.0.13/css/all.css");
+		this.cssLib("lib/font-awesome.css");
+
+		this.css("css/index.css");
 	}
 
 	/**
@@ -184,8 +198,8 @@ else{
 		}
 		else {
 			const oApp: app = new app();
-			oApp.includeCss();
 			oApp.js("js/index.min.js");
+			oApp.css("css/index.min.css");
 		}
 	})();
 }
