@@ -3,3 +3,6 @@ node_modules
 public/js/*.js
 !public/js/app.min.js
 !public/js/index.min.js
+# scss -> css
+public/css/*.css
+!public/css/index.min.js
