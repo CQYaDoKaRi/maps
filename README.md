@@ -1,4 +1,4 @@
-# maps
+# 概要
 - ２地点間の距離を求める
 - ある地点から角度と距離を指定して地点を求める
 - ズームレベルと縮尺
@@ -20,7 +20,7 @@ build.sh
 - `src/scss/*.scss` のコンパイルして、`public/css/*.css` へ出力
 - `public/css/*.css`、`public/lib/*.css` のファイルを minify して、`public/css/*.min.css` へ出力
 
-## ビルド（開発モード）
+## ビルド - 開発モード
 ```
 build.sh dev
 ```
@@ -33,8 +33,18 @@ node index.js
 ```
 
 ## 表示
-http://localhost:8080/
+http://localhost:8080/  
 
-## 表示（開発モード）
-http://localhost:8080/index.html?dev=1
-minify 前のファイルを使う
+## 表示 - 開発モード
+http://localhost:8080/index.html?dev=1  
+minify 前のファイルを使う  
+
+## テスト - JEST
+```
+npm run test
+```
+
+## テスト - Cypress
+```
+npx cypress open
+```
