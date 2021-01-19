@@ -6,3 +6,11 @@ public/js/*.js
 # scss -> css
 public/css/*.css
 !public/css/index.min.js
+# bin -> tile
+bin/tile/.vs
+bin/tile/dll.Tile/obj
+bin/tile/dll.Tile/bin/Debug
+bin/tile/dll.Tile/bin/Release/*pdb
+bin/tile/app.GetTile/app.GetTile.csproj.user
+bin/tile/app.GetTile/obj
+bin/tile/app.GetTile/bin/Release/*pdb
