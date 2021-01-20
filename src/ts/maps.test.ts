@@ -1,8 +1,9 @@
-import { maps } from "./maps";
+/// <reference path="./maps.ts" />
+const o = require("./maps.ts");
 
 // 方位角を方位名(略字)に変換
 test("方位角を方位名(略字)に変換", (): void => {
-	const oMaps: maps = new maps();
+	const oMaps: maps = new o.maps();
 
 	// 正常範囲
 	expect(oMaps.deg2Name(0)).toBe("N");

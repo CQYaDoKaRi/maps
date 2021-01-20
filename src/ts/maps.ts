@@ -21,7 +21,7 @@ enum mapsTypeTile {
 /**
  * 地図：座標
  */
-export class mapsLatLon {
+class mapsLatLon {
 	/**
 	 * 緯度
 	 */
@@ -36,7 +36,7 @@ export class mapsLatLon {
 /**
  * 地図：タイル
  */
-export class mapsTile {
+class mapsTile {
 	/**
 	 * タイル座標X
 	 */
@@ -66,7 +66,7 @@ export class mapsTile {
 /**
  * 地図：タイル：URL
  */
-export class mapsTileUrl {
+class mapsTileUrl {
 	/**
 	 * タイル座標
 	 */
@@ -135,7 +135,7 @@ export class mapsTileUrl {
 /**
  * 地図：タイル：標高タイル
  */
-export class mapsTileDem {
+class mapsTileDem {
 	/**
 	 * タイル種別
 	 */
@@ -216,7 +216,7 @@ export class mapsTileDem {
 /**
  * 地図：データ：Garmin GPSログ(GPX)
  */
-export class mapsDataGpx {
+class mapsDataGpx {
 	/**
 	 * ファイル名
 	 */
@@ -417,7 +417,7 @@ export class mapsDataGpx {
 /**
  * 地図：データ：Garmin GPSログ(GPX)：ログ
  */
-export class mapsDataGpxLog {
+class mapsDataGpxLog {
 	/**
 	 * 時刻
 	 */
@@ -487,7 +487,7 @@ export class mapsDataGpxLog {
 /**
  * 地図
  */
-export class maps {
+class maps {
 	/**
 	 * 楕円体
 	 */
@@ -1498,4 +1498,17 @@ export class maps {
 		}
 		);
 	}
+}
+
+interface module {
+	exports: any;
+}
+if (typeof module !== "undefined" && module && module.exports) {
+	module.exports.maps = maps;
+	module.exports.mapsLatLon = mapsLatLon;
+	module.exports.mapsTile = mapsTile;
+	module.exports.mapsTileUrl = mapsTileUrl;
+	module.exports.mapsTileDem = mapsTileDem;
+	module.exports.mapsDataGpx = mapsDataGpx;
+	module.exports.mapsDataGpxLog = mapsDataGpxLog;
 }

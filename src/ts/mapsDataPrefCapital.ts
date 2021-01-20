@@ -103,3 +103,11 @@ class mapsDataPrefCapital {
 		return this.d;
 	}
 }
+
+interface module {
+	exports: any;
+}
+if (typeof module !== "undefined" && module && module.exports) {
+	module.exports.mapsDataPrefCapital = mapsDataPrefCapital;
+	module.exports.mapsDataPrefCapitalItem = mapsDataPrefCapitalItem;
+}

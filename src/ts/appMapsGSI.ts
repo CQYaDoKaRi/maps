@@ -1,3 +1,5 @@
+/// <reference path="./maps.ts" />
+
 /**
  * 地理院タイル
  */
@@ -64,4 +66,11 @@ class appMapsGSI {
 			});
 		}
 	}
+}
+
+interface module {
+	exports: any;
+}
+if (typeof module !== "undefined" && module && module.exports) {
+	module.exports.appMapsGSI = appMapsGSI;
 }
