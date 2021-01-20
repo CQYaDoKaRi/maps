@@ -1,3 +1,5 @@
+/// <reference path="./maps.ts" />
+
 /**
  * ChartJS
  */
@@ -624,4 +626,13 @@ class mapsDataGpxChartData {
 	 * テキスト
 	 */
 	public text: string[] = [];
+}
+
+interface module {
+	exports: any;
+}
+if (typeof module !== "undefined" && module && module.exports) {
+	module.exports.ChartIndex = ChartIndex;
+	module.exports.mapsDataGpxChart = mapsDataGpxChart;
+	module.exports.mapsDataGpxChartData = mapsDataGpxChartData;
 }

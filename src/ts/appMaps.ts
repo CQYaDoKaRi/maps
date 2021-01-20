@@ -8,7 +8,7 @@
 /**
  * アプリケーション：地図
  */
-class appMap {
+class appMaps {
 	private oMap: L.Map | null = null;
 	private iMapApp: string = "";
 	private oMapApp: HTMLElement | null;
@@ -118,4 +118,11 @@ class appMap {
 			o.bindPopup(options.popup);
 		}
 	}
+}
+
+interface module {
+	exports: any;
+}
+if (typeof module !== "undefined" && module && module.exports) {
+	module.exports.appMap = appMaps;
 }

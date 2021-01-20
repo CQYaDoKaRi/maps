@@ -1,3 +1,9 @@
+/// <reference path="./maps.ts" />
+/// <reference path="./mapsGpxChart.ts" />
+/// <reference path="./mapsDataPrefCapital.ts" />
+/// <reference path="./appMaps.ts" />
+/// <reference path="./appMapsGSI.ts" />
+
 /**
  * 初期処理
  * @param id DivID
@@ -22,7 +28,7 @@ function init(id: string) : boolean {
  */
 function page() : void {
 	const oMaps: maps = new maps();
-	let oAppMap: appMap | null = null;
+	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
 	let vDiv: string[] | null = ["Accuracy", "Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
@@ -81,10 +87,10 @@ function page() : void {
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
-		oAppMap = new appMap("appAccuracyMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+		oAppMaps = new appMaps("appAccuracyMap", _MapLat, _MapLon, _MapZ, _MapOptions);
 		const distanceTo = [10, 100, 1000, 10000, 100000];
 		dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
-			if (!oAppMap) {
+			if (!oAppMaps) {
 				return;
 			}
 
@@ -94,7 +100,7 @@ function page() : void {
 			let options: { [key: string]: any } = {};
 
 			distanceTo.map((distance: number, n: number, distanceTo: number[]) => {
-				if (!oAppMap) {
+				if (!oAppMaps) {
 					return;
 				}
 
@@ -115,19 +121,19 @@ function page() : void {
 
 					options.color = "blue";
 					options.popup = "<ol style=\"list-style-type: none;\"><li>" + pref + "から" + distance.toLocaleString() + "m" + "</li><li>緯度：" + lat + "</li><li>経度：" + lon + "</li></ol>";
-					oAppMap.point(c.lat, lon, options);
+					oAppMaps.point(c.lat, lon, options);
 
 					atob.push(new Array(c.lat, lon));
 
 					options = {};
 					options.color = "#4169e1";
-					oAppMap.arc(atob, options);
+					oAppMaps.arc(atob, options);
 				}
 			});
 
 			options.color = "red";
 			options.popup = "<ol style=\"list-style-type: none;\"><li>" + pref + "</li><li>緯度：" + lat + "</li><li>経度：" + lon + "</li></ol>";
-			oAppMap.point(lat, lon, options);
+			oAppMaps.point(lat, lon, options);
 		});
 	}
 
@@ -149,7 +155,7 @@ function page() : void {
 
 				// ２地点間の距離を求める
 				oDiv = document.getElementById("appDistance");
-				oAppMap = new appMap("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+				oAppMaps = new appMaps("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
 			}
 			else if (t === 1) {
 				if (!init("appDistanceTo")) {
@@ -158,10 +164,10 @@ function page() : void {
 
 				// ある地点から角度と距離を指定して地点を求める
 				oDiv = document.getElementById("appDistanceTo");
-				oAppMap = new appMap("appDistanceToMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+				oAppMaps = new appMaps("appDistanceToMap", _MapLat, _MapLon, _MapZ, _MapOptions);
 			}
 
-			if (!oDiv || !oAppMap) {
+			if (!oDiv || !oAppMaps) {
 				return;
 			}
 
@@ -209,10 +215,10 @@ function page() : void {
 			let options: { [key: string]: any } = {};
 			options.color = "red";
 			options.popup = item_base.pref;
-			oAppMap.point(item_base.lat, item_base.lon, options);
+			oAppMaps.point(item_base.lat, item_base.lon, options);
 
 			dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
-				if (!oDiv || !oAppMap) {
+				if (!oDiv || !oAppMaps) {
 					return;
 				}
 
@@ -269,14 +275,14 @@ function page() : void {
 					options = {};
 					options.color = "blue";
 					options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>緯度：" + item.lat + "</li><li>経度：" + item.lon + "</li></ol>";
-					oAppMap.point(item.lat, item.lon, options);
+					oAppMaps.point(item.lat, item.lon, options);
 
 
 					if (t === 1) {
 						options = {};
 						options.color = "green";
 						options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
-						oAppMap.point(item.c_lat, item.c_lon, options);
+						oAppMaps.point(item.c_lat, item.c_lon, options);
 					}
 
 					const atob: number[][] = [];
@@ -286,7 +292,7 @@ function page() : void {
 					options = {};
 					options.color = "#4169e1";
 					options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
-					oAppMap.arc(atob, options);
+					oAppMaps.arc(atob, options);
 				}
 			});
 		}

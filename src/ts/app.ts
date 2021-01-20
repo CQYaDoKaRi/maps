@@ -158,7 +158,7 @@ class app {
 		this.js("js/maps.js");
 		this.js("js/mapsGpxChart.js");
 
-		this.js("js/appMap.js");
+		this.js("js/appMaps.js");
 		this.js("js/mapsDataPrefCapital.js");
 
 		this.js("js/index.js");
