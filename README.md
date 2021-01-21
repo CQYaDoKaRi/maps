@@ -32,6 +32,26 @@ build.sh dev
 node index.js
 ```
 
+## docker - 起動
+```
+./docker/init.sh start
+```
+- docker image 作成
+- docker コンテナ起動
+- node 起動
+
+## docker - 停止
+```
+./docker/init.sh stop
+```
+- docker コンテナ停止
+- docker image 削除
+
+## docker - コンテナログイン
+```
+./docker init.sh exec
+```
+
 ## 表示
 http://localhost:8080/  
 
@@ -44,7 +64,12 @@ minify 前のファイルを使う
 npm run test
 ```
 
-## テスト - Cypress
+## テスト - Cypress - GUI
 ```
 npx cypress open
+```
+
+## テスト - Cypress - CUI
+```
+npx cypress run
 ```
