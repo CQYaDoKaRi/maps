@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+ maps:
+  image: maps:dev
+  container_name: maps
+  hostname: maps
+  build: .
+  ports:
+   - "8080:8080"
+  volumes:
+   - maps_data:/usr/local/maps
+  tty: true
+  networks:
+   - link_maps
+
+volumes:
+ maps_data:
+   driver_opts:
+    type: none
+    device: ${PWD}/../
+    o: bind
+
+networks:
+ default:
+  external:
+   name: bridge
+ link_maps:
+  name: maps.internal
+  driver: bridge
+  ipam:
+   driver: default
+   config:
+    - subnet: "192.168.0.1/24"
+
