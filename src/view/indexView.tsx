@@ -4,6 +4,7 @@
 /// <reference path="../../node_modules/@types/react-dom/index.d.ts" />
 
 /// <reference path="./indexViewMenu.tsx" />
+/// <reference path="./indexViewContents.tsx" />
 
 /**
  * indexView
@@ -27,6 +28,19 @@ class indexView {
 		if (container) {
 			ReactDOM.render(
 				<IndexViewMenu titles={this.title} />
+				, container
+			);
+		}
+	}
+
+	/**
+	 * 描画 - コンテンツ
+	 * @param container Div
+	 */
+	public renderContents(container: HTMLElement | null){
+		if (container) {
+			ReactDOM.render(
+				<IndexViewContents />
 				, container
 			);
 		}

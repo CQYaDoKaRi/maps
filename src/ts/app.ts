@@ -162,6 +162,7 @@ class app {
 		this.js("js/ts/mapsDataPrefCapital.js");
 
 		this.js("js/view/indexViewMenu.js");
+		this.js("js/view/indexViewContents.js");
 		this.js("js/view/indexView.js");
 		this.js("js/view/index.js");
 	}

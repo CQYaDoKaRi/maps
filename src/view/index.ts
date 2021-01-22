@@ -570,6 +570,7 @@ window.onload = () => {
 	});
 
 	oView.renderMenu(document.getElementById("menu"));
+	oView.renderContents(document.getElementById("contents"));
 
 	page();
 }
