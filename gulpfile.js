@@ -195,6 +195,7 @@ function scssLibMinify() {
 gulp.task("tsc", gulp.series(tsc));
 // task - javascript - minify
 gulp.task("jsmin", gulp.series(jsAppMinify, jsIndexMinify, jsLibMinify));
+gulp.task("jsmin-app", gulp.series(jsAppMinify));
 // task - css
 gulp.task("scss", gulp.series(scss));
 // task - css - minify
