@@ -1,8 +1,8 @@
-/// <reference path="./maps.ts" />
-/// <reference path="./mapsGpxChart.ts" />
-/// <reference path="./mapsDataPrefCapital.ts" />
-/// <reference path="./appMaps.ts" />
-/// <reference path="./appMapsGSI.ts" />
+/// <reference path="../ts/maps.ts" />
+/// <reference path="../ts/mapsGpxChart.ts" />
+/// <reference path="../ts/mapsDataPrefCapital.ts" />
+/// <reference path="../ts/appMaps.ts" />
+/// <reference path="../ts/appMapsGSI.ts" />
 /// <reference path="./indexView.tsx" />
 
 /**
