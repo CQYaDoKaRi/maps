@@ -161,6 +161,7 @@ class app {
 		this.js("js/appMaps.js");
 		this.js("js/mapsDataPrefCapital.js");
 
+		this.js("js/indexView.js");
 		this.js("js/index.js");
 	}
 }
