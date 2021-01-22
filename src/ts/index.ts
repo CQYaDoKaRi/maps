@@ -3,6 +3,7 @@
 /// <reference path="./mapsDataPrefCapital.ts" />
 /// <reference path="./appMaps.ts" />
 /// <reference path="./appMapsGSI.ts" />
+/// <reference path="./indexView.tsx" />
 
 /**
  * 初期処理
@@ -614,9 +615,9 @@ function page() : void {
  * window.onload
  */
 window.onload = () => {
-	const oView: indexView = new indexView({});
+	const oView: indexView = new indexView();
 
-	const title: indexTitle[] = [
+	const title: indexMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離を求める" }
 		, { key: "DistanceTo", title: "ある地点から角度と距離を指定して地点を求める" }
 		, { key: "Scale", title: "ズームレベルと縮尺" }
@@ -624,11 +625,11 @@ window.onload = () => {
 		, { key: "TileE", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
 		, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
 	];
-	title.map((item: indexTitle) => {
-		oView.setTitle(item);
+	title.map((item: indexMenuTitle) => {
+		oView.setMenuTitle(item);
 	});
 
-	oView.menu(document.getElementById("menu"));
+	oView.renderMenu(document.getElementById("menu"));
 
 	page();
 }

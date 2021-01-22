@@ -3,43 +3,63 @@
 // npm install --save-dev @types/react-dom
 /// <reference path="../../node_modules/@types/react-dom/index.d.ts" />
 
-interface indexTitle {
+interface indexMenuTitle {
 	key: string
 	, title: string
 }
 
-class indexView extends React.Component {
-	private title: indexTitle[] = [];
+/**
+ * React Component - IndexViewMenu - props
+ */
+type indexViewMenuProps = {
+	titles: indexMenuTitle[];
+}
 
-	constructor(props: any) {
+/**
+ * React Component - IndexViewMenu
+ */
+class IndexViewMenu extends React.Component<indexViewMenuProps, {}> {
+	constructor(props: indexViewMenuProps) {
 		super(props);
 	}
 
-	/**
-	 * メニュー - タイトルを設定
-	 * @param item タイトル
-	 */
-	public setTitle(item: indexTitle): void{
-		this.title.push(item);
-	}
-
-	/**
-	 * メニュー
-	 * @param container div
-	 */
-	public menu(container: HTMLElement | null): void{
-		const element: JSX.Element = (
+	render(){
+		return(
 			<ul>
 				{
-					this.title.map((item: indexTitle) => (
+					this.props.titles.map((item: indexMenuTitle) => (
 						<li><a href={ "#" + item.key }>{ item.title }</a></li>
 					))
 				}
 			</ul>
 		);
+	}
+}
 
+/**
+ * indexView
+ */
+class indexView {
+	private title: indexMenuTitle[] = [];
+
+	/**
+	 * 設定：メニュー - タイトル
+	 * @param item タイトル
+	 */
+	public setMenuTitle(item: indexMenuTitle): void{
+		this.title.push(item);
+	}
+
+	/**
+	 * 描画 - メニュー
+	 * @param container Div
+	 */
+	public renderMenu(container: HTMLElement | null){
 		if (container) {
-			ReactDOM.render(element, container);
+			ReactDOM.render(
+				<IndexViewMenu titles={this.title} />
+				, container
+			);
 		}
 	}
 }
@@ -48,5 +68,5 @@ interface module {
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
-	module.exports.indexView = indexView;
+	module.exports.indexViewRender = indexView;
 }
