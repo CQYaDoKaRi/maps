@@ -14,7 +14,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 
  // src
-const app = require("./public/js/app");
+const app = require("./public/js/ts/app");
 const oApp = new app.app();
 oApp.include();
 
@@ -29,7 +29,7 @@ const env = {
 	}
 	, js: {
 		path: "public/js"
-		, srcApp: ["public/js/app.js"]
+		, srcApp: ["public/js/ts/app.js"]
 		, srcIndex: oApp.getJs()
 		, srcLib: oApp.getJsLib()
 		, minApp: "app.min.js"
@@ -195,6 +195,7 @@ function scssLibMinify() {
 gulp.task("tsc", gulp.series(tsc));
 // task - javascript - minify
 gulp.task("jsmin", gulp.series(jsAppMinify, jsIndexMinify, jsLibMinify));
+gulp.task("jsmin-app", gulp.series(jsAppMinify));
 // task - css
 gulp.task("scss", gulp.series(scss));
 // task - css - minify

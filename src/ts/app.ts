@@ -153,15 +153,18 @@ class app {
 		this.jsLib("lib/leaflet.awesome-markers.js");
 		this.jsLib("lib/chart.js");
 
-		this.js("js/appMapsGSI.js");
+		this.js("js/ts/appMapsGSI.js");
 
-		this.js("js/maps.js");
-		this.js("js/mapsGpxChart.js");
+		this.js("js/ts/maps.js");
+		this.js("js/ts/mapsGpxChart.js");
 
-		this.js("js/appMaps.js");
-		this.js("js/mapsDataPrefCapital.js");
+		this.js("js/ts/appMaps.js");
+		this.js("js/ts/mapsDataPrefCapital.js");
 
-		this.js("js/index.js");
+		this.js("js/view/indexViewMenu.js");
+		this.js("js/view/indexViewContents.js");
+		this.js("js/view/indexView.js");
+		this.js("js/view/index.js");
 	}
 }
 

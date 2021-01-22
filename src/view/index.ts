@@ -1,8 +1,9 @@
-/// <reference path="./maps.ts" />
-/// <reference path="./mapsGpxChart.ts" />
-/// <reference path="./mapsDataPrefCapital.ts" />
-/// <reference path="./appMaps.ts" />
-/// <reference path="./appMapsGSI.ts" />
+/// <reference path="../ts/maps.ts" />
+/// <reference path="../ts/mapsGpxChart.ts" />
+/// <reference path="../ts/mapsDataPrefCapital.ts" />
+/// <reference path="../ts/appMaps.ts" />
+/// <reference path="../ts/appMapsGSI.ts" />
+/// <reference path="./indexView.tsx" />
 
 /**
  * 初期処理
@@ -31,7 +32,7 @@ function page() : void {
 	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
-	let vDiv: string[] | null = ["Accuracy", "Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
+	let vDiv: string[] | null = ["Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
 	const fDiv: { [key: string]: boolean } = {};
 	vDiv.map((key: string, n: number, vDiv: string[]) => {
 		fDiv[key] = false;
@@ -76,66 +77,6 @@ function page() : void {
 	_MapOptions.wUnit = "%";
 	_MapOptions.h = 600;
 	_MapOptions.hUnit = "px";
-
-	/*==============================================================================================*/
-	// 精度
-	if (fDiv["Accuracy"] === true) {
-		if (!init("Accuracy")) {
-			return;
-		}
-
-		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
-		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
-
-		oAppMaps = new appMaps("appAccuracyMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-		const distanceTo = [10, 100, 1000, 10000, 100000];
-		dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
-			if (!oAppMaps) {
-				return;
-			}
-
-			const pref: string = item.pref;
-			const lat: number = item.lat;
-			const lon: number = item.lon;
-			let options: { [key: string]: any } = {};
-
-			distanceTo.map((distance: number, n: number, distanceTo: number[]) => {
-				if (!oAppMaps) {
-					return;
-				}
-
-				for (let i = 0; i < 2; i++) {
-					let a: number = 0;
-					const atob: number[][] = [];
-					const atob_item: number[] = new Array(2);
-					atob_item[0] = lat;
-					atob_item[1] = lon;
-					atob.push(atob_item);
-					if (i === 0) {
-						a = 0;
-					}
-					else if (i === 1) {
-						a = 180;
-					}
-					const c: mapsLatLon = oMaps.distanceTo(lat, lon, a, distance);
-
-					options.color = "blue";
-					options.popup = "<ol style=\"list-style-type: none;\"><li>" + pref + "から" + distance.toLocaleString() + "m" + "</li><li>緯度：" + lat + "</li><li>経度：" + lon + "</li></ol>";
-					oAppMaps.point(c.lat, lon, options);
-
-					atob.push(new Array(c.lat, lon));
-
-					options = {};
-					options.color = "#4169e1";
-					oAppMaps.arc(atob, options);
-				}
-			});
-
-			options.color = "red";
-			options.popup = "<ol style=\"list-style-type: none;\"><li>" + pref + "</li><li>緯度：" + lat + "</li><li>経度：" + lon + "</li></ol>";
-			oAppMaps.point(lat, lon, options);
-		});
-	}
 
 	/*==============================================================================================*/
 	// ２地点間の距離＆ある地点から角度と距離を指定して地点を求める
@@ -614,6 +555,23 @@ function page() : void {
  * window.onload
  */
 window.onload = () => {
+	const oView: indexView = new indexView();
+
+	const title: indexMenuTitle[] = [
+		{ key: "Distance", title: "２地点間の距離を求める" }
+		, { key: "DistanceTo", title: "ある地点から角度と距離を指定して地点を求める" }
+		, { key: "Scale", title: "ズームレベルと縮尺" }
+		, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める" }
+		, { key: "TileE", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
+		, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
+	];
+	title.map((item: indexMenuTitle) => {
+		oView.setMenuTitle(item);
+	});
+
+	oView.renderMenu(document.getElementById("menu"));
+	oView.renderContents(document.getElementById("contents"));
+
 	page();
 }
 

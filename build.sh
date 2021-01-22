@@ -18,6 +18,7 @@ if [ "${TYPE}" = "ver" ]; then
 elif [ "${TYPE}" = "dev" ]; then
 	npm run scss_build
 	npm run tsc_build
+	npm run gulp jsmin-app
         npm run tsc_build_w
 # build for release
 else
