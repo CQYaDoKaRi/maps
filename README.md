@@ -27,9 +27,15 @@ build.sh dev
 - `src/scss/*.scss` のコンパイルして、`public/css/*.css` へ出力
 - `src/ts/*.ts` のコンパイル、変更を監視して、`public/js/*.js` へ出力
 
-## 起動
+## 起動 - ts-node
 ```
-node index.js
+npm run start
+```
+= npm run ts-node dist/node/index.js
+
+## 起動 - node
+```
+node dist/node/index.js
 ```
 
 ## docker - 起動

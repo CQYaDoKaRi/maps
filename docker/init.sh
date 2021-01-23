@@ -23,7 +23,10 @@ function stop() {
 function run() {
 	echo -e "\033[0;31m[${APP}] start node\033[0;39m"
 	cd ${DIR}/../
-	node index.js
+	# - dev
+	npm run ts-node dist/node/index.js
+	# - release
+	#node index.js
 }
 
 # -------
