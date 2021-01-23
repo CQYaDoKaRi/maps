@@ -1,10 +1,11 @@
 node_modules
 # ts -> js
-dist/ts/*
-dist/view/*
 !dist/.gitkeep
+dist/ts/*
 !dist/ts/.gitkeep
+dist/view/*
 !dist/view/.gitkeep
+dist/node/*
 # scss -> css
 public/css/*.css
 !public/css/index.min.js
