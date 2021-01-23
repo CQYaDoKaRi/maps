@@ -11,6 +11,7 @@
 		"gulp": "gulp",
 		"scss_build": "gulp scss",
 		"build": "gulp build",
+		"start": "ts-node dist/node/index.js",
 		"test": "jest"
 	},
 	"repository": {

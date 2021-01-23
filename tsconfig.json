@@ -72,6 +72,7 @@
 		"./src/ts/*.ts"
 		, "./src/view/*.ts"
 		, "./src/view/*.tsx"
+		, "./src/node/*.ts"
 	]
 	, "exclude":
 	[
