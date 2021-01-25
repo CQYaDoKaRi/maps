@@ -6,6 +6,8 @@ dist/ts/*
 dist/view/*
 !dist/view/.gitkeep
 dist/node/*
+# js - [babel] -> js
+dist.babel
 # scss -> css
 public/css/*.css
 !public/css/index.min.js

@@ -6,6 +6,9 @@ const concat = require("gulp-concat");
 const ts = require("gulp-typescript");
 const tsProject = ts.createProject("tsconfig.json");
 
+// babel
+const babel = require("gulp-babel");
+
 // js - minify
 const uglify = require("gulp-uglify");
 
@@ -14,7 +17,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 
  // src
-const app = require("./public/js/ts/app");
+const app = require("./dist/ts/app");
 const oApp = new app.app();
 oApp.include();
 
@@ -25,6 +28,13 @@ const env = {
  	, ts: {
 		src: [
 			"src/ts/**/*.ts"
+		]
+	}
+	, babel : {
+		path: "dist.babel"
+		, src: [
+			"dist/**/*.js"
+			, "!dist/node/*.js"
 		]
 	}
 	, js: {
@@ -69,6 +79,22 @@ function tsc() {
 		.js
  		.pipe(gulp.dest(env.js.path))
 	;
+}
+
+// js(6) - js(5)
+function jsBabel(){
+	return (
+		gulp
+		.src(env.babel.src)
+		.pipe(
+			babel(
+				{
+					presets: ["@babel/preset-env"]
+				}
+			)
+		)
+		.pipe(gulp.dest(env.babel.path))
+	);
 }
 
 // JavaScript - app - minify
@@ -193,6 +219,8 @@ function scssLibMinify() {
 
 // task - typescript
 gulp.task("tsc", gulp.series(tsc));
+// task - babel
+gulp.task("babel", gulp.series(jsBabel));
 // task - javascript - minify
 gulp.task("jsmin", gulp.series(jsAppMinify, jsIndexMinify, jsLibMinify));
 gulp.task("jsmin-app", gulp.series(jsAppMinify));
@@ -201,4 +229,4 @@ gulp.task("scss", gulp.series(scss));
 // task - css - minify
 gulp.task("cssmin", gulp.series(scssMinify, scssLibMinify));
 // task - build
-gulp.task("build", gulp.series(tsc, jsAppMinify, jsIndexMinify, jsLibMinify, scss, scssMinify, scssLibMinify));
+gulp.task("build", gulp.series(tsc, jsBabel, jsAppMinify, jsIndexMinify, jsLibMinify, scss, scssMinify, scssLibMinify));
