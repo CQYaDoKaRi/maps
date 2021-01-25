@@ -11,7 +11,7 @@
 		"gulp": "gulp",
 		"scss_build": "gulp scss",
 		"build": "gulp build",
-		"start": "ts-node dist/node/index.js",
+		"start": "ts-node src/node/index.ts",
 		"test": "jest"
 	},
 	"repository": {
@@ -32,6 +32,8 @@
 		"tsc": "^1.20150623.0"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.12.10",
+		"@babel/preset-env": "^7.12.11",
 		"@types/express": "^4.17.11",
 		"@types/jest": "^26.0.20",
 		"@types/node": "^14.14.22",
@@ -40,6 +42,7 @@
 		"cypress": "^6.2.1",
 		"del": "^6.0.0",
 		"gulp": "^4.0.2",
+		"gulp-babel": "^8.0.0",
 		"gulp-concat": "^2.6.1",
 		"gulp-sass": "^4.1.0",
 		"gulp-sourcemaps": "^3.0.0",
