@@ -3,8 +3,8 @@
 // npm install --leaflet.awesome-markers @types/leaflet.awesome-markers
 import L from "leaflet";
 import "leaflet.awesome-markers";
-//import "leaflet/dist/leaflet.css";
-//import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
+import "leaflet/dist/leaflet.css";
+import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
 
 /**
  * アプリケーション：地図

@@ -138,8 +138,6 @@ class app {
 	 * include CSS
 	 */
 	public includeCss(): void{
-		this.cssLib("lib/leaflet.css");
-		this.cssLib("lib/leaflet.awesome-markers.css");
 		this.cssLib("lib/font-awesome.css");
 
 		this.css("css/index.css");
