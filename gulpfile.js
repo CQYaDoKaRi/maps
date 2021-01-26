@@ -59,7 +59,7 @@ const env = {
 	, css: {
 		path: "./public/css"
 		, src: [
-			"./src/scss/**/*.scss"
+			"./src/scss/*.scss"
 		]
 		, srcIndex: oApp.getCss()
 		, srcLib: oApp.getCssLib()
@@ -191,3 +191,12 @@ gulp.task("build"
 		, scss, scssMinify, scssLibMinify
 	)
 );
+
+// task - watch - babel
+const watchFiles = () => {
+	gulp.watch(tsProject.options.outDir).on("change", gulp.series(jsBabel));
+	gulp.watch(env.babel.path).on("change", gulp.series(jsWebpackDev));
+	gulp.watch(env.css.src).on("change", gulp.series(scss, scssMinify, scssLibMinify));
+};
+
+gulp.task("watch", gulp.parallel(watchFiles));
