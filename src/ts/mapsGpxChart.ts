@@ -1,16 +1,11 @@
-/// <reference path="./maps.ts" />
-
-/**
- * ChartJS
- */
-declare let Chart: {
-	new(context: CanvasRenderingContext2D, data: {}): any;
-}
+import { mapsDataGpx, mapsDataGpxLog } from "./maps";
+// npm install --save-dev chart.js @types/chart.js
+import { Chart } from "chart.js";
 
 /**
  * ChartJS.Index
  */
-class ChartIndex {
+export class ChartIndex {
 	public init: boolean = false;
 
 	public index: number = 0;
@@ -28,7 +23,7 @@ class ChartIndex {
  *  ver:5.0.13 -> http://fontawesome.io/
  *  ver:2.7.2  -> http://www.chartjs.org/
  */
-class mapsDataGpxChart {
+export class mapsDataGpxChart {
 	/**
 	 * DIV
 	 */
@@ -101,10 +96,11 @@ class mapsDataGpxChart {
 	/**
 	 * 生成
 	 */
-	public create() {
+	public create(): void {
 		if(!this.o) {
 			return;
 		}
+		const _this: mapsDataGpxChart = this;
 
 		this.o.innerHTML = "";
 
@@ -132,7 +128,7 @@ class mapsDataGpxChart {
 			this.oScreen.style.textAlign = "right";
 			this.oScreen.innerHTML = "<i class=\"fas fa-thumbtack\"></i>";
 			this.oScreen.addEventListener("click",
-				(e: {}) => {
+				(e: MouseEvent) => {
 					return _this.eChartClick(e, null);
 				}
 			);
@@ -143,7 +139,7 @@ class mapsDataGpxChart {
 			this.oChartCanvas = document.createElement("canvas");
 			this.oChartCanvas.style.display = "none";
 			this.oScreen.addEventListener("mouseout",
-				(e: {}) => {
+				(e: MouseEvent) => {
 					return _this.eHoverOut(e);
 				}
 			);
@@ -151,111 +147,112 @@ class mapsDataGpxChart {
 			this.oChart.append(this.oChartCanvas);
 
 			// <- ChartJS - JavaScript
-			const oChartCanvas2D: any = this.oChartCanvas.getContext("2d");
-			let _this = this;
-			this.oChartCanvasData = new Chart(
-				oChartCanvas2D
-				,
-				{
-					type: "line"
-					, data: {
-						labels: this.vChartCanvasDataLabels
-						, datasets:
-							[
-								{
-									data: this.vChartCanvasData
-									, fill: true
-									, lineTension: 0
-									, borderWidth: 1
-									, borderColor: "rgba(89, 185, 105, 1)"
-									, backgroundColor: "rgba(89, 185, 105, 0.2)"
-									, pointRadius: 0
-									, pointHoverRadius: 5
-								}
-							]
-					}
-					, options: {
-						responsive: true
-						, maintainAspectRatio: false
-						, scales:
-						{
-							xAxes: [
-								{
-									ticks:
+			const oChartCanvas2D: CanvasRenderingContext2D | null = this.oChartCanvas.getContext("2d");
+			if (oChartCanvas2D){
+				this.oChartCanvasData = new Chart(
+					oChartCanvas2D
+					,
+					{
+						type: "line"
+						, data: {
+							labels: this.vChartCanvasDataLabels
+							, datasets:
+								[
 									{
-										minRotation: 0
-										, maxRotation: 0
-										, autoSkip: true
-										, callback:
-											(value: string) => {
-												if (value === "-") {
-													return "";
-												}
-												else {
-													return value.toLocaleString() + "km";
-												}
-											}
+										data: this.vChartCanvasData
+										, fill: true
+										, lineTension: 0
+										, borderWidth: 1
+										, borderColor: "rgba(89, 185, 105, 1)"
+										, backgroundColor: "rgba(89, 185, 105, 0.2)"
+										, pointRadius: 0
+										, pointHoverRadius: 5
 									}
-								}
-							]
-							,
-							yAxes: [
-								{
-									ticks:
-									{
-										minRotation: 0
-										, maxRoDtation: 0
-										, autoSkip: true
-										, callback:
-											(value: string) => {
-												return value.toLocaleString() + " m";
-											}
-									}
-								}
-							]
+								]
 						}
-						, legend:
-						{
-							display: false
-						}
-						, hover:
-						{
-							mode: "nearest"
-							, intersect: false
-						}
-						, tooltips:
-						{
-							enabled: true
-							, mode: "nearest"
-							, callbacks:
+						, options: {
+							responsive: true
+							, maintainAspectRatio: false
+							, scales:
 							{
-								title:
-									(i: any[], data: {}) => {
-										return "";
+								xAxes: [
+									{
+										ticks:
+										{
+											minRotation: 0
+											, maxRotation: 0
+											, autoSkip: true
+											, callback:
+												(value: string) => {
+													if (value === "-") {
+														return "";
+													}
+													else {
+														return value.toLocaleString() + "km";
+													}
+												}
+										}
 									}
-								, label:
-									(i: any[], data: {}) => {
-										return "";
+								]
+								,
+								yAxes: [
+									{
+										ticks:
+										{
+											minRotation: 0
+											, maxRotation: 0
+											, autoSkip: true
+											, callback:
+												(value: string) => {
+													return value.toLocaleString() + " m";
+												}
+										}
 									}
-								, afterBody:
-									(i: any[], data: {}) => {
-										return _this.eChartToolTipData(i, data);
-									}
+								]
 							}
-						}
-						, onHover:
-							(e: {}, i: any[]) => {
-								return _this.eChartHover(e, i);
+							, legend:
+							{
+								display: false
 							}
+							, hover:
+							{
+								mode: "nearest"
+								, intersect: false
+							}
+							, tooltips:
+							{
+								enabled: true
+								, mode: "nearest"
+								, callbacks:
+								{
+									title:
+										(i: Chart.ChartTooltipItem[], data: Chart.ChartData) => {
+											return "";
+										}
+									, label:
+										(i: Chart.ChartTooltipItem, data: Chart.ChartData) => {
+											return "";
+										}
+									, afterBody:
+										(i:Chart.ChartTooltipItem[], data: Chart.ChartData) => {
+											return _this.eChartToolTipData(i, data);
+										}
+								}
+							}
+							, onHover:
+								(e: MouseEvent, i: any[]) => {
+									return _this.eChartHover(e, i);
+								}
 
-						, onClick:
-							(e: {}, i: any[]) => {
-								return _this.eChartClick(e, i);
-							}
+							, onClick:
+								(e: MouseEvent, i: any[]) => {
+									return _this.eChartClick(e, i);
+								}
+						}
 					}
-				}
-			);
-			// -> ChartJS - JavaScript
+				);
+				// -> ChartJS - JavaScript
+			}
 		}
 
 
@@ -271,7 +268,7 @@ class mapsDataGpxChart {
 	 * イベント：HoverOut
 	 * @param e MouseEvent
 	 */
-	private eHoverOut(e: {}) {
+	private eHoverOut(e: MouseEvent): void {
 		if (!this.fScreen) {
 			this.toolTip(null);
 		}
@@ -283,7 +280,7 @@ class mapsDataGpxChart {
 	 * @param i データインデックス
 	 * @returns イベントステータス
 	 */
-	private eChartHover(e: {}, i: ChartIndex[]): boolean {
+	private eChartHover(e: MouseEvent, i: ChartIndex[]): boolean {
 		if (!this.fScreen) {
 			if (i.length > 0) {
 				// ツールチップ
@@ -301,7 +298,7 @@ class mapsDataGpxChart {
 	 * イベント：Chart - Hover - callback
 	 * @param i データインデックス
 	 */
-	private eChartHoverCallback(i: ChartIndex) {
+	private eChartHoverCallback(i: Chart.ChartTooltipItem): void {
 		if (this.fChartHoverCallback !== null) {
 			let data = this.eChartToolTipDataLog(i);
 
@@ -317,7 +314,7 @@ class mapsDataGpxChart {
 	 * @param i データインデックス
 	 * @returns イベントステータス
 	 */
-	private eChartClick(e: {}, i: ChartIndex[] | null): boolean {
+	private eChartClick(e: MouseEvent, i: ChartIndex[] | null): boolean {
 		this.fScreen = !this.fScreen;
 
 		let vDisplay: string = "none";
@@ -358,82 +355,82 @@ class mapsDataGpxChart {
 	 * ツールチップ
 	 * @param データインデックス
 	 */
-	private toolTip(i: ChartIndex | null) {
-		if (this.oChartCanvasData !== null) {
-			let fOpen: boolean = false;
-			let iData: number | null = null;
-			let iDataSet: number | null = null;
-			if (!this.oChartCanvasData.tooltip._active) {
-				this.oChartCanvasData.tooltip._active = new Array();
-			}
-			if (i === null) {
-				if (typeof this.oChartCanvasData.tooltip._active_index === "number"
-					&&
-					typeof this.oChartCanvasData.tooltip._active_datasetIndex === "number"
-				) {
-					iData = this.oChartCanvasData.tooltip._active_index;
-					iDataSet = this.oChartCanvasData.tooltip._active_datasetIndex;
-				}
-			}
-			else {
-				fOpen = true;
-				iData = i._index;
-				iDataSet = i._datasetIndex;
-			}
+	private toolTip(i: ChartIndex | null): void {
+		if (!this.oChartCanvasData) {
+			return;
+		}
 
-			if (iData !== null
+		let fOpen: boolean = false;
+		let iData: number | null = null;
+		let iDataSet: number | null = null;
+		if (!this.oChartCanvasData.tooltip._active) {
+			this.oChartCanvasData.tooltip._active = new Array();
+		}
+		if (i === null) {
+			if (typeof this.oChartCanvasData.tooltip._active_index === "number"
 				&&
-				iDataSet !== null
+				typeof this.oChartCanvasData.tooltip._active_datasetIndex === "number"
 			) {
-				let vData = this.oChartCanvasData.getDatasetMeta(iDataSet).data[iData];
-
-				let fSingle: boolean = true;
-
-				// ツールチップ：単一
-				if (fSingle) {
-					if (fOpen) {
-						this.oChartCanvasData.tooltip._active = [];
-					}
-				}
-				// ツールチップ：複数
-				this.oChartCanvasData.tooltip._active.some((o: any, n: number, data: any) => {
-					if (o._index === vData._index) {
-						if (fOpen) {
-							vData = null;
-						}
-						else {
-							data._active.splice(n, 1);
-						}
-						return true;
-					}
-				});
-
-				i = new ChartIndex();
-				i._index = iData;
-				i._datasetIndex = iDataSet;
-				if (vData !== null) {
-					i.init = true;
-					if (fOpen) {
-						this.oChartCanvasData.tooltip._active.push(vData);
-					}
-
-					this.oChartCanvasData.tooltip._active_datasetIndex = iDataSet;
-					this.oChartCanvasData.tooltip._active_index = iData;
-				}
-
-				this.toolTipDraw(i);
-
-				this.oChartCanvasData.tooltip.update(true);
-				this.oChartCanvasData.draw();
+				iData = this.oChartCanvasData.tooltip._active_index;
+				iDataSet = this.oChartCanvasData.tooltip._active_datasetIndex;
 			}
 		}
+		else {
+			fOpen = true;
+			iData = i._index;
+			iDataSet = i._datasetIndex;
+		}
+		if (!iData || !iDataSet){
+			return;
+		}
+
+		let vData = this.oChartCanvasData.getDatasetMeta(iDataSet).data[iData];
+
+		let fSingle: boolean = true;
+
+		// ツールチップ：単一
+		if (fSingle) {
+			if (fOpen) {
+				this.oChartCanvasData.tooltip._active = [];
+			}
+		}
+		// ツールチップ：複数
+		this.oChartCanvasData.tooltip._active.some((o: any, n: number, data: any) => {
+			if (o._index === vData._index) {
+				if (fOpen) {
+					vData = null;
+				}
+				else {
+					data._active.splice(n, 1);
+				}
+				return true;
+			}
+		});
+
+		i = new ChartIndex();
+		i._index = iData;
+		i._datasetIndex = iDataSet;
+		if (vData !== null) {
+			i.init = true;
+			if (fOpen) {
+				this.oChartCanvasData.tooltip._active.push(vData);
+			}
+
+			this.oChartCanvasData.tooltip._active_datasetIndex = iDataSet;
+			this.oChartCanvasData.tooltip._active_index = iData;
+		}
+
+		this.toolTipDraw(i);
+
+		this.oChartCanvasData.tooltip.update(true);
+		this.oChartCanvasData.draw();
 	}
 
 	/**
 	 * ツールチップ：描画
 	 * @param データインデックス
 	 */
-	private toolTipDraw(i: ChartIndex | null) {
+	private toolTipDraw(i: ChartIndex | null): void {
 		// 描画処理：呼び出し
 		if (i === null) {
 			if (this.vChartCanvasData_DrawTM !== null) {
@@ -483,7 +480,7 @@ class mapsDataGpxChart {
 	 * @param data データ.datasets, labels
 	 * @returns ツールチップ
 	 */
-	private eChartToolTipData(i: ChartIndex[], data: {}): string[] {
+	private eChartToolTipData(i: Chart.ChartTooltipItem[], data: Chart.ChartData): string[] {
 		return this.eChartToolTipDataLog(i[0]).text;
 	}
 
@@ -492,41 +489,43 @@ class mapsDataGpxChart {
 	 * @param i データインデックス
 	 * @returns データ
 	 */
-	private eChartToolTipDataLog(i: ChartIndex): mapsDataGpxChartData {
+	private eChartToolTipDataLog(i: Chart.ChartTooltipItem): mapsDataGpxChartData {
 		let ret: mapsDataGpxChartData = new mapsDataGpxChartData();
 
 		if(this.data) {
 			let dataLogs: mapsDataGpxLog[] = this.data.getLogs();
-			let dataLog: mapsDataGpxLog = dataLogs[i.index];
+			if (i.index) {
+				let dataLog: mapsDataGpxLog = dataLogs[i.index];
 
-			let incline: string = "";
-			let direction: string = "";
-			if (dataLog.distanceText !== "") {
-				incline = "" + dataLog.incline;
-				direction = dataLog.direction + "°" + "(" + dataLog.directionName + ")";
+				let incline: string = "";
+				let direction: string = "";
+				if (dataLog.distanceText !== "") {
+					incline = "" + dataLog.incline;
+					direction = dataLog.direction + "°" + "(" + dataLog.directionName + ")";
+				}
+
+				ret.data = dataLog;
+
+				ret.text.push("時間：" + dataLog.timeFormatJP);
+				ret.text.push("距離：" + dataLog.distanceText);
+				ret.text.push("緯度：" + dataLog.lat);
+				ret.text.push("経度：" + dataLog.lon);
+				ret.text.push("標高：" + dataLog.e.toLocaleString() + " m");
+				ret.text.push("勾配：" + incline);
+				ret.text.push("速度：" + dataLog.speed + " km/h");
+				ret.text.push("方向：" + direction);
 			}
-
-			ret.data = dataLog;
-
-			ret.text.push("時間：" + dataLog.timeFormatJP);
-			ret.text.push("距離：" + dataLog.distanceText);
-			ret.text.push("緯度：" + dataLog.lat);
-			ret.text.push("経度：" + dataLog.lon);
-			ret.text.push("標高：" + dataLog.e.toLocaleString() + " m");
-			ret.text.push("勾配：" + incline);
-			ret.text.push("速度：" + dataLog.speed + " km/h");
-			ret.text.push("方向：" + direction);
 		}
 
 		return ret;
 	}
 
-	/* 描画
+	/** 描画
 	 *  @param w  幅[px]
 	 *  @param h  高[px]
 	 *  @param wx 横グリッド幅[px]
 	 */
-	public refresh(w: number, h: number, wx: number) {
+	public refresh(w: number, h: number, wx: number): void {
 		let n = Math.floor(w / wx);
 		w = wx * n;
 		n += 1;
@@ -553,9 +552,9 @@ class mapsDataGpxChart {
 	}
 
 	/** 選択
-	 * @time 時間
+	 * @param time 時間
 	 */
-	public selectTime(time: Date) {
+	public selectTime(time: Date): void {
 		this.fScreen = false;
 		let i: ChartIndex = new ChartIndex();
 
@@ -602,11 +601,11 @@ class mapsDataGpxChart {
 		this.toolTipDraw(i);
 	}
 
-	/* イベント設定：ホバー
-	 * args
-	 *  Object eHover : コールバック関数
+	/**
+	 * イベント設定：ホバー
+	 * @param fnc コールバック関数
 	 */
-	public setEventHover = (fnc: Function) => {
+	public setEventHover(fnc: Function): void {
 		if (this.fChartHoverCallback !== fnc) {
 			this.fChartHoverCallback = fnc;
 		}
@@ -616,7 +615,7 @@ class mapsDataGpxChart {
 /**
  * 地図：データ：Garmin GPSログ(GPX)：標高図 -> データ
  */
-class mapsDataGpxChartData {
+export class mapsDataGpxChartData {
 	/**
 	 * データ
 	 */

@@ -1,7 +1,7 @@
 /**
  * 地図：データ：都道府県庁：項目
  */
-class mapsDataPrefCapitalItem {
+export class mapsDataPrefCapitalItem {
 	public pref: string = "";
 	public addr: string = "";
 	public lat: number = 0.0;
@@ -17,7 +17,7 @@ class mapsDataPrefCapitalItem {
 /**
  * 地図：データ：都道府県庁
  */
-class mapsDataPrefCapital {
+export class mapsDataPrefCapital {
 	private d: mapsDataPrefCapitalItem[] = [];
 
 	/**

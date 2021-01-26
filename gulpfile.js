@@ -1,10 +1,20 @@
 const gulp = require("gulp");
+const path = require("path");
 const del = require("del");
 const concat = require("gulp-concat");
 
 // ts
 const ts = require("gulp-typescript");
 const tsProject = ts.createProject("tsconfig.json");
+const tsProjectNode = ts.createProject("tsconfig.node.json");
+
+// babel
+const babel = require("gulp-babel");
+
+// webpack
+const webpack = require("webpack");
+const webpackStream = require("webpack-stream");
+const webpackConfig = require("./webpack.config");
 
 // js - minify
 const uglify = require("gulp-uglify");
@@ -14,7 +24,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 
  // src
-const app = require("./public/js/ts/app");
+const app = require("./dist/public/ts/app");
 const oApp = new app.app();
 oApp.include();
 
@@ -22,14 +32,23 @@ oApp.include();
 const env = {
 	root: "./"
 	, rootPublic: "./public"
- 	, ts: {
-		src: [
-			"src/ts/**/*.ts"
+ 	, babel : {
+		path: "./dist/public.babel"
+		, src: [
+			"./dist/public/**/*.js"
 		]
 	}
+	, webpack : {
+		src: "./dist/public.babel/view/index.js"
+		, dist: {
+			path: path.join(__dirname, "./public/js")
+			, fname: "index.min.js"
+			, fnameDev: "index.js"
+		}
+	}
 	, js: {
-		path: "public/js"
-		, srcApp: ["public/js/ts/app.js"]
+		path: "./public/js"
+		, srcApp: ["./dist/public.babel/ts/app.js"]
 		, srcIndex: oApp.getJs()
 		, srcLib: oApp.getJsLib()
 		, minApp: "app.min.js"
@@ -38,9 +57,9 @@ const env = {
 		}
 	}
 	, css: {
-		path: "public/css"
+		path: "./public/css"
 		, src: [
-			"src/scss/**/*.scss"
+			"./src/scss/*.scss"
 		]
 		, srcIndex: oApp.getCss()
 		, srcLib: oApp.getCssLib()
@@ -48,37 +67,57 @@ const env = {
 	}
 }
 
-
-let fTSC = false;
-let fJsAppMinify = false;
-let fJsIndexMinify = false;
-let fJsLibMinify = false;
-let fScss = false;
-let fScssMinify = false;
-let fScssLibMinify = false;
-
 // typescript - comple
 function tsc() {
-	if (!fTSC) {
-		console.log("tsc", env.ts.src);
-		fTSC = true;
-	}
-
 	return tsProject.src()
 		.pipe(tsProject())
-		.js
- 		.pipe(gulp.dest(env.js.path))
+		.js.pipe(gulp.dest(tsProject.options.outDir))
 	;
+}
+
+// typescript - comple - for node
+function tscNode() {
+	return tsProjectNode.src()
+		.pipe(tsProjectNode())
+		.js.pipe(gulp.dest(tsProjectNode.options.outDir))
+	;
+}
+
+// js(6) - js(5)
+function jsBabel(){
+	return (
+		gulp
+		.src(env.babel.src)
+		.pipe(
+			babel(
+				{
+					presets: ["@babel/preset-env"]
+				}
+			)
+		)
+		.pipe(gulp.dest(env.babel.path))
+	);
+}
+
+// js - webpack - prod - minify
+function jsWebpack() {
+	return webpackStream(webpackConfig, webpack)
+	.pipe(gulp.dest(env.js.path)
+	);
+}
+
+// js - webpack - dev
+function jsWebpackDev() {
+	webpackConfig.mode = "development";
+	webpackConfig.output.filename = webpackConfig.output.filename.replace(".min", "");
+	return webpackStream(webpackConfig, webpack)
+	.pipe(gulp.dest(env.js.path)
+	);
 }
 
 // JavaScript - app - minify
 function jsAppMinify() {
 	del("./" + env.js.path + "/" + env.js.minApp);
-
-	if (!fJsAppMinify) {
-		console.log("js-app-minify", env.js.srcApp);
-		fJsAppMinify = true;
-	}
 
 	return gulp
 		.src(env.js.srcApp)
@@ -88,58 +127,8 @@ function jsAppMinify() {
 	;
 }
 
-
-// JavaScript - index - minify
-function jsIndexMinify() {
-	del("./" + env.js.path + "/" + env.js.minIndex);
-
-	let src = env.js.srcIndex.map(
-		(js) => {
-			return env.rootPublic + "/" + js;
-		}
-	);
-
-	if (!fJsIndexMinify) {
-		console.log("js-index-minify", src);
-		fJsIndexMinify = true;
-	}
-
-	return gulp
-		.src(src)
-		.pipe(uglify(env.js.uglify))
-		.pipe(concat(env.js.minIndex))
-		.pipe(gulp.dest(env.js.path))
-	;
-}
-
-// JavaScript - lib - minify(concat)
-function jsLibMinify() {
-	let src = env.js.srcLib.map(
-		(js) => {
-			return env.rootPublic + "/" + js;
-		}
-	);
-	src.push("./" + env.js.path + "/" + env.js.minIndex);
-
-	if (!fJsLibMinify) {
-		console.log("js-lib-minify", src);
-		fJsLibMinify = true;
-	}
-
-	return gulp
-		.src(src)
-		.pipe(concat(env.js.minIndex))
-		.pipe(gulp.dest(env.js.path))
-	;
-}
-
 // scss - comple
 function scss() {
-	if (!fScss) {
-		console.log("scss", env.css.src);
-		fScss = true;
-	}
-
 	return gulp
 		.src(env.css.src)
 		.pipe(sourcemaps.init())
@@ -151,11 +140,6 @@ function scss() {
 
 // scss - minify
 function scssMinify() {
-	if (!fScssMinify) {
-		console.log("scss-minify", env.css.srcIndex);
-		fScssMinify = true;
-	}
-
 	let src = env.css.srcIndex.map(
 		(css) => {
 			return env.rootPublic + "/" + css;
@@ -172,11 +156,6 @@ function scssMinify() {
 
 // scss - Lib - minify
 function scssLibMinify() {
-	if (!fScssLibMinify) {
-		console.log("scss-lib-minify", env.css.srcLib);
-		fScssLibMinify = true;
-	}
-
 	let src = env.css.srcLib.map(
 		(css) => {
 			return env.rootPublic + "/" + css;
@@ -192,13 +171,32 @@ function scssLibMinify() {
 }
 
 // task - typescript
-gulp.task("tsc", gulp.series(tsc));
+gulp.task("tsc", gulp.series(tsc, tscNode));
+// task - babel
+gulp.task("babel", gulp.series(jsBabel));
+// task - webpack
+gulp.task("webpack", gulp.series(jsWebpack, jsWebpackDev));
 // task - javascript - minify
-gulp.task("jsmin", gulp.series(jsAppMinify, jsIndexMinify, jsLibMinify));
-gulp.task("jsmin-app", gulp.series(jsAppMinify));
+gulp.task("js-app", gulp.series(jsAppMinify));
 // task - css
 gulp.task("scss", gulp.series(scss));
 // task - css - minify
 gulp.task("cssmin", gulp.series(scssMinify, scssLibMinify));
 // task - build
-gulp.task("build", gulp.series(tsc, jsAppMinify, jsIndexMinify, jsLibMinify, scss, scssMinify, scssLibMinify));
+gulp.task("build"
+	, gulp.series(
+		tsc, jsBabel, jsWebpack, jsWebpackDev
+		, tscNode
+		, jsAppMinify
+		, scss, scssMinify, scssLibMinify
+	)
+);
+
+// task - watch - babel
+const watchFiles = () => {
+	gulp.watch(tsProject.options.outDir).on("change", gulp.series(jsBabel));
+	gulp.watch(env.babel.path).on("change", gulp.series(jsWebpackDev));
+	gulp.watch(env.css.src).on("change", gulp.series(scss, scssMinify, scssLibMinify));
+};
+
+gulp.task("watch", gulp.parallel(watchFiles));

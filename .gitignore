@@ -1,12 +1,10 @@
 node_modules
-# ts -> js
-!dist/.gitkeep
-dist/ts/*
-!dist/ts/.gitkeep
-dist/view/*
-!dist/view/.gitkeep
-dist/node/*
-# scss -> css
+# tsc, babel -> js
+dist
+# public - tsc, babel, webpack -> js
+public/js/*.js
+public/js/*.LICENSE.txt
+# public - scss -> css
 public/css/*.css
 !public/css/index.min.js
 # bin -> tile
