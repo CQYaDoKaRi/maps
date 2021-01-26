@@ -33,7 +33,7 @@ function page() : void {
 	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
-	let vDiv: string[] | null = ["Distance", "DistanceTo", "Scale", "Tile", "DataGpx"];
+	let vDiv: string[] | null = ["Distance", "Scale", "Tile", "DataGpx"];
 	const fDiv: { [key: string]: boolean } = {};
 	vDiv.map((key: string, n: number, vDiv: string[]) => {
 		fDiv[key] = false;
@@ -77,164 +77,132 @@ function page() : void {
 	_MapOptions.hUnit = "px";
 
 	/*==============================================================================================*/
-	// ２地点間の距離＆ある地点から角度と距離を指定して地点を求める
-	if (fDiv["Distance"] === true || fDiv["DistanceTo"] === true) {
+	// ２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める
+	if (fDiv["Distance"] === true) {
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
 		const base:number = 12;
 		const item_base = dmapsDataPrefCapital[base];
-		for (let t = 0; t < 2; t++) {
-			let oDiv: HTMLElement | null = null;
+		const oDiv: HTMLElement | null = document.getElementById("appDistance");
+		oAppMaps = new appMaps("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
 
-			if (t === 0) {
-				if (!init("Distance")) {
-					return;
-				}
+		if (!oDiv || !oAppMaps) {
+			return;
+		}
 
-				// ２地点間の距離を求める
-				oDiv = document.getElementById("appDistance");
-				oAppMaps = new appMaps("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-			}
-			else if (t === 1) {
-				if (!init("appDistanceTo")) {
-					return;
-				}
+		const oDivTitle: HTMLElement = document.createElement("div");
+		oDivTitle.innerHTML = item_base.pref + "からの距離";
+		oDiv.appendChild(oDivTitle);
 
-				// ある地点から角度と距離を指定して地点を求める
-				oDiv = document.getElementById("appDistanceTo");
-				oAppMaps = new appMaps("appDistanceToMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-			}
+		let dl: HTMLElement = document.createElement("dl");
+		let dt: HTMLElement = document.createElement("dt");
+		let dd_lat: HTMLElement = document.createElement("dd");
+		let dd_lon: HTMLElement = document.createElement("dd");
+		let dd_distT: HTMLElement = document.createElement("dd");
+		let dd_distH: HTMLElement = document.createElement("dd");
+		let dd_distS: HTMLElement = document.createElement("dd");
+		let dd_a: HTMLElement = document.createElement("dd");
+		let dd_c_lat: HTMLElement = document.createElement("dd");
+		let dd_c_lon: HTMLElement = document.createElement("dd");
 
+		dt.innerHTML = "県庁";
+		dd_lat.innerHTML = "緯度";
+		dd_lon.innerHTML = "経度";
+		dd_distT.innerHTML = "距離<br/>（三角球面法）";
+		dd_distH.innerHTML = "距離<br/>（ヒュベニ）";
+		dd_distS.innerHTML = "距離<br/>（測地線航海算法）";
+		dd_a.innerHTML = "方角";
+		dd_c_lat.innerHTML = "経度を算出=<br />方角＋距離<br/>（ヒュベニ）";
+		dd_c_lon.innerHTML = "経度を算出=<br />方角＋距離<br/>（ヒュベニ）";
+
+		dl.appendChild(dt);
+		dl.appendChild(dd_lat);
+		dl.appendChild(dd_lon);
+		dl.appendChild(dd_distT);
+		dl.appendChild(dd_distH);
+		dl.appendChild(dd_distS);
+		dl.appendChild(dd_a);
+		dl.appendChild(dd_c_lat);
+		dl.appendChild(dd_c_lon);
+
+		oDiv.appendChild(dl);
+
+		let options: { [key: string]: any } = {};
+		options.color = "red";
+		options.popup = item_base.pref;
+		oAppMaps.point(item_base.lat, item_base.lon, options);
+
+		dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
 			if (!oDiv || !oAppMaps) {
 				return;
 			}
 
-			const oDivTitle: HTMLElement = document.createElement("div");
-			oDivTitle.innerHTML = item_base.pref + "からの距離";
-			oDiv.appendChild(oDivTitle);
+			if (n !== base) {
+				dl = document.createElement("dl");
+				dt = document.createElement("dt");
+				dd_lat = document.createElement("dd");
+				dd_lon = document.createElement("dd");
+				dd_distT = document.createElement("dd");
+				dd_distH = document.createElement("dd");
+				dd_distS = document.createElement("dd");
+				dd_a = document.createElement("dd");
+				dd_c_lat = document.createElement("dd");
+				dd_c_lon = document.createElement("dd");
 
-			let dl: HTMLElement = document.createElement("dl");
-			let dt: HTMLElement = document.createElement("dt");
-			let dd_lat: HTMLElement = document.createElement("dd");
-			let dd_lon: HTMLElement = document.createElement("dd");
-			let dd_distT: HTMLElement = document.createElement("dd");
-			let dd_distH: HTMLElement = document.createElement("dd");
-			let dd_distS: HTMLElement = document.createElement("dd");
-			let dd_a: HTMLElement = document.createElement("dd");
-			let dd_c_lat: HTMLElement = document.createElement("dd");
-			let dd_c_lon: HTMLElement = document.createElement("dd");
+				item.distT = oMaps.distanceT(item_base.lat, item_base.lon, item.lat, item.lon);
+				item.distH = oMaps.distanceH(item_base.lat, item_base.lon, item.lat, item.lon);
+				item.distS = oMaps.distanceS(item_base.lat, item_base.lon, item.lat, item.lon);
+				item.a = oMaps.direction(item_base.lat, item_base.lon, item.lat, item.lon);
 
-			dt.innerHTML = "県庁";
-			dd_lat.innerHTML = "緯度";
-			dd_lon.innerHTML = "経度";
-			dd_distT.innerHTML = "距離<br/>（三角球面法）";
-			dd_distH.innerHTML = "距離<br/>（ヒュベニ）";
-			dd_distS.innerHTML = "距離<br/>（測地線航海算法）";
-			dd_a.innerHTML = "方角";
-			if (t === 1) {
-				dd_c_lat.innerHTML = "経度を算出=<br />方角＋距離<br/>（ヒュベニ）";
-				dd_c_lon.innerHTML = "経度を算出=<br />方角＋距離<br/>（ヒュベニ）";
-			}
+				const c: mapsLatLon = oMaps.distanceTo(item_base.lat, item_base.lon, item.a, item.distH);
+				item.c_lat = c.lat;
+				item.c_lon = c.lon;
 
-			dl.appendChild(dt);
-			dl.appendChild(dd_lat);
-			dl.appendChild(dd_lon);
-			dl.appendChild(dd_distT);
-			dl.appendChild(dd_distH);
-			dl.appendChild(dd_distS);
-			dl.appendChild(dd_a);
-			if (t === 1) {
+				dd_c_lat.innerHTML = "" + item.c_lat;
+				dd_c_lon.innerHTML = "" + item.c_lon;
+
+				dt.innerHTML = item.pref;
+				dd_lat.innerHTML = "" + item.lat;
+				dd_lon.innerHTML = "" + item.lon;
+				dd_distT.innerHTML = "" + item.distT / 1000;
+				dd_distH.innerHTML = "" + item.distH / 1000;
+				dd_distS.innerHTML = "" + item.distS / 1000;
+				dd_a.innerHTML = "" + item.a;
+
+				dl.appendChild(dt);
+				dl.appendChild(dd_lat);
+				dl.appendChild(dd_lon);
+				dl.appendChild(dd_distT);
+				dl.appendChild(dd_distH);
+				dl.appendChild(dd_distS);
+				dl.appendChild(dd_a);
 				dl.appendChild(dd_c_lat);
 				dl.appendChild(dd_c_lon);
+
+				oDiv.appendChild(dl);
+
+
+				options = {};
+				options.color = "blue";
+				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>緯度：" + item.lat + "</li><li>経度：" + item.lon + "</li></ol>";
+				oAppMaps.point(item.lat, item.lon, options);
+
+				options = {};
+				options.color = "green";
+				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
+				oAppMaps.point(item.c_lat, item.c_lon, options);
+
+				const atob: number[][] = [];
+				atob.push(new Array(item_base.lat, item_base.lon));
+				atob.push(new Array(item.lat, item.lon));
+
+				options = {};
+				options.color = "#4169e1";
+				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
+				oAppMaps.arc(atob, options);
 			}
-
-			oDiv.appendChild(dl);
-
-			let options: { [key: string]: any } = {};
-			options.color = "red";
-			options.popup = item_base.pref;
-			oAppMaps.point(item_base.lat, item_base.lon, options);
-
-			dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
-				if (!oDiv || !oAppMaps) {
-					return;
-				}
-
-				if (n !== base) {
-					dl = document.createElement("dl");
-					dt = document.createElement("dt");
-					dd_lat = document.createElement("dd");
-					dd_lon = document.createElement("dd");
-					dd_distT = document.createElement("dd");
-					dd_distH = document.createElement("dd");
-					dd_distS = document.createElement("dd");
-					dd_a = document.createElement("dd");
-					dd_c_lat = document.createElement("dd");
-					dd_c_lon = document.createElement("dd");
-
-					if (t === 0) {
-						item.distT = oMaps.distanceT(item_base.lat, item_base.lon, item.lat, item.lon);
-						item.distH = oMaps.distanceH(item_base.lat, item_base.lon, item.lat, item.lon);
-						item.distS = oMaps.distanceS(item_base.lat, item_base.lon, item.lat, item.lon);
-						item.a = oMaps.direction(item_base.lat, item_base.lon, item.lat, item.lon);
-					}
-					else if (t === 1) {
-						const c: mapsLatLon = oMaps.distanceTo(item_base.lat, item_base.lon, item.a, item.distH);
-						item.c_lat = c.lat;
-						item.c_lon = c.lon;
-
-						dd_c_lat.innerHTML = "" + item.c_lat;
-						dd_c_lon.innerHTML = "" + item.c_lon;
-					}
-
-					dt.innerHTML = item.pref;
-					dd_lat.innerHTML = "" + item.lat;
-					dd_lon.innerHTML = "" + item.lon;
-					dd_distT.innerHTML = "" + item.distT / 1000;
-					dd_distH.innerHTML = "" + item.distH / 1000;
-					dd_distS.innerHTML = "" + item.distS / 1000;
-					dd_a.innerHTML = "" + item.a;
-
-					dl.appendChild(dt);
-					dl.appendChild(dd_lat);
-					dl.appendChild(dd_lon);
-					dl.appendChild(dd_distT);
-					dl.appendChild(dd_distH);
-					dl.appendChild(dd_distS);
-					dl.appendChild(dd_a);
-					if (t === 1) {
-						dl.appendChild(dd_c_lat);
-						dl.appendChild(dd_c_lon);
-					}
-
-					oDiv.appendChild(dl);
-
-
-					options = {};
-					options.color = "blue";
-					options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>緯度：" + item.lat + "</li><li>経度：" + item.lon + "</li></ol>";
-					oAppMaps.point(item.lat, item.lon, options);
-
-
-					if (t === 1) {
-						options = {};
-						options.color = "green";
-						options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
-						oAppMaps.point(item.c_lat, item.c_lon, options);
-					}
-
-					const atob: number[][] = [];
-					atob.push(new Array(item_base.lat, item_base.lon));
-					atob.push(new Array(item.lat, item.lon));
-
-					options = {};
-					options.color = "#4169e1";
-					options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
-					oAppMaps.arc(atob, options);
-				}
-			});
-		}
+		});
 	}
 
 	/*==============================================================================================*/
@@ -547,8 +515,7 @@ window.onload = () => {
 	const oView: indexView = new indexView();
 
 	const title: indexMenuTitle[] = [
-		{ key: "Distance", title: "２地点間の距離を求める" }
-		, { key: "DistanceTo", title: "ある地点から角度と距離を指定して地点を求める" }
+		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" }
 		, { key: "Scale", title: "ズームレベルと縮尺" }
 		, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
 		, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
