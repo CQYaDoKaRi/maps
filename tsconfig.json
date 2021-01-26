@@ -84,7 +84,10 @@
 		// - List of root folders whose combined content represents the structure of the project at runtime.
 		// , "rootDirs": []
 		// - List of folders to include type definitions from.
-		// , "typeRoots": []
+		 , "typeRoots": [
+			"src/ts.types"
+			, "node_modules/@types"
+		 ]
 		// - Type declaration files to be included in compilation.
 		// , "types": []
 		// - Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
@@ -121,6 +124,7 @@
 	, "include":
 	[
 		"./src/ts/*.ts"
+		, "./src/ts.types/**/*.ts"
 		, "./src/view/*.ts"
 		, "./src/view/*.tsx"
 	]

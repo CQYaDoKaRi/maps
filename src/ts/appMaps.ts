@@ -5,6 +5,25 @@ import L from "leaflet";
 import "leaflet.awesome-markers";
 import "leaflet/dist/leaflet.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
+/*
+ * url-loader で bundle する場合：
+ * ※DataUrl形式になるためオリジナルファイルよりもサイズが大きくなる
+ * ※js サイズが大きくなるためオーバーヘッドが増える
+ */
+/*
+import leafletIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import leafletIconUrl from "leaflet/dist/images/marker-icon.png";
+import leafletShadowUrl from "leaflet/dist/images/marker-shadow.png"
+
+// leaflet：デフォルトアイコンを定義し webpack に png 画像を bundle させる
+L.Icon.Default.mergeOptions(
+	{
+		iconRetinaUrl: leafletIconRetinaUrl
+		, iconUrl: leafletIconUrl
+		, shadowUrl: leafletShadowUrl
+	}
+);
+*/
 
 /**
  * アプリケーション：地図
