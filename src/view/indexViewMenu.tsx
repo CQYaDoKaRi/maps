@@ -1,9 +1,6 @@
 // npm install --save-dev @types/react
-/// <reference path="../../node_modules/@types/react/index.d.ts" />
-// npm install --save-dev @types/react-dom
-/// <reference path="../../node_modules/@types/react-dom/index.d.ts" />
-
-interface indexMenuTitle {
+import React from "react";
+export interface indexMenuTitle {
 	key: string
 	, title: string
 }
@@ -18,7 +15,7 @@ type indexViewMenuProps = {
 /**
  * React Component - IndexViewMenu
  */
-class IndexViewMenu extends React.Component<indexViewMenuProps, {}> {
+export class IndexViewMenu extends React.Component<indexViewMenuProps, {}> {
 	constructor(props: indexViewMenuProps) {
 		super(props);
 	}

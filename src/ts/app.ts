@@ -152,7 +152,7 @@ class app {
 		this.jsLib("lib/leaflet.js");
 		this.jsLib("lib/leaflet.awesome-markers.js");
 		this.jsLib("lib/chart.js");
-
+		/*
 		this.js("js/ts/appMapsGSI.js");
 
 		this.js("js/ts/maps.js");
@@ -165,6 +165,8 @@ class app {
 		this.js("js/view/indexViewContents.js");
 		this.js("js/view/indexView.js");
 		this.js("js/view/index.js");
+		*/
+		this.js("js/index.js");
 	}
 }
 

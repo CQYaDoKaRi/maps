@@ -1,4 +1,4 @@
-/// <reference path="./maps.ts" />
+import { mapsDataGpx, mapsDataGpxLog } from "./maps";
 
 /**
  * ChartJS
@@ -10,7 +10,7 @@ declare let Chart: {
 /**
  * ChartJS.Index
  */
-class ChartIndex {
+export class ChartIndex {
 	public init: boolean = false;
 
 	public index: number = 0;
@@ -28,7 +28,7 @@ class ChartIndex {
  *  ver:5.0.13 -> http://fontawesome.io/
  *  ver:2.7.2  -> http://www.chartjs.org/
  */
-class mapsDataGpxChart {
+export class mapsDataGpxChart {
 	/**
 	 * DIV
 	 */
@@ -616,7 +616,7 @@ class mapsDataGpxChart {
 /**
  * 地図：データ：Garmin GPSログ(GPX)：標高図 -> データ
  */
-class mapsDataGpxChartData {
+export class mapsDataGpxChartData {
 	/**
 	 * データ
 	 */

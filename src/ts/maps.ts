@@ -21,7 +21,7 @@ enum mapsTypeTile {
 /**
  * 地図：座標
  */
-class mapsLatLon {
+export class mapsLatLon {
 	/**
 	 * 緯度
 	 */
@@ -36,7 +36,7 @@ class mapsLatLon {
 /**
  * 地図：タイル
  */
-class mapsTile {
+export class mapsTile {
 	/**
 	 * タイル座標X
 	 */
@@ -66,7 +66,7 @@ class mapsTile {
 /**
  * 地図：タイル：URL
  */
-class mapsTileUrl {
+export class mapsTileUrl {
 	/**
 	 * タイル座標
 	 */
@@ -135,7 +135,7 @@ class mapsTileUrl {
 /**
  * 地図：タイル：標高タイル
  */
-class mapsTileDem {
+export class mapsTileDem {
 	/**
 	 * タイル種別
 	 */
@@ -216,7 +216,7 @@ class mapsTileDem {
 /**
  * 地図：データ：Garmin GPSログ(GPX)
  */
-class mapsDataGpx {
+export class mapsDataGpx {
 	/**
 	 * ファイル名
 	 */
@@ -417,7 +417,7 @@ class mapsDataGpx {
 /**
  * 地図：データ：Garmin GPSログ(GPX)：ログ
  */
-class mapsDataGpxLog {
+export class mapsDataGpxLog {
 	/**
 	 * 時刻
 	 */
@@ -487,7 +487,7 @@ class mapsDataGpxLog {
 /**
  * 地図
  */
-class maps {
+export class maps {
 	/**
 	 * 楕円体
 	 */

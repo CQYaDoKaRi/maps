@@ -1,9 +1,10 @@
-/// <reference path="../ts/maps.ts" />
-/// <reference path="../ts/mapsGpxChart.ts" />
-/// <reference path="../ts/mapsDataPrefCapital.ts" />
-/// <reference path="../ts/appMaps.ts" />
-/// <reference path="../ts/appMapsGSI.ts" />
-/// <reference path="./indexView.tsx" />
+import { maps, mapsLatLon, mapsTile, mapsTileDem, mapsDataGpx } from "../ts/maps";
+import { mapsDataGpxChart } from "../ts/mapsGpxChart";
+import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
+import { appMaps } from "../ts/appMaps";
+import { appMapsGSI } from "../ts/appMapsGSI";
+import { indexView } from "./indexView";
+import { indexMenuTitle } from "./indexViewMenu";
 
 /**
  * 初期処理

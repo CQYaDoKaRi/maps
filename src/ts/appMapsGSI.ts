@@ -1,9 +1,9 @@
-/// <reference path="./maps.ts" />
+import { maps, mapsTile } from "./maps";
 
 /**
  * 地理院タイル
  */
-class appMapsGSI {
+export class appMapsGSI {
 	private oMaps: maps | null = null;
 	private oDiv: HTMLElement | null = null;
 	private oImg: HTMLImageElement[] = [];

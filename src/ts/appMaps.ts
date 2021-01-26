@@ -1,14 +1,15 @@
+// npm install --save-dev leaflet
+// npm install --leaflet.awesome-markers
+import L from "leaflet";
+import "leaflet.awesome-markers";
 // npm install --save-dev @types/geojson
-/// <reference path="../../node_modules/@types/geojson/index.d.ts" />
 // npm install --save-dev @types/leaflet
-/// <reference path="../../node_modules/@types/leaflet/index.d.ts" />
 // npm install --save-dev @types/leaflet.awesome-markers
-/// <reference path="../../node_modules/@types/leaflet.awesome-markers/index.d.ts" />
 
 /**
  * アプリケーション：地図
  */
-class appMaps {
+export class appMaps {
 	private oMap: L.Map | null = null;
 	private iMapApp: string = "";
 	private oMapApp: HTMLElement | null;

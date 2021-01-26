@@ -1,15 +1,15 @@
-// npm install --save-dev @types/react
-/// <reference path="../../node_modules/@types/react/index.d.ts" />
 // npm install --save-dev @types/react-dom
-/// <reference path="../../node_modules/@types/react-dom/index.d.ts" />
+import React from "react"
+// npm install --save-dev @types/react-dom
+import ReactDOM from "react-dom";
 
-/// <reference path="./indexViewMenu.tsx" />
-/// <reference path="./indexViewContents.tsx" />
+import { IndexViewMenu, indexMenuTitle } from "./indexViewMenu";
+import { IndexViewContents } from "./indexViewContents";
 
 /**
  * indexView
  */
-class indexView {
+export class indexView {
 	private title: indexMenuTitle[] = [];
 
 	/**

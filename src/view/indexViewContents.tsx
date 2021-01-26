@@ -1,12 +1,10 @@
 // npm install --save-dev @types/react
-/// <reference path="../../node_modules/@types/react/index.d.ts" />
-// npm install --save-dev @types/react-dom
-/// <reference path="../../node_modules/@types/react-dom/index.d.ts" />
+import React from "react";
 
 /**
  * React Component - IndexViewContents
  */
-class IndexViewContents extends React.Component {
+export class IndexViewContents extends React.Component {
 	render(){
 		return(
 			<>
