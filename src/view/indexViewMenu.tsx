@@ -25,7 +25,7 @@ export class IndexViewMenu extends React.Component<indexViewMenuProps, {}> {
 			<ul>
 				{
 					this.props.titles.map((item: indexMenuTitle) => (
-						<li><a href={ "#" + item.key }>{ item.title }</a></li>
+						<li key={ item.key }><a href={ "#" + item.key }>{ item.title }</a></li>
 					))
 				}
 			</ul>
