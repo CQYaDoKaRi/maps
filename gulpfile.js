@@ -14,6 +14,7 @@ const babel = require("gulp-babel");
 // webpack
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
+const webpackConfig = require("./webpack.config");
 
 // js - minify
 const uglify = require("gulp-uglify");
@@ -100,42 +101,16 @@ function jsBabel(){
 
 // js - webpack - prod - minify
 function jsWebpack() {
-	return webpackStream(
-		{
-			mode: "production"
-			, entry: env.webpack.src
-			, output:
-			{
-				path: env.webpack.dist.path
-				, filename: env.webpack.dist.fname
-			}
-			, performance: {
-				maxEntrypointSize: 500000
-				, maxAssetSize: 500000
-			}
-		}
-		, webpack)
+	return webpackStream(webpackConfig, webpack)
 	.pipe(gulp.dest(env.js.path)
 	);
 }
 
 // js - webpack - dev
 function jsWebpackDev() {
-	return webpackStream(
-		{
-			mode: "development"
-			, entry: env.webpack.src
-			, output:
-			{
-				path: env.webpack.dist.path
-				, filename: env.webpack.dist.fnameDev
-			}
-			, performance: {
-				maxEntrypointSize: 500000
-				, maxAssetSize: 500000
-			}
-		}
-		, webpack)
+	webpackConfig.mode = "development";
+	webpackConfig.output.filename = webpackConfig.output.filename.replace(".min", "");
+	return webpackStream(webpackConfig, webpack)
 	.pipe(gulp.dest(env.js.path)
 	);
 }
