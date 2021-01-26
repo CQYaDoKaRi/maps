@@ -1,7 +1,9 @@
 node_modules
 # tsc, babel -> js
 dist
-# scss -> css
+# public - tsc, babel, webpack -> js
+public/js/*.js
+# public - scss -> css
 public/css/*.css
 !public/css/index.min.js
 # bin -> tile
