@@ -1,6 +1,6 @@
-// npm install --save-dev @types/react-dom
+// npm install --save-dev react @types/react
 import React from "react"
-// npm install --save-dev @types/react-dom
+// npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
 
 import { IndexViewMenu, indexMenuTitle } from "./indexViewMenu";

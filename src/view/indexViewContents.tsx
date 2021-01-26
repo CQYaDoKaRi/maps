@@ -1,4 +1,4 @@
-// npm install --save-dev @types/react
+// npm install --save-dev react @types/react
 import React from "react";
 
 /**
