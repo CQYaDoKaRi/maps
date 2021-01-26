@@ -138,7 +138,7 @@ class app {
 	 * include CSS
 	 */
 	public includeCss(): void{
-		this.cssLib("lib/font-awesome.css");
+		this.cssLib("css/font-awesome.css");
 
 		this.css("css/index.css");
 	}
