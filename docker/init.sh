@@ -24,7 +24,7 @@ function run() {
 	echo -e "\033[0;31m[${APP}] start node\033[0;39m"
 	cd ${DIR}/../
 	# - dev
-	npm run ts-node dist/node/index.js
+	npm run start
 	# - release
 	#node index.js
 }
