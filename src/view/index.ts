@@ -33,7 +33,7 @@ function page() : void {
 	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
-	let vDiv: string[] | null = ["Distance", "DistanceTo", "Scale", "Tile", "TileE", "DataGpx"];
+	let vDiv: string[] | null = ["Distance", "DistanceTo", "Scale", "Tile", "DataGpx"];
 	const fDiv: { [key: string]: boolean } = {};
 	vDiv.map((key: string, n: number, vDiv: string[]) => {
 		fDiv[key] = false;
@@ -47,9 +47,6 @@ function page() : void {
 	let vHashDiv: string = "";
 	if (vHash.length > 0) {
 		vHash = vHashDiv = vHash.substring(1);
-		if (vHash === "TileE") {
-			vHashDiv = "Tile";
-		}
 		const oDiv: HTMLElement | null = document.getElementById(vHashDiv);
 		if (oDiv !== null) {
 			oDiv.style.display = "block";
@@ -301,16 +298,12 @@ function page() : void {
 
 	/*==============================================================================================*/
 	// 緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める
-	if (fDiv["Tile"] === true || fDiv["TileE"] === true) {
+	if (fDiv["Tile"] === true) {
 		_MapZ = 4;
 		_MapLat = 35.360771305;
 		_MapLon = 138.7273035;
 
-		let vTitle: string = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める";
-		if (vHash === "" || vHash === "TileE") {
-			vTitle = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める";
-		}
-
+		let vTitle: string = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める";
 		let vUrl: string = "";
 
 		let oDiv: HTMLElement | null = document.getElementById("Tile");
@@ -401,35 +394,32 @@ function page() : void {
 
 			oTable.append(oTableTr);
 
+			oTableTr = document.createElement("tr");
+
+			oTableTd = document.createElement("th");
+			oTableTd.style.textAlign = "left";
+			oTableTd.innerHTML = "標高（TXT形式）<br>標高タイル";
+			oTableTr.append(oTableTd);
+
+			oTableTd = document.createElement("td");
+			oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Txt\"></div>";
+			oTableTr.append(oTableTd);
+
+			oTable.append(oTableTr);
+
 			//
-			if (vHash === "" || vHash === "TileE") {
-				oTableTr = document.createElement("tr");
+			oTableTr = document.createElement("tr");
 
-				oTableTd = document.createElement("th");
-				oTableTd.style.textAlign = "left";
-				oTableTd.innerHTML = "標高（TXT形式）<br>標高タイル";
-				oTableTr.append(oTableTd);
+			oTableTd = document.createElement("th");
+			oTableTd.style.textAlign = "left";
+			oTableTd.innerHTML = "標高（PNG形式）<br>標高タイル";
+			oTableTr.append(oTableTd);
 
-				oTableTd = document.createElement("td");
-				oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Txt\"></div>";
-				oTableTr.append(oTableTd);
+			oTableTd = document.createElement("td");
+			oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Png\"></div>";
+			oTableTr.append(oTableTd);
 
-				oTable.append(oTableTr);
-
-				//
-				oTableTr = document.createElement("tr");
-
-				oTableTd = document.createElement("th");
-				oTableTd.style.textAlign = "left";
-				oTableTd.innerHTML = "標高（PNG形式）<br>標高タイル";
-				oTableTr.append(oTableTd);
-
-				oTableTd = document.createElement("td");
-				oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Png\"></div>";
-				oTableTr.append(oTableTd);
-
-				oTable.append(oTableTr);
-			}
+			oTable.append(oTableTr);
 
 			const oImg: HTMLImageElement = document.createElement("img");
 			oappMapsGSI.setTile(oImg, vTile);
@@ -442,47 +432,45 @@ function page() : void {
 			oDiv.append(oTable);
 			oDiv.append(oImg);
 
-			if (vHash === "" || vHash === "TileE") {
-				if (oMaps) {
-					const oMapTileDem : Promise<mapsTileDem> | null = oMaps.tileDemTxt(vTile);
-					if(oMapTileDem){
-						oMapTileDem.then((data: mapsTileDem) => {
-							if (!data.tile) {
-								return;
-							}
-							const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Txt");
-							if (!o) {
-								return;
-							}
-							if (data.e === NaN) {
-								o.innerHTML = "標高データなし";
-							}
-							else {
-								o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
-							}
+			if (oMaps) {
+				const oMapTileDem : Promise<mapsTileDem> | null = oMaps.tileDemTxt(vTile);
+				if(oMapTileDem){
+					oMapTileDem.then((data: mapsTileDem) => {
+						if (!data.tile) {
+							return;
 						}
-						);
+						const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Txt");
+						if (!o) {
+							return;
+						}
+						if (data.e === NaN) {
+							o.innerHTML = "標高データなし";
+						}
+						else {
+							o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
+						}
 					}
+					);
+				}
 
-					const oMapTileDemPng : Promise<mapsTileDem> | null = oMaps.tileDemPng(vTile);
-					if (oMapTileDemPng) {
-						oMapTileDemPng.then((data: mapsTileDem) => {
-							if (!data.tile) {
-								return;
-							}
-							const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Png");
-							if (!o) {
-								return;
-							}
-							if (data.e === NaN) {
-								o.innerHTML = "標高データなし";
-							}
-							else {
-								o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
-							}
+				const oMapTileDemPng : Promise<mapsTileDem> | null = oMaps.tileDemPng(vTile);
+				if (oMapTileDemPng) {
+					oMapTileDemPng.then((data: mapsTileDem) => {
+						if (!data.tile) {
+							return;
 						}
-						);
+						const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Png");
+						if (!o) {
+							return;
+						}
+						if (data.e === NaN) {
+							o.innerHTML = "標高データなし";
+						}
+						else {
+							o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
+						}
 					}
+					);
 				}
 			}
 		}
@@ -562,8 +550,7 @@ window.onload = () => {
 		{ key: "Distance", title: "２地点間の距離を求める" }
 		, { key: "DistanceTo", title: "ある地点から角度と距離を指定して地点を求める" }
 		, { key: "Scale", title: "ズームレベルと縮尺" }
-		, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める" }
-		, { key: "TileE", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
+		, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
 		, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
 	];
 	title.map((item: indexMenuTitle) => {
