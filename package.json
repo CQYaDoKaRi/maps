@@ -11,7 +11,7 @@
 		"gulp": "gulp",
 		"scss_build": "gulp scss",
 		"build": "gulp build",
-		"start": "ts-node src/node/index.ts",
+		"start": "ts-node --project ./tsconfig.node.json src/node/index.ts",
 		"test": "jest"
 	},
 	"repository": {
@@ -49,6 +49,8 @@
 		"gulp-typescript": "^6.0.0-alpha.1",
 		"gulp-uglify": "^3.0.2",
 		"jest": "^26.6.3",
+		"leaflet": "^1.7.1",
+		"leaflet.awesome-markers": "^2.0.5",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
 		"ts-jest": "^26.4.4",
