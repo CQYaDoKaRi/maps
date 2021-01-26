@@ -3,6 +3,7 @@ node_modules
 dist
 # public - tsc, babel, webpack -> js
 public/js/*.js
+public/js/*.LICENSE.txt
 # public - scss -> css
 public/css/*.css
 !public/css/index.min.js
