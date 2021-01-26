@@ -9,7 +9,21 @@ module.exports = {
 		, filename: "index.min.js"
 	}
 	, performance: {
-		maxEntrypointSize: 500000
-		, maxAssetSize: 500000
+		maxEntrypointSize: 1000000
+		, maxAssetSize: 1000000
+	}
+	, module: {
+		rules: [
+		  {
+			test: /\.css$/i,
+			use: [
+				"style-loader"
+				, {
+					loader: "css-loader"
+					, options: { url: false }
+				}
+			]
+		  }
+		]
 	}
 }
