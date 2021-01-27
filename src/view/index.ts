@@ -7,64 +7,21 @@ import { indexView } from "./indexView";
 import { indexMenuTitle } from "./indexViewMenu";
 
 /**
- * 初期処理
- * @param id DivID
- * @returns 処理ステータス
- */
-function init(id: string) : boolean {
-	const oDiv: HTMLElement | null = document.getElementById(id);
-	if (oDiv) {
-		if (oDiv.getAttribute("data-init") === "true"){
-			return false;
-		}
-		else{
-			oDiv.setAttribute("data-init", "true");
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
  * ページ
+ * @param oView indexView
  */
-function page() : void {
+function page(oView: indexView) : void {
 	const oMaps: maps = new maps();
 	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
-	let vDiv: string[] | null = ["Distance", "Scale", "Tile", "DataGpx"];
-	const fDiv: { [key: string]: boolean } = {};
-	vDiv.map((key: string, n: number, vDiv: string[]) => {
-		fDiv[key] = false;
-		const oDiv: HTMLElement | null = document.getElementById(key);
-		if (oDiv) {
-			oDiv.style.display = "none";
-		}
-	});
-
-	let vHash: string = window.location.hash;
+	const vHash: string = window.location.hash;
 	let vHashDiv: string = "";
 	if (vHash.length > 0) {
-		vHash = vHashDiv = vHash.substring(1);
-		const oDiv: HTMLElement | null = document.getElementById(vHashDiv);
-		if (oDiv !== null) {
-			oDiv.style.display = "block";
-			fDiv[vHash] = true;
-			vDiv = null;
-		}
+		vHashDiv = vHash.substring(1);
 	}
-
-	if (vDiv !== null) {
-		vDiv.map((key: string, n: number, vDiv: string[]) => {
-			const oDiv: HTMLElement | null = document.getElementById(key);
-			if (oDiv !== null) {
-				oDiv.style.display = "none";
-				fDiv[key] = false;
-			}
-		});
-	}
-
+	oView.display(vHashDiv);
+	
 	/*==============================================================================================*/
 	// 地図
 	let _MapLat: number = 35.681236;
@@ -77,8 +34,13 @@ function page() : void {
 	_MapOptions.hUnit = "px";
 
 	/*==============================================================================================*/
-	// ２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める
-	if (fDiv["Distance"] === true) {
+	if (!oView.status("Distance", vHashDiv)) {
+		console.log("LLL");
+		let oDivTitle: HTMLElement | null = document.getElementById("appDistanceTitle");
+		if (oDivTitle) {
+			oDivTitle.innerHTML = oView.getMenuTitle("Distance");
+		}
+		
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
@@ -91,7 +53,7 @@ function page() : void {
 			return;
 		}
 
-		const oDivTitle: HTMLElement = document.createElement("div");
+		oDivTitle = document.createElement("div");
 		oDivTitle.innerHTML = item_base.pref + "からの距離";
 		oDiv.appendChild(oDivTitle);
 
@@ -204,17 +166,10 @@ function page() : void {
 			}
 		});
 	}
-
 	/*==============================================================================================*/
-	// ズームレベルと縮尺
-	if (fDiv["Scale"] === true) {
-		if (!init("Scale")) {
-			return;
-		}
-
+	if (!oView.status("Scale", vHashDiv)) {
 		const vDPI: number = 96;
 
-		const vTitle: string = "ズームレベルと縮尺";
 		_MapLat = 35.65809922;
 		_MapLon = 139.741357472;
 
@@ -225,7 +180,7 @@ function page() : void {
 
 		const oDivTitle: HTMLElement | null = document.getElementById("appScaleTitle");
 		if (oDivTitle) {
-			oDivTitle.innerHTML = vTitle;
+			oDivTitle.innerHTML = oView.getMenuTitle("Scale");
 		}
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appScaleTitleSub");
@@ -263,15 +218,12 @@ function page() : void {
 			oDiv.append(oTable);
 		}
 	}
-
 	/*==============================================================================================*/
-	// 緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める
-	if (fDiv["Tile"] === true) {
+	if (!oView.status("Tile", vHashDiv)) {
 		_MapZ = 4;
 		_MapLat = 35.360771305;
 		_MapLon = 138.7273035;
 
-		let vTitle: string = "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める";
 		let vUrl: string = "";
 
 		let oDiv: HTMLElement | null = document.getElementById("Tile");
@@ -281,7 +233,7 @@ function page() : void {
 
 		const oDivTitle: HTMLElement | null = document.getElementById("appTileTitle");
 		if (oDivTitle) {
-			oDivTitle.innerHTML = vTitle;
+			oDivTitle.innerHTML = oView.getMenuTitle("Tile");
 		}
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appTileTitleSub");
@@ -444,17 +396,10 @@ function page() : void {
 		}
 	}
 	/*==============================================================================================*/
-	// GPX
-	if (fDiv["DataGpx"] === true) {
-		if (!init("DataGpx")) {
-			return;
-		}
-
-		const vTitle = "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示";
-
+	if (!oView.status("DataGpx", vHashDiv)) {
 		const oDivTitle: HTMLElement | null = document.getElementById("appDataGpxTitle");
 		if (oDivTitle) {
-			oDivTitle.innerHTML = vTitle;
+			oDivTitle.innerHTML = oView.getMenuTitle("DataGpx");
 		}
 
 		const oDiv: HTMLElement | null = document.getElementById("appDataGpx");
@@ -516,9 +461,9 @@ window.onload = () => {
 
 	const title: indexMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" }
-		, { key: "Scale", title: "ズームレベルと縮尺" }
-		, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
-		, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
+		, { key: "Scale", title: "ズームレベルから縮尺を求める" }
+		, { key: "Tile", title: "緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める" }
+		, { key: "DataGpx", title: "GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示" }
 	];
 	title.map((item: indexMenuTitle) => {
 		oView.setMenuTitle(item);
@@ -527,12 +472,12 @@ window.onload = () => {
 	oView.renderMenu(document.getElementById("menu"));
 	oView.renderContents(document.getElementById("contents"));
 
-	page();
-}
-
-/**
- * window.onhashchange
- */
-window.onhashchange = () => {
-	page();
+	page(oView);
+	
+	/**
+	 * window.onhashchange
+	 */
+	window.onhashchange = () => {
+		page(oView);
+	}
 }
