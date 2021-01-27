@@ -35,7 +35,6 @@ function page(oView: indexView) : void {
 
 	/*==============================================================================================*/
 	if (!oView.status("Distance", vHashDiv)) {
-		console.log("LLL");
 		let oDivTitle: HTMLElement | null = document.getElementById("appDistanceTitle");
 		if (oDivTitle) {
 			oDivTitle.innerHTML = oView.getMenuTitle("Distance");
