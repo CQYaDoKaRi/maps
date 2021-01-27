@@ -68,7 +68,7 @@ const env = {
 }
 
 // typescript - comple
-function tsc() {
+const tsc = () => {
 	return tsProject.src()
 		.pipe(tsProject())
 		.js.pipe(gulp.dest(tsProject.options.outDir))
@@ -76,7 +76,7 @@ function tsc() {
 }
 
 // typescript - comple - for node
-function tscNode() {
+const tscNode = () => {
 	return tsProjectNode.src()
 		.pipe(tsProjectNode())
 		.js.pipe(gulp.dest(tsProjectNode.options.outDir))
@@ -84,7 +84,7 @@ function tscNode() {
 }
 
 // js(6) - js(5)
-function jsBabel(){
+const jsBabel = () => {
 	return (
 		gulp
 		.src(env.babel.src)
@@ -100,14 +100,14 @@ function jsBabel(){
 }
 
 // js - webpack - prod - minify
-function jsWebpack() {
+const jsWebpack = () => {
 	return webpackStream(webpackConfig, webpack)
 	.pipe(gulp.dest(env.js.path)
 	);
 }
 
 // js - webpack - dev
-function jsWebpackDev() {
+const jsWebpackDev = () => {
 	webpackConfig.mode = "development";
 	webpackConfig.output.filename = webpackConfig.output.filename.replace(".min", "");
 	return webpackStream(webpackConfig, webpack)
@@ -116,7 +116,7 @@ function jsWebpackDev() {
 }
 
 // JavaScript - app - minify
-function jsAppMinify() {
+const jsAppMinify = () => {
 	del("./" + env.js.path + "/" + env.js.minApp);
 
 	return gulp
@@ -128,7 +128,7 @@ function jsAppMinify() {
 }
 
 // scss - comple
-function scss() {
+const scss = () => {
 	return gulp
 		.src(env.css.src)
 		.pipe(sourcemaps.init())
@@ -139,7 +139,7 @@ function scss() {
 }
 
 // scss - minify
-function scssMinify() {
+const scssMinify = () => {
 	let src = env.css.srcIndex.map(
 		(css) => {
 			return env.rootPublic + "/" + css;
@@ -155,7 +155,7 @@ function scssMinify() {
 }
 
 // scss - Lib - minify
-function scssLibMinify() {
+const scssLibMinify = () => {
 	let src = env.css.srcLib.map(
 		(css) => {
 			return env.rootPublic + "/" + css;
@@ -171,32 +171,64 @@ function scssLibMinify() {
 }
 
 // task - typescript
-gulp.task("tsc", gulp.series(tsc, tscNode));
+const task_tsc = gulp.parallel(tsc, tscNode);
+exports.tsc = task_tsc;
+
 // task - babel
-gulp.task("babel", gulp.series(jsBabel));
+const task_babel = gulp.series(jsBabel);
+exports.babel = task_babel;
+
 // task - webpack
-gulp.task("webpack", gulp.series(jsWebpack, jsWebpackDev));
+const task_webpack = gulp.parallel(jsWebpack, jsWebpackDev);
+exports.webpack = task_webpack;
+
 // task - javascript - minify
-gulp.task("js-app", gulp.series(jsAppMinify));
+const task_jsApp = gulp.series(jsAppMinify);
+exports.jsApp = task_jsApp;
+
 // task - css
-gulp.task("scss", gulp.series(scss));
-// task - css - minify
-gulp.task("cssmin", gulp.series(scssMinify, scssLibMinify));
+const task_scss = gulp.series(scss, scssMinify, scssLibMinify);
+exports.scss = task_scss;
+
 // task - build
-gulp.task("build"
-	, gulp.series(
-		tsc, jsBabel, jsWebpack, jsWebpackDev
-		, tscNode
-		, jsAppMinify
-		, scss, scssMinify, scssLibMinify
+const task_build = gulp.series(
+	gulp.parallel(
+		gulp.series(
+			gulp.parallel(tsc, tscNode)
+			, jsBabel
+			, gulp.parallel(jsWebpack, jsWebpackDev)
+			, jsAppMinify
+		)
+		, task_scss
 	)
 );
+exports.build = task_build;
 
-// task - watch - babel
-const watchFiles = () => {
-	gulp.watch(tsProject.options.outDir).on("change", gulp.series(jsBabel));
-	gulp.watch(env.babel.path).on("change", gulp.series(jsWebpackDev));
-	gulp.watch(env.css.src).on("change", gulp.series(scss, scssMinify, scssLibMinify));
+// task - watch - build
+const watch_build = () => {
+	// tsc + babel
+	// +
+	// webpack, js-app
+	gulp.watch(tsProject.config.include)
+	.on("change"
+		, gulp.series(
+			tsc
+			, jsBabel
+			, jsAppMinify
+			, gulp.parallel(jsWebpack, jsWebpackDev)
+		)
+	);
+	
+	// tsc for node
+	gulp.watch(tsProjectNode.config.include)
+	.on("change"
+		, gulp.series(tscNode)
+	);
+	
+	// scss
+	gulp.watch(env.css.src)
+	.on("change"
+		, task_scss
+	);
 };
-
-gulp.task("watch", gulp.parallel(watchFiles));
+exports.watch = watch_build;
