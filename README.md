@@ -4,6 +4,23 @@
 - 緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める
 - Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示
 
+# 使用技術
+## 環境
+- Node.js(ts-node) + Express.js
+- docker
+- gulp + tsc + babel + webpack
+## 言語
+- TypeScript + React
+- JavaScript(ES2015)
+- SCSS
+- HTML5
+- ShellScript(bash)
+## テスト
+- Jest(ts-jest)
+- Cypress
+
+## 
+
 ## インストール
 ```
 npm install
