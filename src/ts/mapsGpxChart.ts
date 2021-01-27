@@ -380,7 +380,7 @@ export class mapsDataGpxChart {
 			iData = i._index;
 			iDataSet = i._datasetIndex;
 		}
-		if (!iData || !iDataSet){
+		if (iData === null || iDataSet === null){
 			return;
 		}
 
