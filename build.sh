@@ -11,17 +11,19 @@ function ver(){
         echo "${FN}=${DT}"
 }
 
+function build(){
+        npm run tsc_build
+        npm run build
+}
+
 # ver for gulp
 if [ "${TYPE}" = "ver" ]; then
         ver
 # build for dev
 elif [ "${TYPE}" = "dev" ]; then
-	npm run tsc_build
-	npm run gulp babel
-	npm run gulp js-app
+	build
         npm run tsc_build_w
 # build for release
 else
-        npm run tsc_build
-        npm run build
+	build
 fi
