@@ -5,12 +5,10 @@ const url = "http://localhost:8080";
 
 // 設定：パラメーター
 const params = [
-	{ key: "Distance", title: "２地点間の距離を求める" }
-	, { key: "DistanceTo", title: "ある地点から角度と距離を指定して地点を求める" }
-	, { key: "Scale", title: "ズームレベルと縮尺" }
-	, { key: "Tile", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度を求める" }
-	, { key: "TileE", title: "緯度経度からタイル情報を取得し、タイル左上原点の緯度経度と標高タイルから標高値を求める" }
-	, { key: "DataGpx", title: "Garamin の GPS ログデータ（GPX）を読み込んでグラフ表示" }
+	{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" }
+	, { key: "Scale", title: "ズームレベルから縮尺を求める" }
+	, { key: "Tile", title: "緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める" }
+	, { key: "DataGpx", title: "GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示" }
 ];
 
 function view(key) {
