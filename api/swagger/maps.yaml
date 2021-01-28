@@ -46,6 +46,100 @@ paths:
           required: true
           description: 方位の角度
     parameters: []
+  /api/maps/tky2jgdg:
+    get:
+      summary: ''
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  lat:
+                    type: number
+                    description: 十進緯度（世界測地系）
+                  lon:
+                    type: number
+                    description: 十進経度（世界測地系）
+              examples:
+                example:
+                  value:
+                    status: true
+                    lat: 35.68078249
+                    lon: 139.767235
+      operationId: get-api-maps-tky2jgdg
+      description: 日本測地系を世界測地系に変換（1次式）
+      parameters:
+        - schema:
+            type: number
+            format: double
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（日本測地系）
+        - schema:
+            type: number
+            format: double
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（日本測地系）
+    parameters: []
+  /api/maps/jgd2tkyg:
+    get:
+      summary: ''
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  lat:
+                    type: number
+                    description: 十進緯度（日本測地系）
+                  lon:
+                    type: number
+                    description: 十進経度（日本測地系）
+              examples:
+                example:
+                  value:
+                    status: true
+                    lat: 35.67755556
+                    lon: 139.7704444
+      operationId: get-api-maps-jgd2tkyg
+      description: 世界測地系を日本測地系に変換（1次式）
+      parameters:
+        - schema:
+            type: number
+            format: double
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系）
+        - schema:
+            type: number
+            format: double
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（世界測地系）
+    parameters: []
 tags:
   - name: maps
     description: ''
