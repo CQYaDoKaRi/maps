@@ -1,4 +1,8 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express'
+import yamljs from 'yamljs'
+
+import { maps } from '../ts/maps';
 
 const app:express.Express = express();
 
@@ -29,6 +33,33 @@ router.get('/',
 			res.send(html.join(''));
 			res.end();
         }
+);
+
+// API - maps - SwaggerUI
+const swaggerDocument = yamljs.load('./api/swagger/maps.yaml');
+app.use('/api/maps/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
+// API - maps
+router.get('/api/maps/deg2name',
+	(req:express.Request, res:express.Response) => {
+		const oMaps: maps = new maps();
+		
+		let name: string = "";
+		if (req.query.deg) {
+			const deg: number = +req.query.deg
+			if (!Number.isNaN(deg)) {
+				name = oMaps.deg2Name(deg);
+			}
+		}
+		
+		const data: {} = {
+			status : true
+			, name : name
+		}
+		
+		res.json(data);
+		res.end();
+	}
 );
 
 app.use(router);

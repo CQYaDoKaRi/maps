@@ -14,6 +14,7 @@
 - JavaScript(ES2015)
 - SCSS
 - HTML5
+- Swagger
 - ShellScript(bash)
 ## ライブラリー
 - leaflet
@@ -22,14 +23,12 @@
 - Jest(ts-jest)
 - Cypress
 
-## 
-
-## インストール
+# インストール
 ```
 npm install
 ```
 
-## ビルド
+# ビルド
 ```
 build.sh
 ```
@@ -45,7 +44,7 @@ build.sh
 - gulp + sass
 	- scss をコンパイル、結合、圧縮して出力[./public/css]
 
-## ビルド - 開発モード(TypeScript)
+# ビルド - 開発モード(TypeScript)
 ```
 build.sh dev
 ```
@@ -56,18 +55,18 @@ build.sh dev
 - gulp + tsc
 	- TypeScript のファイルを監視しコンパイル
 
-## 起動 - ts-node
+# 起動 - ts-node
 ```
 npm run start
 ```
 = npm run ts-node --project ./tsconfig.node.json src/node/index.ts
 
-## 起動 - node
+# 起動 - node
 ```
 node dist/node/node/index.js
 ```
 
-## docker - 起動
+# docker - 起動
 ```
 ./docker/init.sh start
 ```
@@ -75,36 +74,39 @@ node dist/node/node/index.js
 - docker コンテナ起動
 - node 起動
 
-## docker - 停止
+# docker - 停止
 ```
 ./docker/init.sh stop
 ```
 - docker コンテナ停止
 - docker image 削除
 
-## docker - コンテナログイン
+# docker - コンテナログイン
 ```
 ./docker init.sh exec
 ```
 
-## 表示
+# 表示
 http://localhost:8080/  
 
-## 表示 - 開発モード
+# 表示 - 開発モード
 http://localhost:8080/index.html?dev=1  
 minify 前のファイルを使う  
 
-## テスト - JEST
+# API
+http://localhost:8080/api/maps/docs/  
+
+# テスト - JEST
 ```
 npm run test
 ```
 
-## テスト - Cypress - GUI
+# テスト - Cypress - GUI
 ```
 npx cypress open
 ```
 
-## テスト - Cypress - CUI
+# テスト - Cypress - CUI
 ```
 npx cypress run
 ```
