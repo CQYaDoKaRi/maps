@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: maps
+  version: '1.0'
+  contact:
+    email: test@dev.com
+  description: 地図API
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /api/maps/deg2name:
+    get:
+      summary: ''
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  name:
+                    type: string
+                    description: 12方位名
+              examples:
+                example:
+                  value:
+                    status: true
+                    name: 'N'
+      operationId: get-api-maps-deg2name
+      description: 方位の角度を12方位名に変換
+      parameters:
+        - schema:
+            type: number
+            minimum: 0
+            maximum: 360
+            format: float
+          in: query
+          name: deg
+          required: true
+          description: 方位の角度
+    parameters: []
+tags:
+  - name: maps
+    description: ''
+components:
+  schemas: {}
+  securitySchemes: {}
