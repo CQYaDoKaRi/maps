@@ -1,4 +1,7 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express'
+import yamljs from 'yamljs'
+
 import { maps } from '../ts/maps';
 
 const app:express.Express = express();
@@ -32,6 +35,11 @@ router.get('/',
         }
 );
 
+// API - maps - SwaggerUI
+const swaggerDocument = yamljs.load('./api/swagger/maps.yaml');
+app.use('/api/maps/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
+// API - maps
 router.get('/api/maps/deg2name',
 	(req:express.Request, res:express.Response) => {
 		const oMaps: maps = new maps();
