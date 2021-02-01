@@ -140,6 +140,189 @@ paths:
           required: true
           description: 十進経度（世界測地系）
     parameters: []
+  /api/maps/distancet:
+    get:
+      summary: '２地点間の距離（球面三角法）'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  distance:
+                    type: number
+                    description: 距離（cm）
+              examples:
+                example:
+                  value:
+                    status: true
+                    distance: 27335.473262593438
+      operationId: get-api-maps-distancet
+      description: ２地点間の距離（球面三角法）
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat1
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon1
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 35.447495
+          in: query
+          name: lat2
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.6424
+          in: query
+          name: lon2
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+    parameters: []
+  /api/maps/distanceh:
+    get:
+      summary: '２地点間の距離（ヒュベニ）'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  distance:
+                    type: number
+                    description: 距離（cm）
+              examples:
+                example:
+                  value:
+                    status: true
+                    distance: 27248.24567995688
+      operationId: get-api-maps-distanceh
+      description: ２地点間の距離（ヒュベニ）
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat1
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon1
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 35.447495
+          in: query
+          name: lat2
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.6424
+          in: query
+          name: lon2
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+    parameters: []
+  /api/maps/distances:
+    get:
+      summary: '２地点間の距離（測地線航海算法）'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  distance:
+                    type: number
+                    description: 距離（cm）
+              examples:
+                example:
+                  value:
+                    status: true
+                    distance: 32204.322252668517
+      operationId: get-api-maps-distances
+      description: ２地点間の距離（測地線航海算法）
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat1
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon1
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 35.447495
+          in: query
+          name: lat2
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.6424
+          in: query
+          name: lon2
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+    parameters: []
 tags:
   - name: maps
     description: ''
