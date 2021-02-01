@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express'
 import yamljs from 'yamljs'
 
 import { maps, mapsLatLon } from '../ts/maps';
+import { apiMapsDistance } from './apiMapsDistance';
 
 const app:express.Express = express();
 
@@ -122,6 +123,9 @@ router.get('/api/maps/jgd2tkyg',
 		res.end();
 	}
 );
+
+const oApiMapsDistance = new apiMapsDistance();
+oApiMapsDistance.regist(router);
 
 app.use(router);
 app.use('/', express.static('public'));
