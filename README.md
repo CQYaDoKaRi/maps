@@ -14,7 +14,7 @@
 - JavaScript(ES2015)
 - SCSS
 - HTML5
-- Swagger
+- Swagger(OpenAPI v3)
 - ShellScript(bash)
 ## ライブラリー
 - leaflet
