@@ -1,9 +1,15 @@
 import express from 'express';
-import { maps } from '../ts/maps';
+import { maps, mapsLatLon } from '../ts/maps';
 
 interface apiMapsDistanceData {
 	status: boolean
 	, distance: number
+};
+
+interface apiMapsDistanceToData {
+	status: boolean
+	, lat: number
+	, lon: number
 };
 
 export class apiMapsDistance {
@@ -56,6 +62,37 @@ export class apiMapsDistance {
 				}
 			}
 		}
+
+		return data;
+	}
+
+	/**
+	 * 角度・距離から緯度経度を取得
+	 * @param req リクエスト
+	 * @returns 結果
+	 */
+	private distanceTo(req:express.Request): apiMapsDistanceToData{
+		let data: apiMapsDistanceToData = {
+			status: false
+			, lat: 0
+			, lon: 0
+		};
+
+		const oMaps: maps = new maps();
+
+		if (req.query.lat && req.query.lon && req.query.a && req.query.len) {
+			const lat: number = +req.query.lat;
+			const lon: number = +req.query.lon;
+			const a: number = +req.query.a;
+			const len: number = +req.query.len;
+			if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(a) && !Number.isNaN(len)) {
+				const pos: mapsLatLon  = oMaps.distanceTo(lat, lon, a, len);
+				data.status = true;
+				data.lat = pos.lat;
+				data.lon = pos.lon;
+			}
+		}
+
 		return data;
 	}
 
@@ -64,6 +101,7 @@ export class apiMapsDistance {
 	 * @param router express - Router
 	 */
 	public regist(router: express.Router): void {
+		// ２地点間の距離：球面三角法
 		router.get(this.uri + '/distancet',
 			(req:express.Request, res:express.Response) => {
 				let data: apiMapsDistanceData = {
@@ -77,6 +115,7 @@ export class apiMapsDistance {
 			}
 		);
 
+		// ２地点間の距離：ヒュベニ
 		router.get(this.uri + '/distanceh',
 			(req:express.Request, res:express.Response) => {
 				let data: apiMapsDistanceData = {
@@ -90,6 +129,7 @@ export class apiMapsDistance {
 			}
 		);
 
+		// ２地点間の距離：測地線航海算法
 		router.get(this.uri + '/distances',
 			(req:express.Request, res:express.Response) => {
 				let data: apiMapsDistanceData = {
@@ -97,6 +137,21 @@ export class apiMapsDistance {
 					, distance: 0
 				};
 				data = this.distance('S', req);
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// 角度・距離から緯度経度を取得
+		router.get(this.uri + '/distanceto',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsDistanceToData = {
+					status: false
+					, lat: 0
+					, lon: 0
+				};
+				data = this.distanceTo(req);
 
 				res.json(data);
 				res.end();
