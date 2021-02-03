@@ -218,13 +218,13 @@ const watch_build = () => {
 			, gulp.parallel(jsWebpack, jsWebpackDev)
 		)
 	);
-	
+
 	// tsc for node
 	gulp.watch(tsProjectNode.config.include)
 	.on("change"
 		, gulp.series(tscNode)
 	);
-	
+
 	// scss
 	gulp.watch(env.css.src)
 	.on("change"

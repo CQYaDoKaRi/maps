@@ -21,7 +21,7 @@ function page(oView: indexView) : void {
 		vHashDiv = vHash.substring(1);
 	}
 	oView.display(vHashDiv);
-	
+
 	/*==============================================================================================*/
 	// 地図
 	let _MapLat: number = 35.681236;
@@ -39,7 +39,7 @@ function page(oView: indexView) : void {
 		if (oDivTitle) {
 			oDivTitle.innerHTML = oView.getMenuTitle("Distance");
 		}
-		
+
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
@@ -472,7 +472,7 @@ window.onload = () => {
 	oView.renderContents(document.getElementById("contents"));
 
 	page(oView);
-	
+
 	/**
 	 * window.onhashchange
 	 */

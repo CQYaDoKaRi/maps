@@ -9,15 +9,15 @@ interface apiMapsLatLonData {
 
 export class apiMapsLatLon {
 	private uri = '';
-	
+
 	/**
 	 * コンストラクター
 	 * @param uri API URI
 	 */
 	constructor(uri: string){
-		this.uri = uri;	
+		this.uri = uri;
 	}
-	
+
 	/**
 	 * 登録
 	 * @param router express - Router
@@ -30,9 +30,9 @@ export class apiMapsLatLon {
 					, lat: 0
 					, lon: 0
 				};
-				
-				const oMaps: maps = new maps();	
-				
+
+				const oMaps: maps = new maps();
+
 				if (req.query.lat && req.query.lon) {
 					const lat: number = +req.query.lat;
 					const lon: number = +req.query.lon;
@@ -43,12 +43,12 @@ export class apiMapsLatLon {
 						data.lon = pos.lon;
 					}
 				}
-				
+
 				res.json(data);
 				res.end();
 			}
 		);
-		
+
 		router.get(this.uri + '/jgd2tkyg',
 			(req:express.Request, res:express.Response) => {
 				let data: apiMapsLatLonData = {
@@ -56,9 +56,9 @@ export class apiMapsLatLon {
 					, lat: 0
 					, lon: 0
 				};
-		
+
 				const oMaps: maps = new maps();
-				
+
 				if (req.query.lat && req.query.lon) {
 					const lat: number = +req.query.lat;
 					const lon: number = +req.query.lon;
@@ -69,7 +69,7 @@ export class apiMapsLatLon {
 						data.lon = pos.lon;
 					}
 				}
-				
+
 				res.json(data);
 				res.end();
 			}

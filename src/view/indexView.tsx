@@ -29,7 +29,7 @@ export class indexView {
 			}
 		});
 	}
-	
+
 	/**
 	 * ステータス
 	 * @param key タイトルキー
@@ -45,7 +45,7 @@ export class indexView {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * 取得：メニュー - タイトル
 	 * @param key タイトルキー
@@ -55,7 +55,7 @@ export class indexView {
 		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
 		return item ? item.title : "";
 	}
-	
+
 	/**
 	 * 設定：メニュー - タイトル
 	 * @param item タイトル
