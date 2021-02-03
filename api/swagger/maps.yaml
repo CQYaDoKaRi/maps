@@ -454,6 +454,75 @@ paths:
           required: true
           description: 十進経度（世界測地系[GSR80]）
     parameters: []
+  /api/maps/tile:
+    get:
+      summary: '緯度経度・ズームレベルからタイル座標を取得'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  x:
+                    type: number
+                    description: タイル座標X
+                  y:
+                    type: number
+                    description: タイル座標Y
+                  z:
+                    type: number
+                    description: ズームレベル
+                  px_x:
+                    type: number
+                    description: タイル左上からY値[pixel]
+                  px_y:
+                    type: number
+                    description: タイル左上からX値[pixel]
+              examples:
+                example:
+                  value:
+                    status: true
+                    x: 14505
+                    y: 6469
+                    z: 14
+                    px_x: 162
+                    px_y: 148
+      operationId: get-api-maps-tile
+      description: 緯度経度・ズームレベルからタイル座標を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.360771305
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 138.7273035
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
 tags:
   - name: maps
     description: ''

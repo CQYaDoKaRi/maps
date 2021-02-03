@@ -5,6 +5,7 @@ import { api } from './api';
 import { apiMapsDeg } from './apiMapsDeg';
 import { apiMapsLatLon } from './apiMapsLatLon';
 import { apiMapsDistance } from './apiMapsDistance';
+import { apiMapsTile } from './apiMapsTile';
 
 const app:express.Express = express();
 const router: express.Router = express.Router();
@@ -27,6 +28,9 @@ oApiMapsLatLon.regist(router);
 
 const oApiMapsDistance: apiMapsDistance = new apiMapsDistance(apiURI);
 oApiMapsDistance.regist(router);
+
+const oApiMapsTile: apiMapsTile = new apiMapsTile(apiURI);
+oApiMapsTile.regist(router);
 
 // app
 // - CORS の許可
