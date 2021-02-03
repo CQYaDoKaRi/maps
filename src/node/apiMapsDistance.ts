@@ -8,15 +8,15 @@ interface apiMapsDistanceData {
 
 export class apiMapsDistance {
 	private uri = '';
-	
+
 	/**
 	 * コンストラクター
 	 * @param uri API URI
 	 */
 	constructor(uri: string){
-		this.uri = uri;	
+		this.uri = uri;
 	}
-	
+
 	/**
 	 * ２地点間の距離
 	 * @param type T:球面三角法,H:ヒュベニ,S:測地線航海算法
@@ -30,7 +30,7 @@ export class apiMapsDistance {
 		};
 
 		const oMaps: maps = new maps();
-		
+
 		if (type === 'T' || type === 'H' || type === 'S') {
 			if (req.query.lat1 && req.query.lon1 && req.query.lat2 && req.query.lon2) {
 				const lat1: number = +req.query.lat1;
@@ -71,7 +71,7 @@ export class apiMapsDistance {
 					, distance: 0
 				};
 				data = this.distance('T', req);
-				
+
 				res.json(data);
 				res.end();
 			}
@@ -84,7 +84,7 @@ export class apiMapsDistance {
 					, distance: 0
 				};
 				data = this.distance('H', req);
-				
+
 				res.json(data);
 				res.end();
 			}
@@ -97,7 +97,7 @@ export class apiMapsDistance {
 					, distance: 0
 				};
 				data = this.distance('S', req);
-				
+
 				res.json(data);
 				res.end();
 			}

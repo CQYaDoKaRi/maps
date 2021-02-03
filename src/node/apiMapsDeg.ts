@@ -8,15 +8,15 @@ interface apiMapsDegData {
 
 export class apiMapsDeg {
 	private uri = '';
-	
+
 	/**
 	 * コンストラクター
 	 * @param uri API URI
 	 */
 	constructor(uri: string){
-		this.uri = uri;	
+		this.uri = uri;
 	}
-	
+
 	/**
 	 * 登録
 	 * @param router express - Router
@@ -28,9 +28,9 @@ export class apiMapsDeg {
 					status: false
 					, name: ""
 				};
-				
+
 				const oMaps: maps = new maps();
-				
+
 				if (req.query.deg) {
 					const deg: number = +req.query.deg
 					if (!Number.isNaN(deg)) {
@@ -38,10 +38,10 @@ export class apiMapsDeg {
 						data.name = oMaps.deg2Name(deg);
 					}
 				}
-				
+
 				res.json(data);
 				res.end();
 			}
-		);	
+		);
 	}
 }
