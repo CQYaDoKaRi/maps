@@ -328,6 +328,132 @@ paths:
           required: true
           description: 十進経度（世界測地系[GSR80]）
     parameters: []
+  /api/maps/distanceto:
+    get:
+      summary: '角度・距離から緯度経度を取得'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  lat:
+                    type: number
+                    description: 十進緯度（世界測地系[GSR80]）
+                  lon:
+                    type: number
+                    description: 十進経度（世界測地系[GSR80]）
+              examples:
+                example:
+                  value:
+                    status: true
+                    lat: 43.06473675180286
+                    lon: 141.3469832298937
+      operationId: get-api-maps-distanceto
+      description: 角度・距離から緯度経度を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 9.362103972638495
+          in: query
+          name: a
+          required: true
+          description: 角度
+        - schema:
+            type: number
+            format: double
+            default: 831070.2256498174
+          in: query
+          name: len
+          required: true
+          description: 距離（m）
+    parameters: []
+  /api/maps/direction:
+    get:
+      summary: '２地点間の角度'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  a:
+                    type: number
+                    description: 角度
+              examples:
+                example:
+                  value:
+                    status: true
+                    a: 9.362103972638495
+      operationId: get-api-maps-direction
+      description: ２地点間の角度
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat1
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon1
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 43.064301
+          in: query
+          name: lat2
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 141.346874
+          in: query
+          name: lon2
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+    parameters: []
 tags:
   - name: maps
     description: ''
