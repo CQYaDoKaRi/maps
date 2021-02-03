@@ -6,6 +6,11 @@ interface apiMapsDistanceData {
 	, distance: number
 };
 
+interface apiMapsDirectionData {
+	status: boolean
+	, a: number
+};
+
 interface apiMapsDistanceToData {
 	status: boolean
 	, lat: number
@@ -97,6 +102,35 @@ export class apiMapsDistance {
 	}
 
 	/**
+	 * ２地点間の角度
+	 * @param req リクエスト
+	 * @returns 結果
+	 */
+	private direction(req:express.Request): apiMapsDirectionData{
+		let data: apiMapsDirectionData = {
+			status: false
+			, a: 0
+		};
+
+		const oMaps: maps = new maps();
+
+		if (req.query.lat1 && req.query.lon1 && req.query.lat2 && req.query.lon2) {
+			const lat1: number = +req.query.lat1;
+			const lon1: number = +req.query.lon1;
+			const lat2: number = +req.query.lat2;
+			const lon2: number = +req.query.lon2;
+			if (!Number.isNaN(lat1) && !Number.isNaN(lon1) && !Number.isNaN(lat2) && !Number.isNaN(lon2)) {
+				const a: number  = oMaps.direction(lat1, lon1, lat2, lon2);
+				data.status = true;
+				data.a = a;
+			}
+		}
+
+		return data;
+	}
+
+
+	/**
 	 * 登録
 	 * @param router express - Router
 	 */
@@ -152,6 +186,20 @@ export class apiMapsDistance {
 					, lon: 0
 				};
 				data = this.distanceTo(req);
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// ２地点間の角度
+		router.get(this.uri + '/direction',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsDirectionData = {
+					status: false
+					, a: 0
+				};
+				data = this.direction(req);
 
 				res.json(data);
 				res.end();
