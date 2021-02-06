@@ -16,6 +16,13 @@ interface apiMapsTileData {
 	, px_y: number
 };
 
+interface apiMapsTileUrlData {
+	status: boolean
+	, x: number
+	, y: number
+	, z: number
+};
+
 interface apiMapsTileScale {
 	status: boolean
 	, scale: number
@@ -117,6 +124,37 @@ export class apiMapsTile {
 						const scale: number = oMaps.tileScale(z, lat, dpi);
 						data.status = true;
 						data.scale = scale;
+					}
+				}
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// タイル座標のズームレベルを変更した場合のタイル座標を取得
+		router.get(this.uri + '/tile2z',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsTileUrlData = {
+					status: false
+					, x: 0
+					, y: 0
+					, z: 0
+				};
+
+				const oMaps: maps = new maps();
+
+				if (req.query.x && req.query.y && req.query.z && req.query.toz) {
+					const x: number = +req.query.x;
+					const y: number = +req.query.y;
+					const z: number = +req.query.z;
+					const toz: number = +req.query.toz;
+					if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z) && !Number.isNaN(toz)) {
+						const tile: mapsTile = oMaps.tile2z(x, y, z, toz);
+						data.status = true;
+						data.x = tile.x;
+						data.y = tile.y;
+						data.z = tile.z;
 					}
 				}
 

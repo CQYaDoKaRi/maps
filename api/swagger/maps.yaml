@@ -633,6 +633,81 @@ paths:
           required: true
           description: 解像度
     parameters: []
+  /api/maps/tile2z:
+    get:
+      summary: 'タイル座標のズームレベルを変更した場合のタイル座標を取得'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  x:
+                    type: number
+                    description: タイル座標X
+                  y:
+                    type: number
+                    description: タイル座標Y
+                  z:
+                    type: number
+                    description: ズームレベル
+                  px_x:
+                    type: number
+                    description: タイル左上からY値[pixel]
+                  px_y:
+                    type: number
+                    description: タイル左上からX値[pixel]
+              examples:
+                example:
+                  value:
+                    status: true
+                    x: 29010
+                    y: 12938
+                    z: 15
+      operationId: get-api-maps-tile2z
+      description: タイル座標のズームレベルを変更した場合のタイル座標を取得
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 14505
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 6469
+          in: query
+          name: y
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: toz
+          required: true
+          description: ズームレベル
+    parameters: []
 tags:
   - name: maps
     description: ''
