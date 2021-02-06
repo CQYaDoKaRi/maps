@@ -16,6 +16,11 @@ interface apiMapsTileData {
 	, px_y: number
 };
 
+interface apiMapsTileScale {
+	status: boolean
+	, scale: number
+};
+
 export class apiMapsTile {
 	private uri = '';
 
@@ -86,6 +91,32 @@ export class apiMapsTile {
 						data.status = true;
 						data.lat = pos.lat;
 						data.lon = pos.lon;
+					}
+				}
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// タイル座標のズームレベルから縮尺を取得
+		router.get(this.uri + '/tilescale',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsTileScale = {
+					status: false
+					, scale: 0
+				};
+
+				const oMaps: maps = new maps();
+
+				if (req.query.lat && req.query.z && req.query.dpi) {
+					const lat: number = +req.query.lat;
+					const z: number = +req.query.z;
+					const dpi: number = +req.query.dpi;
+					if (!Number.isNaN(lat) && !Number.isNaN(z) && !Number.isNaN(dpi)) {
+						const scale: number = oMaps.tileScale(z, lat, dpi);
+						data.status = true;
+						data.scale = scale;
 					}
 				}
 

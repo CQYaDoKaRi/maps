@@ -580,6 +580,59 @@ paths:
           required: true
           description: ズームレベル
     parameters: []
+  /api/maps/tilescale:
+    get:
+      summary: 'タイル座標のズームレベルから縮尺を取得'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  scale:
+                    type: number
+                    description: 縮尺
+              examples:
+                example:
+                  value:
+                    status: true
+                    scale: 29286.42419123685
+      operationId: get-api-maps-tilescale
+      description: タイル座標のズームレベルから縮尺を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.65809922
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+        - schema:
+            type: integer
+            format: int32
+            default: 96
+          in: query
+          name: dpi
+          required: true
+          description: 解像度
+    parameters: []
 tags:
   - name: maps
     description: ''
