@@ -515,8 +515,65 @@ paths:
           required: true
           description: 十進経度（世界測地系[GSR80]）
         - schema:
-            type: number
-            format: double
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tile2latlon:
+    get:
+      summary: 'タイル座標から緯度経度を取得'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  lat:
+                    type: number
+                    description: タイル左上の十進緯度（世界測地系[GSR80]）
+                  lon:
+                    type: number
+                    description: タイル左上の十進経度（世界測地系[GSR80]）
+              examples:
+                example:
+                  value:
+                    status: true
+                    lat: 35.371135022801006
+                    lon: 138.71337890625
+      operationId: get-api-maps-tile2latlon
+      description: タイル座標から緯度経度を取得
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 14505
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 6469
+          in: query
+          name: y
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
             default: 14
           in: query
           name: z

@@ -1,5 +1,11 @@
 import express from 'express';
-import { maps, mapsTile  } from '../ts/maps';
+import { maps, mapsTile, mapsLatLon } from '../ts/maps';
+
+interface apiMapsLatLonData {
+	status: boolean
+	, lat: number
+	, lon: number
+};
 
 interface apiMapsTileData {
 	status: boolean
@@ -52,6 +58,34 @@ export class apiMapsTile {
 						data.z = tile.z;
 						data.px_x = tile.px_x;
 						data.px_y = tile.px_y;
+					}
+				}
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// タイル座標から緯度経度を取得
+		router.get(this.uri + '/tile2latlon',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsLatLonData = {
+					status: false
+					, lat: 0
+					, lon: 0
+				};
+
+				const oMaps: maps = new maps();
+
+				if (req.query.x && req.query.y && req.query.z) {
+					const x: number = +req.query.x;
+					const y: number = +req.query.y;
+					const z: number = +req.query.z;
+					if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
+						const pos: mapsLatLon = oMaps.tile2LatLon(x, y, z);
+						data.status = true;
+						data.lat = pos.lat;
+						data.lon = pos.lon;
 					}
 				}
 

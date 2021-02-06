@@ -1044,7 +1044,7 @@ export class maps {
 	 * @param z タイル座標Z
 	 * @returns 緯度経度
 	 */
-	public tile2LatLng(x: number, y: number, z: number): mapsLatLon {
+	public tile2LatLon(x: number, y: number, z: number): mapsLatLon {
 		const ret = new mapsLatLon();
 
 		const n: number = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
