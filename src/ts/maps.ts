@@ -1044,7 +1044,7 @@ export class maps {
 	 * @param z タイル座標Z
 	 * @returns 緯度経度
 	 */
-	public tile2LatLng(x: number, y: number, z: number): mapsLatLon {
+	public tile2LatLon(x: number, y: number, z: number): mapsLatLon {
 		const ret = new mapsLatLon();
 
 		const n: number = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
@@ -1223,10 +1223,10 @@ export class maps {
 	/**
 	 * 標高タイルURLを取得
 	 * 説明：
-     * 該当するタイル番号と標高データは必ず一致するとは限りません。
+     * 該当するタイル番号と標高データは必ず一致するとは限らない
      * ズームレベル 9 以上の場合、
      * DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換
-     * DEM10Bは、ズームレベル9～14はそのまま採用し、14以上は、ズームレベル14でのタイル座標に変換
+     * DEM10Bは、ズームレベル9～14はそのまま、15以上は、ズームレベル14でのタイル座標に変換
 	 * @param x タイル座標X
 	 * @param y タイル座標Y
 	 * @param z タイル座標Z

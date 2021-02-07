@@ -454,8 +454,446 @@ paths:
           required: true
           description: 十進経度（世界測地系[GSR80]）
     parameters: []
+  /api/maps/tile:
+    get:
+      summary: '緯度経度・ズームレベルからタイル座標を取得'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  x:
+                    type: number
+                    description: タイル座標X
+                  y:
+                    type: number
+                    description: タイル座標Y
+                  z:
+                    type: number
+                    description: ズームレベル
+                  px_x:
+                    type: number
+                    description: タイル左上からY値[pixel]
+                  px_y:
+                    type: number
+                    description: タイル左上からX値[pixel]
+              examples:
+                example:
+                  value:
+                    status: true
+                    x: 14505
+                    y: 6469
+                    z: 14
+                    px_x: 162
+                    px_y: 148
+      operationId: get-api-maps-tile
+      description: 緯度経度・ズームレベルからタイル座標を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.360771305
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 138.7273035
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tile2latlon:
+    get:
+      summary: 'タイル座標から緯度経度を取得'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  lat:
+                    type: number
+                    description: タイル左上の十進緯度（世界測地系[GSR80]）
+                  lon:
+                    type: number
+                    description: タイル左上の十進経度（世界測地系[GSR80]）
+              examples:
+                example:
+                  value:
+                    status: true
+                    lat: 35.371135022801006
+                    lon: 138.71337890625
+      operationId: get-api-maps-tile2latlon
+      description: タイル座標から緯度経度を取得
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 14505
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 6469
+          in: query
+          name: 'y'
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tilescale:
+    get:
+      summary: 'タイル座標のズームレベルから縮尺を取得'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  scale:
+                    type: number
+                    description: 縮尺
+              examples:
+                example:
+                  value:
+                    status: true
+                    scale: 29286.42419123685
+      operationId: get-api-maps-tilescale
+      description: タイル座標のズームレベルから縮尺を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.65809922
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+        - schema:
+            type: integer
+            format: int32
+            default: 96
+          in: query
+          name: dpi
+          required: true
+          description: 解像度
+    parameters: []
+  /api/maps/tile2z:
+    get:
+      summary: 'タイル座標のズームレベルを変更した場合のタイル座標を取得'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  x:
+                    type: number
+                    description: タイル座標X
+                  y:
+                    type: number
+                    description: タイル座標Y
+                  z:
+                    type: number
+                    description: ズームレベル
+                  px_x:
+                    type: number
+                    description: タイル左上からY値[pixel]
+                  px_y:
+                    type: number
+                    description: タイル左上からX値[pixel]
+              examples:
+                example:
+                  value:
+                    status: true
+                    x: 29010
+                    y: 12938
+                    z: 15
+      operationId: get-api-maps-tile2z
+      description: タイル座標のズームレベルを変更した場合のタイル座標を取得
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 14505
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 6469
+          in: query
+          name: 'y'
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 14
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: toz
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tiledemurl/png:
+    get:
+      summary: '標高タイルURLを取得(png)'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: |-
+            ズームレベル 9 以上の場合、  
+            DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
+            DEM10Bは、ズームレベル9～14はそのまま、15以上は、ズームレベル14でのタイル座標に変換
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  urls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: boolean
+                          description: 処理結果
+                        x:
+                          type: number
+                          description: タイル座標X
+                        y:
+                          type: number
+                          description: タイル座標Y
+                        z:
+                          type: number
+                          description: ズームレベル
+                        ext:
+                          type: string
+                          description: ファイル拡張子
+                        url:
+                          type: string
+                          description: URL
+              examples:
+                example:
+                  value:
+                    status: true
+                    urls:
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: 'png'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png'
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: png
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png'
+                      - x: 14505
+                        'y': 6469
+                        z: 14
+                        ext: 'png'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png'
+      operationId: get-api-maps-tiledemurl-png
+      description: 標高タイルURLを取得(png)
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 29011
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 12939
+          in: query
+          name: 'y'
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tiledemurl/txt:
+    get:
+      summary: '標高タイルURLを取得(txt)'
+      tags:
+        - mapsTile
+      responses:
+        '200':
+          description: |-
+            ズームレベル 9 以上の場合、  
+            DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
+            DEM10Bは、ズームレベル9～14はそのまま、15以上は、ズームレベル14でのタイル座標に変換
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  urls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: boolean
+                          description: 処理結果
+                        x:
+                          type: number
+                          description: タイル座標X
+                        y:
+                          type: number
+                          description: タイル座標Y
+                        z:
+                          type: number
+                          description: ズームレベル
+                        ext:
+                          type: string
+                          description: ファイル拡張子
+                        url:
+                          type: string
+                          description: URL
+              examples:
+                example:
+                  value:
+                    status: true
+                    urls:
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: 'txt'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt'
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: txt
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt'
+                      - x: 14505
+                        'y': 6469
+                        z: 14
+                        ext: 'txt'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt'
+      operationId: get-api-maps-tiledemurl-txt
+      description: 標高タイルURLを取得(png)
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 29011
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 12939
+          in: query
+          name: 'y'
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
 tags:
   - name: maps
+    description: ''
+  - name: mapsTile
     description: ''
 components:
   schemas: {}

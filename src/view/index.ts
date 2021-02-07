@@ -298,7 +298,7 @@ function page(oView: indexView) : void {
 			oTable.append(oTableTr);
 
 			//
-			vTileLatLon = oMaps.tile2LatLng(vTile.x, vTile.y, vTile.z);
+			vTileLatLon = oMaps.tile2LatLon(vTile.x, vTile.y, vTile.z);
 
 			oTableTr = document.createElement("tr");
 
