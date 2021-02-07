@@ -568,7 +568,7 @@ paths:
             format: int32
             default: 6469
           in: query
-          name: y
+          name: 'y'
           required: true
           description: タイル座標Y
         - schema:
@@ -688,7 +688,7 @@ paths:
             format: int32
             default: 6469
           in: query
-          name: y
+          name: 'y'
           required: true
           description: タイル座標Y
         - schema:
@@ -787,7 +787,7 @@ paths:
             format: int32
             default: 12939
           in: query
-          name: y
+          name: 'y'
           required: true
           description: タイル座標Y
         - schema:
@@ -878,7 +878,7 @@ paths:
             format: int32
             default: 12939
           in: query
-          name: y
+          name: 'y'
           required: true
           description: タイル座標Y
         - schema:
