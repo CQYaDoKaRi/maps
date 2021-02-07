@@ -458,7 +458,7 @@ paths:
     get:
       summary: '緯度経度・ズームレベルからタイル座標を取得'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: ''
@@ -527,7 +527,7 @@ paths:
     get:
       summary: 'タイル座標から緯度経度を取得'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: ''
@@ -584,7 +584,7 @@ paths:
     get:
       summary: 'タイル座標のズームレベルから縮尺を取得'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: ''
@@ -637,7 +637,7 @@ paths:
     get:
       summary: 'タイル座標のズームレベルを変更した場合のタイル座標を取得'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: ''
@@ -712,7 +712,7 @@ paths:
     get:
       summary: '標高タイルURLを取得(png)'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: |-
@@ -803,7 +803,7 @@ paths:
     get:
       summary: '標高タイルURLを取得(txt)'
       tags:
-        - maps
+        - mapsTile
       responses:
         '200':
           description: |-
@@ -892,6 +892,8 @@ paths:
     parameters: []
 tags:
   - name: maps
+    description: ''
+  - name: mapsTile
     description: ''
 components:
   schemas: {}
