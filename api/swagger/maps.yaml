@@ -708,6 +708,188 @@ paths:
           required: true
           description: ズームレベル
     parameters: []
+  /api/maps/tiledemurl/png:
+    get:
+      summary: '標高タイルURLを取得(png)'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: |-
+            ズームレベル 9 以上の場合、  
+            DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
+            DEM10Bは、ズームレベル9～14はそのまま、15以上は、ズームレベル14でのタイル座標に変換
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  urls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: boolean
+                          description: 処理結果
+                        x:
+                          type: number
+                          description: タイル座標X
+                        y:
+                          type: number
+                          description: タイル座標Y
+                        z:
+                          type: number
+                          description: ズームレベル
+                        ext:
+                          type: string
+                          description: ファイル拡張子
+                        url:
+                          type: string
+                          description: URL
+              examples:
+                example:
+                  value:
+                    status: true
+                    urls:
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: 'png'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png'
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: png
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png'
+                      - x: 14505
+                        'y': 6469
+                        z: 14
+                        ext: 'png'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png'
+      operationId: get-api-maps-tiledemurl-png
+      description: 標高タイルURLを取得(png)
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 29011
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 12939
+          in: query
+          name: y
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
+  /api/maps/tiledemurl/txt:
+    get:
+      summary: '標高タイルURLを取得(txt)'
+      tags:
+        - maps
+      responses:
+        '200':
+          description: |-
+            ズームレベル 9 以上の場合、  
+            DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
+            DEM10Bは、ズームレベル9～14はそのまま、15以上は、ズームレベル14でのタイル座標に変換
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 処理結果
+                  urls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: boolean
+                          description: 処理結果
+                        x:
+                          type: number
+                          description: タイル座標X
+                        y:
+                          type: number
+                          description: タイル座標Y
+                        z:
+                          type: number
+                          description: ズームレベル
+                        ext:
+                          type: string
+                          description: ファイル拡張子
+                        url:
+                          type: string
+                          description: URL
+              examples:
+                example:
+                  value:
+                    status: true
+                    urls:
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: 'txt'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt'
+                      - x: 29011
+                        'y': 12939
+                        z: 15
+                        ext: txt
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt'
+                      - x: 14505
+                        'y': 6469
+                        z: 14
+                        ext: 'txt'
+                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt'
+      operationId: get-api-maps-tiledemurl-txt
+      description: 標高タイルURLを取得(png)
+      parameters:
+        - schema:
+            type: integer
+            format: int32
+            default: 29011
+          in: query
+          name: x
+          required: true
+          description: タイル座標X
+        - schema:
+            type: integer
+            format: int32
+            default: 12939
+          in: query
+          name: y
+          required: true
+          description: タイル座標Y
+        - schema:
+            type: integer
+            format: int32
+            default: 15
+          in: query
+          name: z
+          required: true
+          description: ズームレベル
+    parameters: []
 tags:
   - name: maps
     description: ''

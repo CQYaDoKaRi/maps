@@ -1,5 +1,5 @@
 import express from 'express';
-import { maps, mapsTile, mapsLatLon } from '../ts/maps';
+import { maps, mapsLatLon, mapsTile, mapsTileUrl } from '../ts/maps';
 
 interface apiMapsLatLonData {
 	status: boolean
@@ -23,6 +23,19 @@ interface apiMapsTileUrlData {
 	, z: number
 };
 
+interface apiMapsTileUrlInfoData {
+	x: number
+	, y: number
+	, z: number
+	, ext: string
+	, url: string
+};
+
+interface apiMapsTileUrlsData {
+	status: boolean
+	, urls: apiMapsTileUrlInfoData[]
+};
+
 interface apiMapsTileScale {
 	status: boolean
 	, scale: number
@@ -37,6 +50,53 @@ export class apiMapsTile {
 	 */
 	constructor(uri: string){
 		this.uri = uri;
+	}
+
+	/**
+	 * 標高タイルURLを取得
+	 * @param type png, text
+	 * @param req リクエスト
+	 * @returns 結果
+	 */
+	private tileDemUrl(type: string, req:express.Request): apiMapsTileUrlsData{
+		let data: apiMapsTileUrlsData = {
+			status: false
+			, urls: []
+		};
+
+		const oMaps: maps = new maps();
+
+		if (req.query.x && req.query.y && req.query.z) {
+			const x: number = +req.query.x;
+			const y: number = +req.query.y;
+			const z: number = +req.query.z;
+			if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
+				let tileUrls: mapsTileUrl[] = [];
+				if (type === "png") {
+					tileUrls = oMaps.tileDemUrlPng(x, y, z);
+				}
+				else{
+					tileUrls = oMaps.tileDemUrlTxt(x, y, z);
+				}
+
+				tileUrls.map((tileUrl: mapsTileUrl) => {
+					if (tileUrl.tile) {
+						data.status = true;
+						data.urls.push(
+						{
+							x: tileUrl.tile.x
+							, y: tileUrl.tile.y
+							, z: tileUrl.tile.z
+							, ext: tileUrl.ext
+							, url: tileUrl.url
+						}
+						);
+					}
+				});
+			}
+		}
+
+		return data;
 	}
 
 	/**
@@ -162,5 +222,34 @@ export class apiMapsTile {
 				res.end();
 			}
 		);
+
+		// 標高タイルURLを取得[png]
+		router.get(this.uri + '/tiledemurl/png',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsTileUrlsData = {
+					status: false
+					, urls: []
+				};
+				data = this.tileDemUrl("png", req);
+
+				res.json(data);
+				res.end();
+			}
+		);
+
+		// 標高タイルURLを取得[txt]
+		router.get(this.uri + '/tiledemurl/txt',
+			(req:express.Request, res:express.Response) => {
+				let data: apiMapsTileUrlsData = {
+					status: false
+					, urls: []
+				};
+				data = this.tileDemUrl("txt", req);
+
+				res.json(data);
+				res.end();
+			}
+		);
+
 	}
 }
