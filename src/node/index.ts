@@ -1,5 +1,7 @@
 import express from 'express';
 
+import { mongo } from './mongo';
+
 import { page } from './page';
 import { api } from './api';
 import { apiMapsDeg } from './apiMapsDeg';
@@ -9,6 +11,9 @@ import { apiMapsTile } from './apiMapsTile';
 
 const app:express.Express = express();
 const router: express.Router = express.Router();
+
+// mongo
+const oMongo: mongo = new mongo('localhost', 8517);
 
 // page
 const oPage: page = new page('/');
