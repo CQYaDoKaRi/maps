@@ -22,6 +22,8 @@
 ## テスト
 - Jest(ts-jest)
 - Cypress
+## データベース
+- MongoDB
 
 # インストール
 ```
@@ -95,6 +97,9 @@ minify 前のファイルを使う
 
 # API
 http://localhost:8080/api/maps/docs/  
+
+# Mongo Express(docker)
+http://localhost:8581/  
 
 # テスト - JEST
 ```
