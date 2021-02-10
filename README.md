@@ -69,16 +69,19 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 	./start.sh www
 	```
 
-- docker コンテナを使わないで Node.js のみ起動（ts-node）
-	```
-	npm run start
-	```
-	= npm run ts-node --project ./tsconfig.node.json src/node/index.ts
-
-- docker コンテナを使わないで Node.js のみ起動（トランスパイル済み js）
-	```
-	node dist/node/node/index.js
-	```
+- Node.js のみ起動  
+	docker コンテナを使わない＝ docker コンテナが停止している状態で動作します  
+	Node.js の実行するホスト名が docker コンテナのホスト名 [maps] でない場合、  
+	docker コンテナにより動作する MongoDB に関係する処理のみ機能させずに起動します  
+	- ts-node
+		```
+		npm run start
+		```
+		= `npm run ts-node --project ./tsconfig.node.json src/node/index.ts`
+	- node（トランスパイル済み js）
+		```
+		node dist/node/node/index.js
+		```
 
 # サイト表示
 - メインページ  
