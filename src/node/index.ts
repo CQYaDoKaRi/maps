@@ -1,4 +1,7 @@
+import os from 'os';
 import express from 'express';
+
+import { mongo } from './mongo';
 
 import { page } from './page';
 import { api } from './api';
@@ -7,8 +10,15 @@ import { apiMapsLatLon } from './apiMapsLatLon';
 import { apiMapsDistance } from './apiMapsDistance';
 import { apiMapsTile } from './apiMapsTile';
 
+const hostname = os.hostname();
+
 const app:express.Express = express();
 const router: express.Router = express.Router();
+
+if (hostname === "maps") {
+	// mongo
+	const oMongo: mongo = new mongo('mongo', 8517);
+}
 
 // page
 const oPage: page = new page('/');

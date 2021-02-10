@@ -1,24 +1,77 @@
 version: "3.7"
 
 services:
+
  maps:
   image: maps:dev
   container_name: maps
   hostname: maps
   build: .
+  restart: always
   ports:
-   - "8080:8080"
+   - 8080:8080
   volumes:
    - maps_data:/usr/local/maps
   tty: true
   networks:
    - link_maps
+  links:
+   - mongo
+
+ mongo:
+  image: maps_mongo:dev
+  container_name: maps_mongo
+  hostname: maps_mongo
+  build:
+   context: .
+   dockerfile: Dockerfile_mongo
+  restart: always
+  environment:
+   MONGO_INITDB_ROOT_USERNAME: maps
+   MONGO_INITDB_ROOT_PASSWORD: maps
+  ports:
+   - 8517:8517
+  volumes:
+   - mongo:/data
+  tty: true
+  networks:
+   - link_maps
+
+ mongo_express:
+  image:  maps_mongo_express:dev
+  container_name: maps_mongo_express
+  hostname: maps_mongo_express
+  build:
+   context: .
+   dockerfile: Dockerfile_mongo_express
+  restart: always
+  ports:
+   - 8581:8081
+  environment:
+   #ME_CONFIG_BASICAUTH_USERNAME: maps
+   #ME_CONFIG_BASICAUTH_PASSWORD: maps
+   ME_CONFIG_MONGODB_SERVER: mongo
+   ME_CONFIG_MONGODB_PORT: 8517
+   ME_CONFIG_MONGODB_ADMINUSERNAME: maps
+   ME_CONFIG_MONGODB_ADMINPASSWORD: maps
+  tty: true
+  networks:
+   - link_maps
+  links:
+   - mongo
+  command: /bin/bash -c '/usr/local/bin/node /node_modules/mongo-express/app.js'
 
 volumes:
  maps_data:
    driver_opts:
     type: none
     device: ${PWD}/../
+    o: bind
+
+ mongo:
+   driver_opts:
+    type: none
+    device: ${PWD}/../mongo/
     o: bind
 
 networks:
@@ -32,4 +85,3 @@ networks:
    driver: default
    config:
     - subnet: "192.168.0.1/24"
-
