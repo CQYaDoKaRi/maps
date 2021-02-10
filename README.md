@@ -24,6 +24,7 @@
 - Cypress
 ## データベース
 - MongoDB
+- Mongo Express
 
 # インストール
 ```
@@ -57,61 +58,53 @@ build.sh dev
 - gulp + tsc
 	- TypeScript のファイルを監視しコンパイル
 
-# 起動 - ts-node
+# 起動
+docker コンテナで Node.js、MongoDB, Mongo Express を起動します  
 ```
-npm run start
-```
-= npm run ts-node --project ./tsconfig.node.json src/node/index.ts
-
-# 起動 - node
-```
-node dist/node/node/index.js
+./start.sh
 ```
 
-# docker - 起動
-```
-./docker/init.sh start
-```
-- docker image 作成
-- docker コンテナ起動
-- node 起動
+- docker コンテナの Node.js のみ起動する
+	```
+	./start.sh www
+	```
 
-# docker - 停止
-```
-./docker/init.sh stop
-```
-- docker コンテナ停止
-- docker image 削除
+- docker コンテナを使わないで Node.js のみ起動（ts-node）
+	```
+	npm run start
+	```
+	= npm run ts-node --project ./tsconfig.node.json src/node/index.ts
 
-# docker - コンテナログイン
-```
-./docker init.sh exec
-```
+- docker コンテナを使わないで Node.js のみ起動（トランスパイル済み js）
+	```
+	node dist/node/node/index.js
+	```
 
-# 表示
-http://localhost:8080/  
+# サイト表示
+- メインページ  
+	http://localhost:8080/  
 
-# 表示 - 開発モード
-http://localhost:8080/index.html?dev=1  
-minify 前のファイルを使う  
+- メインページ（開発モード）  
+	http://localhost:8080/index.html?dev=1  
 
-# API
-http://localhost:8080/api/maps/docs/  
+- API  
+	http://localhost:8080/api/maps/docs/  
 
-# Mongo Express(docker)
-http://localhost:8581/  
+- Mongo Express  
+	http://localhost:8581/  
 
-# テスト - JEST
-```
-npm run test
-```
+# テスト
+- JEST
+	```
+	npm run test
+	```
 
-# テスト - Cypress - GUI
-```
-npx cypress open
-```
+- Cypress - GUI
+	```
+	npx cypress open
+	```
 
-# テスト - Cypress - CUI
-```
-npx cypress run
-```
+- Cypress - CUI
+	```
+	npx cypress run
+	```
