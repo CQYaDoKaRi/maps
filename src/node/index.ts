@@ -13,7 +13,7 @@ const app:express.Express = express();
 const router: express.Router = express.Router();
 
 // mongo
-const oMongo: mongo = new mongo('localhost', 8517);
+const oMongo: mongo = new mongo('mongo', 8517);
 
 // page
 const oPage: page = new page('/');
