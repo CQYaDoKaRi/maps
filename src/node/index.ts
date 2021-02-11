@@ -15,9 +15,13 @@ const hostname = os.hostname();
 const app:express.Express = express();
 const router: express.Router = express.Router();
 
+const apiURI = '/api/maps';
+
+// MongoDB
 if (hostname === "maps") {
-	// mongo
-	const oMongo: mongo = new mongo('mongo', 8517);
+	const oMongo: mongo = new mongo(apiURI, 'mongo', 8517);
+	// MongoDB - api
+	oMongo.regist(router);
 }
 
 // page
@@ -25,7 +29,6 @@ const oPage: page = new page('/');
 oPage.regist(router);
 
 // api
-const apiURI = '/api/maps';
 const oApi: api = new api(apiURI);
 oApi.regist(app);
 
