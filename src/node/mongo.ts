@@ -96,6 +96,13 @@ export class mongo {
 					}
 				)
 			);
+
+			// - 地図：データ：座標にインデックスを作成
+			await collection.createIndex(
+				{
+					loc: '2dsphere'
+				}
+			);
 			console.log(chalk.blue('MongoDB > create - prefCapital ... completed'));
 		}
 		finally {
