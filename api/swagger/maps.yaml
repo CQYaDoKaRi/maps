@@ -890,11 +890,92 @@ paths:
           required: true
           description: ズームレベル
     parameters: []
+  /api/maps/mongo/prefcapital/near:
+    get:
+      summary: '指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得'
+      tags:
+        - mapsMongo
+      responses:
+        '200':
+          description: '指定した緯度経度に近い順に返す'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pref:
+                      type: string
+                      description: 都道府県名
+                    addr:
+                      type: string
+                      description: 住所
+                    lat:
+                      type: number
+                      description: 十進緯度（世界測地系[GSR80]）
+                    lon:
+                      type: number
+                      description: 十進経度（世界測地系[GSR80]）
+                    distance:
+                      type: string
+                      description: 距離(m)
+              examples:
+                example:
+                  value:
+                    - pref: '東京都'
+                      addr: '東京都新宿区西新宿2-8-1'
+                      lat: 35.689753
+                      lon: 139.691731
+                      distance: 0
+                    - pref : '埼玉県'
+                      addr: '埼玉県さいたま市浦和区高砂3-15-1'
+                      lat: 35.857431
+                      lon: 139.648901
+                      distance: 19062.334307637168
+                    - pref: '神奈川県'
+                      addr: 神奈川県横浜市中区日本大通1
+                      lat: 35.447495
+                      lon: 139.6424
+                      distance: 27335.3146876824
+      operationId: get-api-maps-mongo-prefcapital-near
+      description: 指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得
+      parameters:
+        - schema:
+            type: number
+            format: double
+            default: 35.689753
+          in: query
+          name: lat
+          required: true
+          description: 十進緯度（世界測地系[GSR80]）
+        - schema:
+            type: number
+            format: double
+            default: 139.691731
+          in: query
+          name: lon
+          required: true
+          description: 十進経度（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 3
+          in: query
+          name: 'n'
+          required: true
+          description: |-
+            取得件数(0, 1 ～ 100)  
+            0 を指定した場合、最大件数（100件）  
+    parameters: []
 tags:
   - name: maps
     description: ''
   - name: mapsTile
     description: ''
+  - name: mapsMongo
+    description: 'MongoDB のデータを検索'
 components:
   schemas: {}
   securitySchemes: {}
