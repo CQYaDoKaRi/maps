@@ -76,6 +76,14 @@ export class mongo {
 	}
 
 	/**
+	 * 接続：Collection：postOffice
+	 * @returns
+	 */
+	public async connectPostOffice(): Promise<Collection | null> {
+		return await this.connect('postOffice');
+	}
+
+	/**
 	 * 登録
 	 * @param router express - Router
 	 */

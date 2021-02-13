@@ -34,6 +34,7 @@ export class mongoCreate extends mongo {
 		await this.collectionPref();
 		await this.collectionPrefCapital();
 		await this.collectionPrefCity();
+		await this.collectionPostOffice();
 	}
 
 	/**
@@ -181,6 +182,55 @@ export class mongoCreate extends mongo {
 			);
 
 			console.log(chalk.blue('MongoDB > create - prefCity ... completed'));
+		}
+		finally {
+			if (this.client) {
+				this.client.close();
+			}
+		}
+	}
+
+	/**
+	 * 初期処理：郵便局 - Point
+	 * @returns
+	 */
+	private async collectionPostOffice(): Promise<void> {
+		// 接続
+		const collection: Collection | null = await this.connectPostOffice();
+		if (!collection) {
+			return;
+		}
+
+		try {
+			// 件数
+			const n = await collection.find().count();
+			if(n > 0){
+				return;
+			}
+
+			// 件数がない場合：データを挿入
+			console.log(chalk.blue('MongoDB > create - postOffice ...'));
+
+			// - 地図：データ
+			const mapsDataPref: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPostOffice.geojson`, 'utf-8'));
+			const oData: geojsonFeatures[] = mapsDataPref.features;
+
+			await Promise.all(
+				oData.map(
+					async(item: geojsonFeatures) => {
+						try{
+							await collection.insertOne({
+								properties: item.properties
+								, loc: item.geometry
+							});
+						}
+						catch{
+						}
+					}
+				)
+			);
+
+			console.log(chalk.blue('MongoDB > create - postOffice ... completed'));
 		}
 		finally {
 			if (this.client) {
