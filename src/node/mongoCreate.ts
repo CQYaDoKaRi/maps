@@ -78,6 +78,8 @@ export class mongoCreate extends mongo {
 				)
 			);
 
+			// インデックス
+			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
 			console.log(chalk.blue('MongoDB > create - pref ... completed'));
 		}
 		finally {
@@ -182,6 +184,8 @@ export class mongoCreate extends mongo {
 				)
 			);
 
+			// インデックス
+			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
 			console.log(chalk.blue('MongoDB > create - prefCity ... completed'));
 		}
 		finally {
@@ -231,6 +235,12 @@ export class mongoCreate extends mongo {
 				)
 			);
 
+			// - データ：座標にインデックスを作成
+			await collection.createIndex(
+				{
+					loc: '2dsphere'
+				}
+			);
 			console.log(chalk.blue('MongoDB > create - postOffice ... completed'));
 		}
 		finally {
@@ -280,6 +290,12 @@ export class mongoCreate extends mongo {
 				)
 			);
 
+			// - データ：座標にインデックスを作成
+			await collection.createIndex(
+				{
+					loc: '2dsphere'
+				}
+			);
 			console.log(chalk.blue('MongoDB > create - roadsiteStation ... completed'));
 		}
 		finally {
