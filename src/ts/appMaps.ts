@@ -38,6 +38,11 @@ export class appMaps {
 	private z: number = 0;
 	private options: { [key: string]: any } = {};
 
+	private dPref: any | null = null;
+	private dPrefCity: any | null = null;
+	private oPref: L.GeoJSON | null = null;
+	private oPrefCity: L.GeoJSON | null = null;
+
 	constructor(i: string, lat: number, lon: number, z: number, options: { [key: string]: any }) {
 		this.iMapApp = i;
 		this.oMapApp = document.getElementById(this.iMapApp);
@@ -65,8 +70,98 @@ export class appMaps {
 			}
 		).addTo(this.oMap);
 
+		if (i === "appMongoDBMap") {
+			var that = this;
+			this.oMap.on("zoomend", (e: L.LeafletEvent) => {
+				if (!that.oMap) {
+					return;
+				}
+
+				const z: number = that.oMap.getZoom();
+				if (z < 12) {
+					if (that.oPrefCity) {
+						that.oMap.removeLayer(that.oPrefCity);
+						that.oPrefCity = null;
+					}
+
+					if (that.dPref) {
+						if (!that.oPref) {
+							that.oPref = L.geoJSON(that.dPref, {});
+							that.oPref.addTo(that.oMap);
+						}
+					}
+					else {
+						that.LayerGeoJSON("./data/dPref.geojson").then((data: any) => {
+							that.dPref = data;
+							if (!that.oMap) {
+								return;
+							}
+							that.oPref = L.geoJSON(that.dPref, {});
+							that.oPref.addTo(that.oMap);
+						});
+					}
+				}
+				else{
+					if (that.oPref) {
+						that.oMap.removeLayer(that.oPref);
+						that.oPref = null;
+					}
+
+					if (that.dPrefCity) {
+						if (!that.oPrefCity) {
+							that.oPrefCity = L.geoJSON(that.dPrefCity, {});
+							that.oPrefCity.addTo(that.oMap);
+						}
+					}
+					else {
+						that.LayerGeoJSON("./data/dPrefCity.geojson").then((data: any) => {
+							that.dPrefCity = data;
+							if (!that.oMap) {
+								return;
+							}
+							that.oPrefCity = L.geoJSON(that.dPrefCity, {});
+							that.oPrefCity.addTo(that.oMap);
+						});
+					}
+				}
+			});
+		}
+
 		this.view(this.lat, this.lon, this.z);
 	}
+
+	/**
+	 * Layer - GeoJSON
+	 * @param url GPXファイル
+	 * @returns Promise<void>
+	 */
+	public LayerGeoJSON(url: string): Promise<void> {
+		return new Promise<void>((resolve: (data: any) => void, reject: (reson: any) => void) => {
+			fetch(url,
+				{
+					method: "GET"
+				}
+			).then(response => {
+				if (response.status === 200) {
+					response.text().then(text => {
+						if (text.length > 0) {
+							resolve(JSON.parse(text));
+						}
+					}
+					);
+				}
+				else {
+					resolve("");
+				}
+			}
+			).catch(error => {
+				resolve("");
+			}
+			);
+		}
+		);
+	}
+
 
 	/**
 	 * 表示

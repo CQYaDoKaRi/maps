@@ -450,6 +450,15 @@ function page(oView: indexView) : void {
 			);
 		}
 	}
+	/*==============================================================================================*/
+	if (!oView.status("MongoDB", vHashDiv)) {
+		const oDivTitle: HTMLElement | null = document.getElementById("appMongoDBTitle");
+		if (oDivTitle) {
+			oDivTitle.innerHTML = oView.getMenuTitle("MongoDB");
+
+			oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+		}
+	}
 }
 
 /**
@@ -463,6 +472,7 @@ window.onload = () => {
 		, { key: "Scale", title: "ズームレベルから縮尺を求める" }
 		, { key: "Tile", title: "緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める" }
 		, { key: "DataGpx", title: "GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示" }
+		, { key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" }
 	];
 	title.map((item: indexMenuTitle) => {
 		oView.setMenuTitle(item);
