@@ -2,6 +2,7 @@ import os from 'os';
 import express from 'express';
 
 import { mongo } from './mongo';
+import { mongoCreate } from './mongoCreate';
 
 import { page } from './page';
 import { api } from './api';
@@ -19,8 +20,12 @@ const apiURI = '/api/maps';
 
 // MongoDB
 if (hostname === "maps") {
-	const oMongo: mongo = new mongo(apiURI, 'mongo', 8517);
+	// MongoDB - Create
+	const oMongoCreate: mongoCreate = new mongoCreate(apiURI, 'mongo', 8517);
+	oMongoCreate.collections();
+
 	// MongoDB - api
+	const oMongo: mongo = new mongo(apiURI, 'mongo', 8517);
 	oMongo.regist(router);
 }
 

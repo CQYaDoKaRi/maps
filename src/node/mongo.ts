@@ -1,13 +1,12 @@
-import chalk from 'chalk';
 import express from 'express';
 import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb'
-import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
 
 export class mongo {
-	private uri = '';
+	private uri: string = '';
+
 	private dbName: string = 'maps';
 	private dbURL: string = '';
-	private client: MongoClient | null = null;
+	public client: MongoClient | null = null;
 	private clientOptions: MongoClientOptions = {};
 
 	/**
@@ -23,8 +22,6 @@ export class mongo {
 
 		this.clientOptions.useNewUrlParser = true;
 		this.clientOptions.useUnifiedTopology = true
-
-		this.init();
 	}
 
 	/**
@@ -55,66 +52,43 @@ export class mongo {
 	}
 
 	/**
+	 * 接続：Collection：pref
+	 * @returns
+	 */
+	public async connectPref(): Promise<Collection | null> {
+		return await this.connect('pref');
+	}
+
+	/**
 	 * 接続：Collection：prefCapital
 	 * @returns
 	 */
-	private async connectPrefCapital(): Promise<Collection | null> {
+	public async connectPrefCapital(): Promise<Collection | null> {
 		return await this.connect('prefCapital');
 	}
 
 	/**
-	 * 初期処理
+	 * 接続：Collection：prefCity
 	 * @returns
 	 */
-	private async init(): Promise<void> {
-		// 接続
-		const collection: Collection | null = await this.connectPrefCapital();
-		if (!collection) {
-			return;
-		}
+	public async connectPrefCity(): Promise<Collection | null> {
+		return await this.connect('prefCity');
+	}
 
-		try {
-			// 件数
-			const n = await collection.find().count();
-			if(n > 0){
-				return;
-			}
+	/**
+	 * 接続：Collection：postOffice
+	 * @returns
+	 */
+	public async connectPostOffice(): Promise<Collection | null> {
+		return await this.connect('postOffice');
+	}
 
-			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - prefCapital ...'));
-			// - 地図：データ：都道府県庁
-			const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
-			const dMapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
-
-			await Promise.all(
-				dMapsDataPrefCapital.map(
-					async(item: mapsDataPrefCapitalItem) => {
-						try{
-							await collection.insertOne({
-								"pref": item.pref
-								, "addr": item.addr
-								, loc: [item.lon, item.lat]
-							});
-						}
-						catch{
-						}
-					}
-				)
-			);
-
-			// - 地図：データ：座標にインデックスを作成
-			await collection.createIndex(
-				{
-					loc: '2dsphere'
-				}
-			);
-			console.log(chalk.blue('MongoDB > create - prefCapital ... completed'));
-		}
-		finally {
-			if (this.client) {
-				this.client.close();
-			}
-		}
+	/**
+	 * 接続：Collection：postOffice
+	 * @returns
+	 */
+	public async connectRoadsiteStation(): Promise<Collection | null> {
+		return await this.connect('roadsiteStation');
 	}
 
 	/**
@@ -129,7 +103,7 @@ export class mongo {
 					const lon: number = +req.query.lon;
 					const n: number = +req.query.n;
 					if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(n)) {
-						this.near(lat, lon, n, res);
+						this.prefcapitalNear(lat, lon, n, res);
 						return;
 					}
 				}
@@ -147,7 +121,7 @@ export class mongo {
 	 * @param n 取得件数0 = 全件, 1 <= n <= 100
 	 * @param res レスポンス
 	 */
-	public async near(lat: number, lon: number, n: number, res:express.Response): Promise<void> {
+	public async prefcapitalNear(lat: number, lon: number, n: number, res:express.Response): Promise<void> {
 		// 接続
 		const collection: Collection | null = await this.connectPrefCapital();
 		if (!collection) {
