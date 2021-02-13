@@ -1,13 +1,12 @@
-import chalk from 'chalk';
 import express from 'express';
 import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb'
-import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
 
 export class mongo {
-	private uri = '';
+	private uri: string = '';
+
 	private dbName: string = 'maps';
 	private dbURL: string = '';
-	private client: MongoClient | null = null;
+	public client: MongoClient | null = null;
 	private clientOptions: MongoClientOptions = {};
 
 	/**
@@ -23,8 +22,6 @@ export class mongo {
 
 		this.clientOptions.useNewUrlParser = true;
 		this.clientOptions.useUnifiedTopology = true
-
-		this.initCollectionPrefCapital();
 	}
 
 	/**
@@ -55,66 +52,19 @@ export class mongo {
 	}
 
 	/**
-	 * 接続：Collection：prefCapital
+	 * 接続：Collection：pref
 	 * @returns
 	 */
-	private async connectPrefCapital(): Promise<Collection | null> {
-		return await this.connect('prefCapital');
+	public async connectPref(): Promise<Collection | null> {
+		return await this.connect('pref');
 	}
 
 	/**
-	 * 初期処理
+	 * 接続：Collection：prefCapital
 	 * @returns
 	 */
-	private async initCollectionPrefCapital(): Promise<void> {
-		// 接続
-		const collection: Collection | null = await this.connectPrefCapital();
-		if (!collection) {
-			return;
-		}
-
-		try {
-			// 件数
-			const n = await collection.find().count();
-			if(n > 0){
-				return;
-			}
-
-			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - prefCapital ...'));
-			// - 地図：データ：都道府県庁
-			const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
-			const dMapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
-
-			await Promise.all(
-				dMapsDataPrefCapital.map(
-					async(item: mapsDataPrefCapitalItem) => {
-						try{
-							await collection.insertOne({
-								"pref": item.pref
-								, "addr": item.addr
-								, loc: [item.lon, item.lat]
-							});
-						}
-						catch{
-						}
-					}
-				)
-			);
-
-			// - 地図：データ：座標にインデックスを作成
-			await collection.createIndex(
-				{
-					loc: '2dsphere'
-				}
-			);
-			console.log(chalk.blue('MongoDB > create - prefCapital ... completed'));
-		}
-		finally {
-			if (this.client) {
-				this.client.close();
-			}
-		}
+	public async connectPrefCapital(): Promise<Collection | null> {
+		return await this.connect('prefCapital');
 	}
 
 	/**
