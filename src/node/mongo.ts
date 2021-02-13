@@ -24,7 +24,7 @@ export class mongo {
 		this.clientOptions.useNewUrlParser = true;
 		this.clientOptions.useUnifiedTopology = true
 
-		this.init();
+		this.initCollectionPrefCapital();
 	}
 
 	/**
@@ -66,7 +66,7 @@ export class mongo {
 	 * 初期処理
 	 * @returns
 	 */
-	private async init(): Promise<void> {
+	private async initCollectionPrefCapital(): Promise<void> {
 		// 接続
 		const collection: Collection | null = await this.connectPrefCapital();
 		if (!collection) {
@@ -129,7 +129,7 @@ export class mongo {
 					const lon: number = +req.query.lon;
 					const n: number = +req.query.n;
 					if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(n)) {
-						this.near(lat, lon, n, res);
+						this.prefcapitalNear(lat, lon, n, res);
 						return;
 					}
 				}
@@ -147,7 +147,7 @@ export class mongo {
 	 * @param n 取得件数0 = 全件, 1 <= n <= 100
 	 * @param res レスポンス
 	 */
-	public async near(lat: number, lon: number, n: number, res:express.Response): Promise<void> {
+	public async prefcapitalNear(lat: number, lon: number, n: number, res:express.Response): Promise<void> {
 		// 接続
 		const collection: Collection | null = await this.connectPrefCapital();
 		if (!collection) {
