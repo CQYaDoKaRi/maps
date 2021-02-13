@@ -111,3 +111,30 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 	```
 	npx cypress run
 	```
+
+# MongoDB
+## Collection
+- pref  
+	都道府県界データ（Polygon）  
+	- 元データ：GeoJSON  
+		https://japonyol.net/editor/article/prefectures.geojson  
+
+- prefCity  
+	市区町村界データ（Polygon）  
+	- 元データ：GeoJSON  
+		https://www.esrij.com/products/japan-shp/  
+
+- prefCapital  
+	都道府県庁データ（Point）  
+	- 元データ：TypeScript  
+		src/ts/mapsDataPrefCapital.ts
+
+- postOffice  
+	郵便局データ（Point）  
+	- 元データ：GeoJSON  
+		https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P30.html  
+
+- roadsiteStation  
+	道の駅データ（Point）  
+	- 元データ：GeoJSON  
+		https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P35.html  
