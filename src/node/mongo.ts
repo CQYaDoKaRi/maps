@@ -68,6 +68,14 @@ export class mongo {
 	}
 
 	/**
+	 * 接続：Collection：prefCity
+	 * @returns
+	 */
+	public async connectPrefCity(): Promise<Collection | null> {
+		return await this.connect('prefCity');
+	}
+
+	/**
 	 * 登録
 	 * @param router express - Router
 	 */

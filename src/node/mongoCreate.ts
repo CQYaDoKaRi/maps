@@ -14,6 +14,8 @@ interface geojsonFeatures {
 }
 
 export class mongoCreate extends mongo {
+	private pathGeoJSON = './public/data/';
+
 	/**
 	 * コンストラクター
 	 * @param uri API URI
@@ -31,6 +33,7 @@ export class mongoCreate extends mongo {
 	public async collections(): Promise<void> {
 		await this.collectionPref();
 		await this.collectionPrefCapital();
+		await this.collectionPrefCity();
 	}
 
 	/**
@@ -55,7 +58,7 @@ export class mongoCreate extends mongo {
 			console.log(chalk.blue('MongoDB > create - pref ...'));
 
 			// - 地図：データ
-			const mapsDataPref: geojson = JSON.parse(fs.readFileSync('./public/data/dPref.geojson', 'utf-8'));
+			const mapsDataPref: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPref.geojson`, 'utf-8'));
 			const oData: geojsonFeatures[] = mapsDataPref.features;
 
 			await Promise.all(
@@ -136,4 +139,54 @@ export class mongoCreate extends mongo {
 			}
 		}
 	}
+
+	/**
+	 * 初期処理：市区町村界 - Polygon
+	 * @returns
+	 */
+	private async collectionPrefCity(): Promise<void> {
+		// 接続
+		const collection: Collection | null = await this.connectPrefCity();
+		if (!collection) {
+			return;
+		}
+
+		try {
+			// 件数
+			const n = await collection.find().count();
+			if(n > 0){
+				return;
+			}
+
+			// 件数がない場合：データを挿入
+			console.log(chalk.blue('MongoDB > create - prefCity ...'));
+
+			// - 地図：データ
+			const mapsDataPref: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPrefCity.geojson`, 'utf-8'));
+			const oData: geojsonFeatures[] = mapsDataPref.features;
+
+			await Promise.all(
+				oData.map(
+					async(item: geojsonFeatures) => {
+						try{
+							await collection.insertOne({
+								properties: item.properties
+								, loc: item.geometry
+							});
+						}
+						catch{
+						}
+					}
+				)
+			);
+
+			console.log(chalk.blue('MongoDB > create - prefCity ... completed'));
+		}
+		finally {
+			if (this.client) {
+				this.client.close();
+			}
+		}
+	}
+
 }
