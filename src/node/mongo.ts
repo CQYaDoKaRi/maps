@@ -84,6 +84,14 @@ export class mongo {
 	}
 
 	/**
+	 * 接続：Collection：postOffice
+	 * @returns
+	 */
+	public async connectRoadsiteStation(): Promise<Collection | null> {
+		return await this.connect('roadsiteStation');
+	}
+
+	/**
 	 * 登録
 	 * @param router express - Router
 	 */
