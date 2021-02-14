@@ -79,6 +79,9 @@ export class appMaps {
 			this.oMapApp.style.height = this.options.h + this.options.hUnit;
 		}
 
+		// スケール
+		L.control.scale({imperial: false}).addTo(this.oMap);
+
 		this.view(this.lat, this.lon, this.z);
 	}
 
@@ -194,7 +197,7 @@ export class appMaps {
 
 		const z: number = this.oMap.getZoom();
 		// 都道府県界
-		if (z < 12) {
+		if (z < 10) {
 			this.dPrefCity.remove(this.oMap);
 			this.dPref.set(this.oMap);
 		}
