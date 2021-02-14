@@ -22,7 +22,7 @@ if [ "${TYPE}" = "ver" ]; then
 # build for dev
 elif [ "${TYPE}" = "dev" ]; then
 	build
-        npm run tsc_build_w
+	npm run gulp watch
 # build for release
 else
 	build
