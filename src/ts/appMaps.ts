@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet.awesome-markers";
 import "leaflet/dist/leaflet.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
+import { appMapsGeoJSON } from "./appMapsGeoJSON";
 /*
  * url-loader で bundle する場合：
  * ※DataUrl形式になるためオリジナルファイルよりもサイズが大きくなる
@@ -31,18 +32,24 @@ L.Icon.Default.mergeOptions(
 export class appMaps {
 	private oMap: L.Map | null = null;
 	private iMapApp: string = "";
-	private oMapApp: HTMLElement | null;
+	private oMapApp: HTMLElement | null = null;
 
 	private lat: number = 0;
 	private lon: number = 0;
 	private z: number = 0;
 	private options: { [key: string]: any } = {};
 
-	private dPref: any | null = null;
-	private dPrefCity: any | null = null;
-	private oPref: L.GeoJSON | null = null;
-	private oPrefCity: L.GeoJSON | null = null;
+	private dPref: appMapsGeoJSON = new appMapsGeoJSON("./data/dPref.geojson");
+	private dPrefCity: appMapsGeoJSON = new appMapsGeoJSON("./data/dPrefCity.geojson");
 
+	/**
+	 * コンストラクター
+	 * @param i div
+	 * @param lat 緯度
+	 * @param lon 経度
+	 * @param z ズームレベル
+	 * @param options leaflet のオプション
+	 */
 	constructor(i: string, lat: number, lon: number, z: number, options: { [key: string]: any }) {
 		this.iMapApp = i;
 		this.oMapApp = document.getElementById(this.iMapApp);
@@ -50,12 +57,21 @@ export class appMaps {
 			return;
 		}
 
-		this.oMap = L.map(this.iMapApp);
+		const mapOptions: L.MapOptions = {
+			// ズームレベル制限：最小
+			minZoom: 4
+			// 表示範囲制限：左上, 右下
+			, maxBounds: [
+				[45.55722222, 122.93250000]
+				,[20.42527777, 153.98666666]
+			]
+		}
+
+		this.oMap = L.map(this.iMapApp, mapOptions);
 		this.lat = lat;
 		this.lon = lon;
 		this.z = z;
 		this.options = options;
-
 		if (this.options.w) {
 			this.oMapApp.style.width = this.options.w + this.options.wUnit;
 		}
@@ -64,104 +80,14 @@ export class appMaps {
 		}
 
 		L.tileLayer(
-			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
-			{
+			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
+			, {
 				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
 			}
 		).addTo(this.oMap);
 
-		if (i === "appMongoDBMap") {
-			var that = this;
-			this.oMap.on("zoomend", (e: L.LeafletEvent) => {
-				if (!that.oMap) {
-					return;
-				}
-
-				const z: number = that.oMap.getZoom();
-				if (z < 12) {
-					if (that.oPrefCity) {
-						that.oMap.removeLayer(that.oPrefCity);
-						that.oPrefCity = null;
-					}
-
-					if (that.dPref) {
-						if (!that.oPref) {
-							that.oPref = L.geoJSON(that.dPref, {});
-							that.oPref.addTo(that.oMap);
-						}
-					}
-					else {
-						that.LayerGeoJSON("./data/dPref.geojson").then((data: any) => {
-							that.dPref = data;
-							if (!that.oMap) {
-								return;
-							}
-							that.oPref = L.geoJSON(that.dPref, {});
-							that.oPref.addTo(that.oMap);
-						});
-					}
-				}
-				else{
-					if (that.oPref) {
-						that.oMap.removeLayer(that.oPref);
-						that.oPref = null;
-					}
-
-					if (that.dPrefCity) {
-						if (!that.oPrefCity) {
-							that.oPrefCity = L.geoJSON(that.dPrefCity, {});
-							that.oPrefCity.addTo(that.oMap);
-						}
-					}
-					else {
-						that.LayerGeoJSON("./data/dPrefCity.geojson").then((data: any) => {
-							that.dPrefCity = data;
-							if (!that.oMap) {
-								return;
-							}
-							that.oPrefCity = L.geoJSON(that.dPrefCity, {});
-							that.oPrefCity.addTo(that.oMap);
-						});
-					}
-				}
-			});
-		}
-
 		this.view(this.lat, this.lon, this.z);
 	}
-
-	/**
-	 * Layer - GeoJSON
-	 * @param url GPXファイル
-	 * @returns Promise<void>
-	 */
-	public LayerGeoJSON(url: string): Promise<void> {
-		return new Promise<void>((resolve: (data: any) => void, reject: (reson: any) => void) => {
-			fetch(url,
-				{
-					method: "GET"
-				}
-			).then(response => {
-				if (response.status === 200) {
-					response.text().then(text => {
-						if (text.length > 0) {
-							resolve(JSON.parse(text));
-						}
-					}
-					);
-				}
-				else {
-					resolve("");
-				}
-			}
-			).catch(error => {
-				resolve("");
-			}
-			);
-		}
-		);
-	}
-
 
 	/**
 	 * 表示
@@ -231,6 +157,43 @@ export class appMaps {
 		const o = L.polyline(coordinates, { color: options.color }).addTo(this.oMap);
 		if (options.popup) {
 			o.bindPopup(options.popup);
+		}
+	}
+
+	/**
+	 * レイヤー：都道府県、市区町村界
+	 */
+	public layerPref(): void{
+		if (!this.oMap) {
+			return;
+		}
+		this.layerPrefEvtZoomEnd(null);
+		this.oMap.on("zoomend",
+			(e: L.LeafletEvent) => {
+				 this.layerPrefEvtZoomEnd(e);
+			}
+		);
+	}
+
+	/**
+	 * レイヤー：都道府県、市区町村界：イベント：zoomend
+	 * @param e
+	 */
+	private layerPrefEvtZoomEnd(e: L.LeafletEvent | null){
+		if (!this.oMap) {
+			return;
+		}
+
+		const z: number = this.oMap.getZoom();
+		// 都道府県界
+		if (z < 12) {
+			this.dPrefCity.remove(this.oMap);
+			this.dPref.set(this.oMap);
+		}
+		// 市区町村界
+		else{
+			this.dPref.remove(this.oMap);
+			this.dPrefCity.set(this.oMap);
 		}
 	}
 }

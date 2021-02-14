@@ -457,6 +457,7 @@ function page(oView: indexView) : void {
 			oDivTitle.innerHTML = oView.getMenuTitle("MongoDB");
 
 			oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+			oAppMaps.layerPref();
 		}
 	}
 }
