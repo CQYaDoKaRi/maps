@@ -35,6 +35,10 @@ export class IndexViewContents extends React.Component {
 				<div id="appDataGpxTitleSub"></div>
 				<div id="appDataGpx"></div>
 			</div>
+			<div id="MongoDB" className="contents">
+				■　<span id="appMongoDBTitle"></span><br />
+				<div id="appMongoDBMap"></div>
+			</div>
 			</>
 		);
 	}

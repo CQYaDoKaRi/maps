@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet.awesome-markers";
 import "leaflet/dist/leaflet.css";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
+import { appMapsGeoJSON } from "./appMapsGeoJSON";
 /*
  * url-loader で bundle する場合：
  * ※DataUrl形式になるためオリジナルファイルよりもサイズが大きくなる
@@ -31,13 +32,24 @@ L.Icon.Default.mergeOptions(
 export class appMaps {
 	private oMap: L.Map | null = null;
 	private iMapApp: string = "";
-	private oMapApp: HTMLElement | null;
+	private oMapApp: HTMLElement | null = null;
 
 	private lat: number = 0;
 	private lon: number = 0;
 	private z: number = 0;
 	private options: { [key: string]: any } = {};
 
+	private dPref: appMapsGeoJSON = new appMapsGeoJSON("./data/dPref.geojson");
+	private dPrefCity: appMapsGeoJSON = new appMapsGeoJSON("./data/dPrefCity.geojson");
+
+	/**
+	 * コンストラクター
+	 * @param i div
+	 * @param lat 緯度
+	 * @param lon 経度
+	 * @param z ズームレベル
+	 * @param options leaflet のオプション
+	 */
 	constructor(i: string, lat: number, lon: number, z: number, options: { [key: string]: any }) {
 		this.iMapApp = i;
 		this.oMapApp = document.getElementById(this.iMapApp);
@@ -45,12 +57,21 @@ export class appMaps {
 			return;
 		}
 
-		this.oMap = L.map(this.iMapApp);
+		const mapOptions: L.MapOptions = {
+			// ズームレベル制限：最小
+			minZoom: 4
+			// 表示範囲制限：左上, 右下
+			, maxBounds: [
+				[45.55722222, 122.93250000]
+				,[20.42527777, 153.98666666]
+			]
+		}
+
+		this.oMap = L.map(this.iMapApp, mapOptions);
 		this.lat = lat;
 		this.lon = lon;
 		this.z = z;
 		this.options = options;
-
 		if (this.options.w) {
 			this.oMapApp.style.width = this.options.w + this.options.wUnit;
 		}
@@ -58,12 +79,8 @@ export class appMaps {
 			this.oMapApp.style.height = this.options.h + this.options.hUnit;
 		}
 
-		L.tileLayer(
-			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
-			{
-				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
-			}
-		).addTo(this.oMap);
+		// スケール
+		L.control.scale({imperial: false}).addTo(this.oMap);
 
 		this.view(this.lat, this.lon, this.z);
 	}
@@ -136,6 +153,58 @@ export class appMaps {
 		const o = L.polyline(coordinates, { color: options.color }).addTo(this.oMap);
 		if (options.popup) {
 			o.bindPopup(options.popup);
+		}
+	}
+
+	/**
+	 * レイヤー：ベース（地理院地図）
+	 */
+	public layerBase(): void{
+		if (!this.oMap) {
+			return;
+		}
+		L.tileLayer(
+			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
+			, {
+				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
+			}
+		).addTo(this.oMap);
+	}
+
+	/**
+	 * レイヤー：都道府県、市区町村界
+	 */
+	public layerPref(): void{
+		if (!this.oMap) {
+			return;
+		}
+		this.layerPrefEvtZoomEnd(null);
+		this.oMap.on("zoomend",
+			(e: L.LeafletEvent) => {
+				 this.layerPrefEvtZoomEnd(e);
+			}
+		);
+	}
+
+	/**
+	 * レイヤー：都道府県、市区町村界：イベント：zoomend
+	 * @param e
+	 */
+	private layerPrefEvtZoomEnd(e: L.LeafletEvent | null){
+		if (!this.oMap) {
+			return;
+		}
+
+		const z: number = this.oMap.getZoom();
+		// 都道府県界
+		if (z < 10) {
+			this.dPrefCity.remove(this.oMap);
+			this.dPref.set(this.oMap);
+		}
+		// 市区町村界
+		else{
+			this.dPref.remove(this.oMap);
+			this.dPrefCity.set(this.oMap);
 		}
 	}
 }
