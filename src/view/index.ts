@@ -47,7 +47,7 @@ function page(oView: indexView) : void {
 		const item_base = dmapsDataPrefCapital[base];
 		const oDiv: HTMLElement | null = document.getElementById("appDistance");
 		oAppMaps = new appMaps("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-
+		oAppMaps.layerBase();
 		if (!oDiv || !oAppMaps) {
 			return;
 		}

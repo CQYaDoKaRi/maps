@@ -79,13 +79,6 @@ export class appMaps {
 			this.oMapApp.style.height = this.options.h + this.options.hUnit;
 		}
 
-		L.tileLayer(
-			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
-			, {
-				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
-			}
-		).addTo(this.oMap);
-
 		this.view(this.lat, this.lon, this.z);
 	}
 
@@ -158,6 +151,21 @@ export class appMaps {
 		if (options.popup) {
 			o.bindPopup(options.popup);
 		}
+	}
+
+	/**
+	 * レイヤー：ベース（地理院地図）
+	 */
+	public layerBase(): void{
+		if (!this.oMap) {
+			return;
+		}
+		L.tileLayer(
+			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
+			, {
+				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
+			}
+		).addTo(this.oMap);
 	}
 
 	/**
