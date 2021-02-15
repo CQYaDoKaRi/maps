@@ -3,6 +3,7 @@ import express from 'express';
 
 import { mongo } from './mongo';
 import { mongoCreate } from './mongoCreate';
+import { mongoApi } from './mongoApi';
 
 import { page } from './page';
 import { api } from './api';
@@ -16,17 +17,21 @@ const hostname = os.hostname();
 const app:express.Express = express();
 const router: express.Router = express.Router();
 
-const apiURI = '/api/maps';
+const apiURI: string = '/api/maps';
 
 // MongoDB
-if (hostname === "maps") {
-	// MongoDB - Create
-	const oMongoCreate: mongoCreate = new mongoCreate(apiURI, 'mongo', 8517);
+if (hostname === 'maps') {
+	const mongoApiUri: string = apiURI;
+	const mongoApiHost: string = 'mongo';
+	const mongoApiPort: number = 5715;
+
+	// - Create
+	const oMongoCreate: mongoCreate = new mongoCreate(mongoApiUri, mongoApiHost, mongoApiPort);
 	oMongoCreate.collections();
 
-	// MongoDB - api
-	const oMongo: mongo = new mongo(apiURI, 'mongo', 8517);
-	oMongo.regist(router);
+	// - api
+	const oMongoApi: mongoApi = new mongoApi(mongoApiUri, mongoApiHost, mongoApiPort);
+	oMongoApi.regist(router);
 }
 
 // page
