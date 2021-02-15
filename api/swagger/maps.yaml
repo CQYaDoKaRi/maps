@@ -969,6 +969,140 @@ paths:
             取得件数(0, 1 ～ 100)  
             0 を指定した場合、最大件数（100件）  
     parameters: []
+  /api/maps/mongo/postoffice/inpolygon:
+    post:
+      summary: '指定したポリゴンに含まれる郵便局を取得'
+      tags:
+        - mapsMongo
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: 郵便局名
+                    lat:
+                      type: number
+                      description: 十進緯度（世界測地系[GSR80]）
+                    lon:
+                      type: number
+                      description: 十進経度（世界測地系[GSR80]）
+              examples:
+                example:
+                  value:
+                    - name: '東京中央郵便局'
+                      lat: 35.679849
+                      lon: 139.764766
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: エラーメッセージ
+              examples:
+                example:
+                  value:
+                    message: 'param[coordinates] error'
+      operationId: get-api-maps-mongo-postoffice-inpolygon
+      description: 指定したポリゴンに含まれる郵便局を取得
+      parameters:
+        - schema:
+            type: string
+            default: '[[[139.69099,35.707074],[139.69099,35.656599],[139.790211,35.656599],[139.790211,35.707074],[139.69099,35.707074]]]'
+          in: query
+          name: coordinates
+          required: true
+          description: GeoJSON - Polygon 座標（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 3
+          in: query
+          name: 'n'
+          required: true
+          description: |-
+            取得件数(0, 1 ～ 1000)  
+            0 を指定した場合、最大件数（1000件）  
+    parameters: []
+  /api/maps/mongo/roadsitestation/inpolygon:
+    post:
+      summary: '指定したポリゴンに含まれる道の駅を取得'
+      tags:
+        - mapsMongo
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: 郵便局名
+                    lat:
+                      type: number
+                      description: 十進緯度（世界測地系[GSR80]）
+                    lon:
+                      type: number
+                      description: 十進経度（世界測地系[GSR80]）
+              examples:
+                example:
+                  value:
+                    - name: '八王子滝山'
+                      lat: 35.6866238
+                      lon: 139.341474899999014
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: エラーメッセージ
+              examples:
+                example:
+                  value:
+                    message: 'param[coordinates] error'
+      operationId: get-api-maps-mongo-roadsitestation-inpolygon
+      description: 指定したポリゴンに含まれる郵便局を取得
+      parameters:
+        - schema:
+            type: string
+            default: '[[[138.411255,36.031332],[138.411255,34.980502],[139.674683,34.980502],[139.674683,36.031332],[138.411255,36.031332]]]'
+          in: query
+          name: coordinates
+          required: true
+          description: GeoJSON - Polygon 座標（世界測地系[GSR80]）
+        - schema:
+            type: integer
+            format: int32
+            default: 3
+          in: query
+          name: 'n'
+          required: true
+          description: |-
+            取得件数(0, 1 ～ 1000)  
+            0 を指定した場合、最大件数（1000件）  
+    parameters: []
 tags:
   - name: maps
     description: ''
