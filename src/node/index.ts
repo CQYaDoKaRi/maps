@@ -23,7 +23,7 @@ const apiURI: string = '/api/maps';
 if (hostname === 'maps') {
 	const mongoApiUri: string = apiURI;
 	const mongoApiHost: string = 'mongo';
-	const mongoApiPort: number = 5715;
+	const mongoApiPort: number = 8517;
 
 	// - Create
 	const oMongoCreate: mongoCreate = new mongoCreate(mongoApiUri, mongoApiHost, mongoApiPort);
