@@ -1,7 +1,7 @@
 import os from 'os';
 import express from 'express';
+import bodyParser from 'body-parser';
 
-import { mongo } from './mongo';
 import { mongoCreate } from './mongoCreate';
 import { mongoApi } from './mongoApi';
 
@@ -62,6 +62,19 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 	next()
 });
+
+// - POST
+app.use(bodyParser.urlencoded(
+	{
+		extended: true
+		, limit: '10mb'
+	}
+));
+app.use(bodyParser.json(
+	{
+		limit: '10mb'
+	}
+));
 
 app.use(router);
 app.use('/', express.static('public'));
