@@ -919,7 +919,7 @@ paths:
                       type: number
                       description: 十進経度（世界測地系[GSR80]）
                     distance:
-                      type: string
+                      type: number
                       description: 距離(m)
               examples:
                 example:
