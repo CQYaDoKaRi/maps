@@ -1020,9 +1020,18 @@ paths:
       parameters:
         - schema:
             type: string
+            default: 'Polygon'
+          in: query
+          name: gtype
+          required: true
+          description: |-
+            GeoJSON - Polygon Type  
+            [Polygon, MultiPolygon]  
+        - schema:
+            type: string
             default: '[[[139.69099,35.707074],[139.69099,35.656599],[139.790211,35.656599],[139.790211,35.707074],[139.69099,35.707074]]]'
           in: query
-          name: coordinates
+          name: gcoordinates
           required: true
           description: GeoJSON - Polygon 座標（世界測地系[GSR80]）
         - schema:
@@ -1033,8 +1042,8 @@ paths:
           name: 'n'
           required: true
           description: |-
-            取得件数(0, 1 ～ 1000)  
-            0 を指定した場合、最大件数（1000件）  
+            取得件数(0, 1 ～ 10000)  
+            0 を指定した場合、最大件数（10000件）  
     parameters: []
   /api/maps/mongo/roadsitestation/inpolygon:
     post:
@@ -1087,9 +1096,18 @@ paths:
       parameters:
         - schema:
             type: string
+            default: 'Polygon'
+          in: query
+          name: gtype
+          required: true
+          description: |-
+            GeoJSON - Polygon Type  
+            [Polygon, MultiPolygon]  
+        - schema:
+            type: string
             default: '[[[138.411255,36.031332],[138.411255,34.980502],[139.674683,34.980502],[139.674683,36.031332],[138.411255,36.031332]]]'
           in: query
-          name: coordinates
+          name: gcoordinates
           required: true
           description: GeoJSON - Polygon 座標（世界測地系[GSR80]）
         - schema:
@@ -1100,8 +1118,8 @@ paths:
           name: 'n'
           required: true
           description: |-
-            取得件数(0, 1 ～ 1000)  
-            0 を指定した場合、最大件数（1000件）  
+            取得件数(0, 1 ～ 10000)  
+            0 を指定した場合、最大件数（10000件）  
     parameters: []
 tags:
   - name: maps
