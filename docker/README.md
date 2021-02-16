@@ -27,6 +27,13 @@ docker によりサービスを起動制御します
 ```
 
 # Node.js コンテナにログインして node を起動
+ts-node 起動  
 ```
 ./docker init.sh exec_run
+```
+
+# Node.js コンテナにログインして node を起動（開発モード）
+ts-node-dev 起動  
+```
+./docker init.sh exec_run_dev
 ```
