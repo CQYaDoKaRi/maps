@@ -6,12 +6,14 @@
 	"scripts": {
 		"tsc": "tsc",
 		"ts-node": "ts-node",
+		"ts-node-dev": "ts-node-dev",
 		"tsc_build": "tsc",
 		"tsc_build_w": "tsc -w",
 		"gulp": "gulp",
 		"build": "gulp build",
 		"watch": "gulp watch",
 		"start": "ts-node --project ./tsconfig.node.json src/node/index.ts",
+		"startdev": "ts-node-dev --project ./tsconfig.node.json src/node/index.ts --respawn",
 		"test": "jest"
 	},
 	"repository": {
@@ -66,6 +68,7 @@
 		"swagger-ui-express": "^4.1.6",
 		"ts-jest": "^26.4.4",
 		"ts-node": "^9.1.1",
+		"ts-node-dev": "^1.1.1",
 		"tsc-watch": "^4.2.9",
 		"typescript": "^4.1.3",
 		"webpack": "^5.17.0",

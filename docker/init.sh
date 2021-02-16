@@ -47,6 +47,16 @@ function run() {
 }
 
 # -------
+# run dev
+# -------
+# run node-dev
+function run_dev() {
+	cd ${DIR}/../
+	# - dev
+	npm run startdev
+}
+
+# -------
 # exec
 # -------
 # docker exec
@@ -59,6 +69,13 @@ function exec_run() {
 	echo -e "\033[0;34m[${APP}] start node\033[0;39m"
 
 	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh run'"
+	eval ${CMD}
+}
+
+function exec_run_dev() {
+	echo -e "\033[0;34m[${APP}] start node[dev]\033[0;39m"
+
+	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh run_dev'"
 	eval ${CMD}
 }
 
@@ -94,11 +111,17 @@ elif [ "${1}" = "stop" ]; then
 elif [ "${1}" = "run" ]; then
 	run
 
+elif [ "${1}" = "run_dev" ]; then
+	run_dev
+
 elif [ "${1}" = "exec" ]; then
 	exec
 
 elif [ "${1}" = "exec_run" ]; then
 	exec_run
+
+elif [ "${1}" = "exec_run_dev" ]; then
+	exec_run_dev
 
 else
 	stop
