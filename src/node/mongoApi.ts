@@ -1,5 +1,5 @@
 import express from 'express';
-import { Collection } from 'mongodb'
+import { Collection, MongoClient } from 'mongodb'
 import { mongo } from './mongo';
 
 export class mongoApi extends mongo {
@@ -57,12 +57,15 @@ export class mongoApi extends mongo {
 
 		router.post(this.uri + '/mongo/postoffice/inpolygon',
 			(req: express.Request, res: express.Response) => {
-				if (req.query.coordinates && req.query.n) {
+				const d_gtype = req.query.gtype ? req.query.gtype : req.body.gtype;
+				const d_gcoordinates = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
+				const d_n = req.query.n ? req.query.n : req.body.n;
+				if (d_gcoordinates && d_n) {
 					try {
-						const coordinates: [] =  JSON.parse('' + req.query.coordinates);
-						const n: number = +req.query.n;
+						const coordinates: [] =  JSON.parse('' + d_gcoordinates);
+						const n: number = +d_n;
 						if (coordinates.length > 0 && !Number.isNaN(n)) {
-							this.pointInPolygon('PostOffice', coordinates, n, res);
+							this.pointInPolygon('PostOffice', d_gtype, coordinates, n, res);
 							return;
 						}
 					}
@@ -78,12 +81,15 @@ export class mongoApi extends mongo {
 
 		router.post(this.uri + '/mongo/roadsitestation/inpolygon',
 			(req: express.Request, res: express.Response) => {
-				if (req.query.coordinates && req.query.n) {
+				const d_gtype = req.query.gtype ? req.query.gtype : req.body.gtype;
+				const d_gcoordinates = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
+				const d_n = req.query.n ? req.query.n : req.body.n;
+				if (d_gcoordinates && d_n) {
 					try {
-						const coordinates: [] =  JSON.parse('' + req.query.coordinates);
-						const n: number = +req.query.n;
+						const coordinates: [] =  JSON.parse('' + d_gcoordinates);
+						const n: number = +d_n;
 						if (coordinates.length > 0 && !Number.isNaN(n)) {
-							this.pointInPolygon('RoadsiteStation', coordinates, n, res);
+							this.pointInPolygon('RoadsiteStation', d_gtype, coordinates, n, res);
 							return;
 						}
 					}
@@ -112,6 +118,7 @@ export class mongoApi extends mongo {
 			return;
 		}
 
+		let client: MongoClient | null = this.client;
 		try {
 			await collection.aggregate(
 				[
@@ -151,6 +158,11 @@ export class mongoApi extends mongo {
 						);
 						res.json(data);
 						res.end();
+
+						if (client) {
+							client.close();
+							client = null;
+						}
 					}
 				);
 		}
@@ -160,8 +172,8 @@ export class mongoApi extends mongo {
 			res.end();
 		}
 		finally {
-			if (this.client) {
-				this.client.close();
+			if (client) {
+				client.close();
 			}
 		}
 	}
@@ -169,10 +181,12 @@ export class mongoApi extends mongo {
 	/**
 	 * ポリゴンに含まれるポイントを取得
 	 * @param type 検索対象[PostOffice, RoadsiteStation]
-	 * @param n 取得件数0 = 全件, 1 <= n <= 1000
+	 * @param gtype タイプ[Polygon, MultiPolygon]
+	 * @param gcoordinates ポリゴン座標
+	 * @param n 取得件数0 = 全件, 1 <= n <= 10000
 	 * @param res レスポンス
 	 */
-	public async pointInPolygon(type: string, coordinates: [], n: number, res: express.Response): Promise<void> {
+	public async pointInPolygon(type: string, gtype: string, gcoordinates: [], n: number, res: express.Response): Promise<void> {
 		// 接続
 		let collection: Collection | null = null;
 		if (type == 'PostOffice') {
@@ -186,6 +200,11 @@ export class mongoApi extends mongo {
 			return;
 		}
 
+		if(!(gtype === 'Polygon' || gtype === 'MultiPolygon')){
+			gtype = 'Polygon';
+		}
+
+		let client: MongoClient | null = this.client;
 		try {
 			await collection.aggregate(
 				[
@@ -194,15 +213,15 @@ export class mongoApi extends mongo {
 							'loc.coordinates': {
 								$geoWithin: {
 									$geometry: {
-										type: 'Polygon'
-										, coordinates: coordinates
+										type: gtype
+										, coordinates: gcoordinates
 									}
 								}
 							}
 						}
 					}
 					, {
-						$limit: this.paramN(n, 1000)
+						$limit: this.paramN(n, 10000)
 					}
 				]
 			)
@@ -229,6 +248,11 @@ export class mongoApi extends mongo {
 						);
 						res.json(data);
 						res.end();
+
+						if (client) {
+							client.close();
+							client = null;
+						}
 					}
 				);
 		}
@@ -238,8 +262,8 @@ export class mongoApi extends mongo {
 			res.end();
 		}
 		finally {
-			if (this.client) {
-				this.client.close();
+			if (client) {
+				client.close();
 			}
 		}
 	}
