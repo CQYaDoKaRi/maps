@@ -15,12 +15,16 @@ type indexViewMenuProps = {
 /**
  * React Component - IndexViewMenu
  */
-export class IndexViewMenu extends React.Component<indexViewMenuProps, {}> {
+export class IndexViewMenu extends React.Component<indexViewMenuProps> {
+	/**
+	 * コンストラクター
+	 * @param props
+	 */
 	constructor(props: indexViewMenuProps) {
 		super(props);
 	}
 
-	render(){
+	render(): JSX.Element{
 		return(
 			<ul>
 				{
