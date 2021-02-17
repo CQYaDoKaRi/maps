@@ -6,7 +6,7 @@
 
 # 使用技術
 ## 環境
-- Node.js(ts-node) + Express.js
+- Node.js(ts-node, ts-node-dev) + Express.js
 - docker
 - gulp + tsc + babel + webpack
 ## 言語
@@ -64,9 +64,16 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 ./start.sh
 ```
 
-- docker コンテナの Node.js のみ起動する
+- docker コンテナの Node.js のみ起動する  
+	ts-node 起動  
 	```
 	./start.sh www
+	```
+
+- docker コンテナの Node.js のみ起動する（開発モード）  
+	ts-node-dev 起動  
+	```
+	./start.sh www_dev
 	```
 
 - Node.js のみ起動  
@@ -78,6 +85,13 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 		npm run start
 		```
 		= `npm run ts-node --project ./tsconfig.node.json src/node/index.ts`
+
+	- ts-node-dev
+		```
+		npm run startdev
+		```
+		= `npm run-dev ts-node --project ./tsconfig.node.json src/node/index.ts`
+
 	- node（トランスパイル済み js）
 		```
 		node dist/node/node/index.js
