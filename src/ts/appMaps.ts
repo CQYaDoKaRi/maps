@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // npm install --save-dev @types/geojson
 // npm install --save-dev leaflet @types/leaflet
 // npm install --leaflet.awesome-markers @types/leaflet.awesome-markers
@@ -31,13 +32,14 @@ L.Icon.Default.mergeOptions(
  */
 export class appMaps {
 	private oMap: L.Map | null = null;
-	private iMapApp: string = "";
+	private iMapApp = "";
 	private oMapApp: HTMLElement | null = null;
 
-	private lat: number = 0;
-	private lon: number = 0;
-	private z: number = 0;
-	private options: { [key: string]: any } = {};
+	private lat = 0;
+	private lon = 0;
+	private z = 0;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private options: any = {};
 
 	private dPref: appMapsGeoJSON = new appMapsGeoJSON("./data/dPref.geojson");
 	private dPrefCity: appMapsGeoJSON = new appMapsGeoJSON("./data/dPrefCity.geojson");
@@ -50,7 +52,8 @@ export class appMaps {
 	 * @param z ズームレベル
 	 * @param options leaflet のオプション
 	 */
-	constructor(i: string, lat: number, lon: number, z: number, options: { [key: string]: any }) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+	constructor(i: string, lat: number, lon: number, z: number, options: any) {
 		this.iMapApp = i;
 		this.oMapApp = document.getElementById(this.iMapApp);
 		if (!this.oMapApp) {
@@ -71,12 +74,17 @@ export class appMaps {
 		this.lat = lat;
 		this.lon = lon;
 		this.z = z;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		this.options = options;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (this.options.w) {
-			this.oMapApp.style.width = this.options.w + this.options.wUnit;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
+			this.oMapApp.style.width = `${this.options.w}${this.options.wUnit}`;
 		}
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (this.options.h) {
-			this.oMapApp.style.height = this.options.h + this.options.hUnit;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
+			this.oMapApp.style.height = `${this.options.h}${this.options.hUnit}`;
 		}
 
 		// スケール
@@ -103,10 +111,13 @@ export class appMaps {
 	 * @param w 幅[px]
 	 * @param h 高[px]
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public resize(w: number, h: number): void {
 		if(this.oMapApp) {
-			this.oMapApp.style.width = this.options.w + "px";
-			this.oMapApp.style.height = this.options.h + "px";
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
+			this.oMapApp.style.width = `${this.options.w}px`;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
+			this.oMapApp.style.height = `${this.options.h}px`;
 		}
 	}
 
@@ -116,23 +127,30 @@ export class appMaps {
 	 * @param lon 経度
 	 * @param options オプション
 	 */
-	public point(lat: number, lon: number, options: { [key: string]: any }): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+	public point(lat: number, lon: number, options: any): void {
 		if (!this.oMap) {
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (!options.color) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			options.color = "bule";
 		}
 
+		/*
 		const _options = {
 			prefix: "glyphicon"
 			, icon: "lock"
 			, markerColor: options.color
 			, extraClasses: "glyphicons-custom"
 		};
+		*/
 		const o = L.marker([lat, lon], { icon: L.AwesomeMarkers.icon(options) }).addTo(this.oMap);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (options.popup) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			o.bindPopup(options.popup);
 		}
 	}
@@ -142,16 +160,22 @@ export class appMaps {
 	 * @param coordinates 座標
 	 * @param options オプション
 	 */
-	public arc(coordinates: any[], options: { [key: string]: any }): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+	public arc(coordinates: any, options: any): void {
 		if (!this.oMap) {
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (!options.color) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			options.color = "bule";
 		}
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const o = L.polyline(coordinates, { color: options.color }).addTo(this.oMap);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (options.popup) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			o.bindPopup(options.popup);
 		}
 	}
@@ -181,7 +205,7 @@ export class appMaps {
 		this.layerPrefEvtZoomEnd(null);
 		this.oMap.on("zoomend",
 			(e: L.LeafletEvent) => {
-				 this.layerPrefEvtZoomEnd(e);
+				this.layerPrefEvtZoomEnd(e);
 			}
 		);
 	}
@@ -190,6 +214,7 @@ export class appMaps {
 	 * レイヤー：都道府県、市区町村界：イベント：zoomend
 	 * @param e
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	private layerPrefEvtZoomEnd(e: L.LeafletEvent | null){
 		if (!this.oMap) {
 			return;
@@ -209,9 +234,12 @@ export class appMaps {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.appMap = appMaps;
 }

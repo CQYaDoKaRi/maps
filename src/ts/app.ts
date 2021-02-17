@@ -151,23 +151,26 @@ class app {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.app = app;
 }
 else{
 	(function() {
-		let fDev: boolean = false;
+		let fDev = false;
 
         // 引数処理
         const params: string[] = location.search.substring(1).split("&");
-        for (let i: number = 0; i < params.length; i++) {
+        for (let i = 0; i < params.length; i++) {
             const v: string = params[i];
             const n: number = v.search(/=/);
-            let key: string = n !== -1 ? v.slice(0, n).toLocaleLowerCase() : "";
-            let val: string = decodeURI(v.slice(v.indexOf("=", 0) + 1));
+            const key: string = n !== -1 ? v.slice(0, n).toLocaleLowerCase() : "";
+            const val: string = decodeURI(v.slice(v.indexOf("=", 0) + 1));
             if (key) {
 				// 開発モード：minify あり / なし
                 if (key === "dev" && val === "1") {

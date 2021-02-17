@@ -1,15 +1,22 @@
-import {Feature, Geometry} from 'geojson';
+import {Feature, GeoJsonObject, Geometry} from 'geojson';
 import L from 'leaflet';
 
 interface FeatureGeometry{
 	type: string
-	coordinates: any[]
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	coordinates: any
+}
+
+interface apiResponsePointInPolygon{
+	name: string
+	, lat: number
+	, lon: number
 }
 
 export class appMapsGeoJSON {
-	private url: string = '';
+	private url = '';
 	private layer: L.GeoJSON | null = null;
-	private layerVisible: boolean = false;
+	private layerVisible = false;
 	private markers: L.Marker[] = [];
 
 	/**
@@ -26,6 +33,7 @@ export class appMapsGeoJSON {
 	 * @returns Promise<void>
 	 */
 	private get(url: string): Promise<void> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return new Promise<void>((resolve: (data: any) => void) => {
 			fetch(url,
 				{
@@ -34,8 +42,8 @@ export class appMapsGeoJSON {
 			).then(
 				res => {
 					if (res.status === 200) {
-						res.text().then(
-							text => {
+						void res.text().then(
+							(text: string) => {
 								if (text.length > 0) {
 									resolve(JSON.parse(text));
 								}
@@ -68,40 +76,52 @@ export class appMapsGeoJSON {
 			this.layerVisible = true;
 		}
 		else {
-			this.get(this.url).then(
+			void this.get(this.url).then(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				(data: any) => {
 					if (!data) {
 						return;
 					}
+
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					const dGeojson: GeoJsonObject = data;
 					const options: L.GeoJSONOptions = {
 						style: {
 							color: '#000000'
 							, weight: 1
 							, opacity: 0.80
 						}
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						, onEachFeature: (feature: Feature<Geometry, any>, layer: L.GeoJSON) => {
 							if (!feature.properties) {
 								return;
 							}
 
-							let pref: number = 0;
+							let pref = 0;
 							// - pref
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 							if (feature.properties.pref) {
-								pref = feature.properties.pref;
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+								pref = +feature.properties.pref;
 							}
 							// - prefCity
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 							else if (feature.properties.JCODE) {
-								pref = +feature.properties.JCODE.substring(0, 2);
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+								const jcode: string = feature.properties.JCODE;
+								pref = +jcode.substring(0, 2);
 							}
 							layer.setStyle(
-								{ color: this.setStyleColor(pref) }
+								{
+									color: this.setStyleColor(pref)
+								}
 							);
 
 							this.setAttr(oMap, feature, layer);
 						}
 					}
 
-					this.layer = L.geoJSON(data, options);
+					this.layer = L.geoJSON(dGeojson, options);
 					this.layer.addTo(oMap);
 					this.layerVisible = true;
 				}
@@ -165,41 +185,54 @@ export class appMapsGeoJSON {
 	 * @param feature 属性情報
 	 * @param layer レイヤー
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public setAttr(oMap: L.Map, feature: Feature<Geometry, any>, layer: L.GeoJSON): void {
 		if (!oMap) {
 			return;
 		}
 
-		let name: string = '';
-		let tname: string = '';
-		let fMarker: boolean = false;
+		let name = '';
+		let tname = '';
+		let fMarker = false;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		if (feature.properties.pref) {
 			tname = '都道府県';
+
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 			name = feature.properties.name;
 		}
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		else if (feature.properties.JCODE) {
 			tname = '市区町村';
-			const name_gun = feature.properties.GUN ? feature.properties.GUN : '';
-			const name_shikuchoson = feature.properties.SIKUCHOSON ? feature.properties.SIKUCHOSON : '';
-			name = feature.properties.KEN + name_gun + name_shikuchoson;
+
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+			const name_ken: string = feature.properties.KEN ? feature.properties.KEN : '';
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+			const name_gun: string = feature.properties.GUN ? feature.properties.GUN : '';
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+			const name_shikuchoson: string = feature.properties.SIKUCHOSON ? feature.properties.SIKUCHOSON : '';
+			name = `${name_ken}${name_gun}${name_shikuchoson}`;
 			fMarker = true;
 		}
-		const id: string = 'l_popup_attr_' + Math.random();
+		const id = `l_popup_attr_${Math.random()}`;
 		name = `<div id='${id}'>${name}</div>`;
 		layer.bindPopup(
 			name
 			, {
-				 minWidth: 100
+				minWidth: 100
 			}
-		).on('popupopen', (e: L.PopupEvent) => {
+		).on('popupopen', () => {
 			this.markerRemove();
 
-			this.attr(feature.geometry).then((data: any) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			void this.attr(feature.geometry).then((data: any) => {
 				const o: HTMLElement | null = L.DomUtil.get(id);
 				if (o) {
-					let n: number = 0;
+					let n = 0;
 					if (data) {
-						data.map((item: any) => {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						const items: apiResponsePointInPolygon[] = data;
+						items.map((item: apiResponsePointInPolygon) => {
 							n++;
 							if (fMarker) {
 								const oMarker = L.marker([item.lat, item.lon]).addTo(oMap);
@@ -223,17 +256,21 @@ export class appMapsGeoJSON {
 	 * @param geometry 空間情報
 	 * @returns Promise<void>
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private attr(geometry: FeatureGeometry | any): Promise<void> {
-		const url: string = 'api/maps/mongo/postoffice/inpolygon';
+		const url = 'api/maps/mongo/postoffice/inpolygon';
 
-		const gcoordinates: any = this.attrGeometoryCoordinatesDuplicateDelete(geometry);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const gcoordinates: [] = this.attrGeometoryCoordinatesDuplicateDelete(geometry);
 
 		const params: URLSearchParams = new URLSearchParams();
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		params.append('gtype', geometry.type);
 		params.append('gcoordinates', JSON.stringify(gcoordinates));
 		params.append('n', '0');
 
-		return new Promise<void>((resolve: (data: any) => void, reject: (reson: any) => void) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return new Promise<void>((resolve: (data: any) => void) => {
 			fetch(url,
 				{
 					method: 'POST'
@@ -242,14 +279,15 @@ export class appMapsGeoJSON {
 			).then(
 				res => {
 					if (res.status === 200) {
-						res.text().then(text => {
-							if (text.length > 0) {
-								resolve(JSON.parse(text));
+						void res.text().then(
+							(text: string) => {
+								if (text.length > 0) {
+									resolve(JSON.parse(text));
+								}
+								else{
+									resolve([]);
+								}
 							}
-							else{
-								resolve([]);
-							}
-						}
 						);
 					}
 					else {
@@ -270,27 +308,40 @@ export class appMapsGeoJSON {
 	 * @param geometry 空間情報
 	 * @returns 空間情報
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private attrGeometoryCoordinatesDuplicateDelete(geometry: FeatureGeometry): any{
-		let gcoordinates: any = geometry.coordinates;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+		const gcoordinates: any = geometry.coordinates;
+
 		if (geometry.type === 'Polygon') {
-			gcoordinates[0] = gcoordinates[0].filter(function(e1: any, index1: number){
-			  return !gcoordinates[0].some(function(e2: any, index2: number){
-				return index1 < index2 && e1[0] === e2[0] && e1[1] === e2[1];
-			  });
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+			gcoordinates[0] = gcoordinates[0].filter((e1: number[], index1: number) => {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+				return !gcoordinates[0].some((e2: number[], index2: number) => {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+					return index1 < index2 && e1[0] === e2[0] && e1[1] === e2[1];
+				});
 			});
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 			gcoordinates[0].push(gcoordinates[0][0]);
 		}
 		else if (geometry.type === 'MultiPolygon') {
-			for(let i: number = 0; i < gcoordinates[0].length; i++){
-				gcoordinates[0][i] = gcoordinates[0][i].filter(function(e1: any, index1: number){
-					return !gcoordinates[0][i].some(function(e2: any, index2: number){
-					return index1 < index2 && e1[0] === e2[0] && e1[1] === e2[1];
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+			for (let i = 0; i < gcoordinates[0].length; i++) {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+				gcoordinates[0][i] = gcoordinates[0][i].filter((e1: number[], index1: number) => {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+					return !gcoordinates[0][i].some((e2: number[], index2: number) => {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+						return index1 < index2 && e1[0] === e2[0] && e1[1] === e2[1];
 					});
 				});
-				gcoordinates[0][i].push(gcoordinates[0][i][0]);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+			gcoordinates[0][i].push(gcoordinates[0][i][0]);
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return gcoordinates;
 	}
 

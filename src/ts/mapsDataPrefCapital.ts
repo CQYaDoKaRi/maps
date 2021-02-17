@@ -2,16 +2,16 @@
  * 地図：データ：都道府県庁：項目
  */
 export class mapsDataPrefCapitalItem {
-	public pref: string = "";
-	public addr: string = "";
-	public lat: number = 0.0;
-	public lon: number = 0.0;
-	public distT: number = 0.0;
-	public distH: number = 0.0;
-	public distS: number = 0.0;
-	public a: number = 0.0;
-	public c_lat: number = 0.0;
-	public c_lon: number = 0.0;
+	public pref = "";
+	public addr = "";
+	public lat = 0.0;
+	public lon = 0.0;
+	public distT = 0.0;
+	public distH = 0.0;
+	public distS = 0.0;
+	public a = 0.0;
+	public c_lat = 0.0;
+	public c_lon = 0.0;
 }
 
 /**
@@ -82,7 +82,7 @@ export class mapsDataPrefCapital {
 	 */
 	private set(pref: string, addr: string, lat: number, lon: number): void {
 		this.d.push({
-			  pref: pref
+			pref: pref
 			, addr: addr
 			, lat: lat
 			, lon: lon
@@ -104,10 +104,14 @@ export class mapsDataPrefCapital {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsDataPrefCapital = mapsDataPrefCapital;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsDataPrefCapitalItem = mapsDataPrefCapitalItem;
 }
