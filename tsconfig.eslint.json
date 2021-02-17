@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig.json"
+	, "include": [
+		"./src/ts/*.ts"
+		, "./src/ts.types/**/*.ts"
+		, "./src/view/*.ts"
+		, "./src/view/*.tsx"
+		// nodde
+		, "./src/node/*.ts"
+		// eslint
+		, ".eslintrc.js"
+	]
+	, "exclude": [
+	  "node_modules"
+	]
+}
