@@ -1,11 +1,10 @@
-import express from 'express';
 import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb'
 
 export class mongo {
-	public uri: string = '';
+	public uri = '';
 
-	private dbName: string = 'maps';
-	private dbURL: string = '';
+	private dbName = 'maps';
+	private dbURL = '';
 	public client: MongoClient | null = null;
 	private clientOptions: MongoClientOptions = {};
 
@@ -18,7 +17,7 @@ export class mongo {
 	constructor(uri: string, host: string, port: number) {
 		this.uri = uri;
 
-		this.dbURL = 'mongodb://' + host + ":" + port;
+		this.dbURL = `mongodb://${host}:${port}`;
 
 		this.clientOptions.useNewUrlParser = true;
 		this.clientOptions.useUnifiedTopology = true
@@ -44,7 +43,7 @@ export class mongo {
 		}
 		catch {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 

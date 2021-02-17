@@ -1,9 +1,30 @@
 import express from 'express';
-import { Collection, MongoClient } from 'mongodb'
 import { mongo } from './mongo';
+import { Collection, MongoClient } from 'mongodb'
 
 import { log } from './log';
 const syslog: log = new log('maps.mongo');
+
+interface mongoCollectionPrefcapital{
+	pref: string
+	, addr: string
+	, loc: number[]
+	, distance: string
+}
+
+interface apiResponsePrefcapitalNear{
+	pref: string
+	, addr: string
+	, lat: number
+	, lon: number
+	, distance: string
+}
+
+interface apiResponsePointInPolygon{
+	name: string
+	, lat: number
+	, lon: number
+}
 
 export class mongoApi extends mongo {
 	/**
@@ -39,7 +60,7 @@ export class mongoApi extends mongo {
 	 * 登録
 	 * @param router express - Router
 	 */
-	public async regist(router: express.Router): Promise<void> {
+	public regist(router: express.Router): void{
 
 		router.get(this.uri + '/mongo/prefcapital/near',
 			(req: express.Request, res: express.Response) => {
@@ -48,7 +69,7 @@ export class mongoApi extends mongo {
 					const lon: number = +req.query.lon;
 					const n: number = +req.query.n;
 					if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(n)) {
-						this.prefcapitalNear(lat, lon, n, res);
+						void this.prefcapitalNear(lat, lon, n, res);
 						return;
 					}
 				}
@@ -60,15 +81,19 @@ export class mongoApi extends mongo {
 
 		router.post(this.uri + '/mongo/postoffice/inpolygon',
 			(req: express.Request, res: express.Response) => {
-				const d_gtype = req.query.gtype ? req.query.gtype : req.body.gtype;
-				const d_gcoordinates = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
-				const d_n = req.query.n ? req.query.n : req.body.n;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_gtype: string = req.query.gtype ? req.query.gtype : req.body.gtype;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_gcoordinates: string = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_n: string = req.query.n ? req.query.n : req.body.n;
 				if (d_gcoordinates && d_n) {
 					try {
-						const coordinates: [] =  JSON.parse('' + d_gcoordinates);
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						const coordinates: [] =  JSON.parse(d_gcoordinates);
 						const n: number = +d_n;
 						if (coordinates.length > 0 && !Number.isNaN(n)) {
-							this.pointInPolygon('PostOffice', d_gtype, coordinates, n, res);
+							void this.pointInPolygon('PostOffice', d_gtype, coordinates, n, res);
 							return;
 						}
 					}
@@ -84,15 +109,19 @@ export class mongoApi extends mongo {
 
 		router.post(this.uri + '/mongo/roadsitestation/inpolygon',
 			(req: express.Request, res: express.Response) => {
-				const d_gtype = req.query.gtype ? req.query.gtype : req.body.gtype;
-				const d_gcoordinates = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
-				const d_n = req.query.n ? req.query.n : req.body.n;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_gtype: string = req.query.gtype ? req.query.gtype : req.body.gtype;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_gcoordinates: string = req.query.gcoordinates ? req.query.gcoordinates : req.body.gcoordinates;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+				const d_n: string = req.query.n ? req.query.n : req.body.n;
 				if (d_gcoordinates && d_n) {
 					try {
-						const coordinates: [] =  JSON.parse('' + d_gcoordinates);
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						const coordinates: [] =  JSON.parse(d_gcoordinates);
 						const n: number = +d_n;
 						if (coordinates.length > 0 && !Number.isNaN(n)) {
-							this.pointInPolygon('RoadsiteStation', d_gtype, coordinates, n, res);
+							void this.pointInPolygon('RoadsiteStation', d_gtype, coordinates, n, res);
 							return;
 						}
 					}
@@ -142,9 +171,9 @@ export class mongoApi extends mongo {
 			)
 			.toArray()
 				.then(
-					(data: any[]) => {
-						data = data.map(
-							(v) => {
+					(data: mongoCollectionPrefcapital[]) => {
+						const r: apiResponsePrefcapitalNear[] = data.map(
+							(v : mongoCollectionPrefcapital): apiResponsePrefcapitalNear => {
 								return {
 									// 都道府県名
 									'pref': v.pref
@@ -159,11 +188,11 @@ export class mongoApi extends mongo {
 								};
 							}
 						);
-						res.json(data);
+						res.json(r);
 						res.end();
 
 						if (client) {
-							client.close();
+							void client.close();
 							client = null;
 						}
 					}
@@ -176,7 +205,7 @@ export class mongoApi extends mongo {
 		}
 		finally {
 			if (client) {
-				client.close();
+				void client.close();
 			}
 		}
 	}
@@ -230,30 +259,46 @@ export class mongoApi extends mongo {
 			)
 			.toArray()
 				.then(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					(data: any[]) => {
-						data = data.map(
-							(v) => {
+						const r: apiResponsePointInPolygon[] = data.map(
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							(v: any) => {
 								if (type == 'PostOffice') {
 									return {
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										'name': v.properties.P30_005
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										, 'lat': v.loc.coordinates[1]
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										, 'lon': v.loc.coordinates[0]
 									};
 								}
 								else if (type == 'RoadsiteStation') {
 									return {
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										'name': v.properties.P35_006
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										, 'lat': v.loc.coordinates[1]
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
 										, 'lon': v.loc.coordinates[0]
 									};
 								}
+								else{
+									return {
+										'name': ''
+										, 'lat': 0
+										, 'lon': 0
+
+									}
+								}
 							}
 						);
-						res.json(data);
+						res.json(r);
 						res.end();
 
 						if (client) {
-							client.close();
+							void client.close();
 							client = null;
 						}
 					}
@@ -266,7 +311,7 @@ export class mongoApi extends mongo {
 		}
 		finally {
 			if (client) {
-				client.close();
+				void client.close();
 			}
 		}
 	}

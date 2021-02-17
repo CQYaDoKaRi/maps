@@ -19,21 +19,21 @@ const syslog: log = new log('maps');
 const app:express.Express = express();
 const router: express.Router = express.Router();
 
-const apiURI: string = '/api/maps';
+const apiURI = '/api/maps';
 
 // MongoDB
 if (hostname === 'maps') {
 	const mongoApiUri: string = apiURI;
-	const mongoApiHost: string = 'mongo';
-	const mongoApiPort: number = 8517;
+	const mongoApiHost = 'mongo';
+	const mongoApiPort = 8517;
 
 	// - Create
 	const oMongoCreate: mongoCreate = new mongoCreate(mongoApiUri, mongoApiHost, mongoApiPort);
-	oMongoCreate.collections();
+	void oMongoCreate.collections();
 
 	// - api
 	const oMongoApi: mongoApi = new mongoApi(mongoApiUri, mongoApiHost, mongoApiPort);
-	oMongoApi.regist(router);
+	void oMongoApi.regist(router);
 }
 
 // page

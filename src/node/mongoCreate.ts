@@ -1,20 +1,21 @@
 import fs from 'fs';
 import chalk from 'chalk';
+import { mongo } from './mongo';
 import { Collection } from 'mongodb'
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
-import { mongo } from './mongo';
 
 import { log } from './log';
 const syslog: log = new log('maps.mongo');
-
 
 interface geojson {
 	features : geojsonFeatures[]
 }
 
 interface geojsonFeatures {
-	properties: {}
-	geometry: {}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	properties: any
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	, geometry: any
 }
 
 export class mongoCreate extends mongo {
@@ -64,6 +65,7 @@ export class mongoCreate extends mongo {
 			syslog.info(chalk.blue('MongoDB > create - pref ...'));
 
 			// - データ
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPref.geojson`, 'utf-8'));
 			const oData: geojsonFeatures[] = json.features;
 
@@ -71,12 +73,17 @@ export class mongoCreate extends mongo {
 				oData.map(
 					async(item: geojsonFeatures) => {
 						try{
-							await collection.insertOne({
-								properties: item.properties
-								, loc: item.geometry
-							});
+							await collection.insertOne(
+								{
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									properties: item.properties
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									, loc: item.geometry
+								}
+							);
 						}
-						catch{
+						catch(e){
+							syslog.error(e);
 						}
 					}
 				)
@@ -88,7 +95,7 @@ export class mongoCreate extends mongo {
 		}
 		finally {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 	}
@@ -127,7 +134,8 @@ export class mongoCreate extends mongo {
 								, loc: [item.lon, item.lat]
 							});
 						}
-						catch{
+						catch(e){
+							syslog.error(e);
 						}
 					}
 				)
@@ -143,7 +151,7 @@ export class mongoCreate extends mongo {
 		}
 		finally {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 	}
@@ -170,6 +178,7 @@ export class mongoCreate extends mongo {
 			syslog.info(chalk.blue('MongoDB > create - prefCity ...'));
 
 			// - データ
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPrefCity.geojson`, 'utf-8'));
 			const oData: geojsonFeatures[] = json.features;
 
@@ -177,12 +186,17 @@ export class mongoCreate extends mongo {
 				oData.map(
 					async(item: geojsonFeatures) => {
 						try{
-							await collection.insertOne({
-								properties: item.properties
-								, loc: item.geometry
-							});
+							await collection.insertOne(
+								{
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									properties: item.properties
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									, loc: item.geometry
+								}
+							);
 						}
-						catch{
+						catch(e){
+							syslog.error(e);
 						}
 					}
 				)
@@ -194,7 +208,7 @@ export class mongoCreate extends mongo {
 		}
 		finally {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 	}
@@ -221,6 +235,7 @@ export class mongoCreate extends mongo {
 			syslog.info(chalk.blue('MongoDB > create - postOffice ...'));
 
 			// - データ
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPostOffice.geojson`, 'utf-8'));
 			const oData: geojsonFeatures[] = json.features;
 
@@ -228,12 +243,17 @@ export class mongoCreate extends mongo {
 				oData.map(
 					async(item: geojsonFeatures) => {
 						try{
-							await collection.insertOne({
-								properties: item.properties
-								, loc: item.geometry
-							});
+							await collection.insertOne(
+								{
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									properties: item.properties
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									, loc: item.geometry
+								}
+							);
 						}
-						catch{
+						catch(e){
+							syslog.error(e);
 						}
 					}
 				)
@@ -249,7 +269,7 @@ export class mongoCreate extends mongo {
 		}
 		finally {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 	}
@@ -276,6 +296,7 @@ export class mongoCreate extends mongo {
 			syslog.info(chalk.blue('MongoDB > create - roadsiteStation ...'));
 
 			// - 地図：データ
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dRoadsiteStation.geojson`, 'utf-8'));
 			const oData: geojsonFeatures[] = json.features;
 
@@ -283,12 +304,17 @@ export class mongoCreate extends mongo {
 				oData.map(
 					async(item: geojsonFeatures) => {
 						try{
-							await collection.insertOne({
-								properties: item.properties
-								, loc: item.geometry
-							});
+							await collection.insertOne(
+								{
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									properties: item.properties
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									, loc: item.geometry
+								}
+							);
 						}
-						catch{
+						catch(e){
+							syslog.error(e);
 						}
 					}
 				)
@@ -304,7 +330,7 @@ export class mongoCreate extends mongo {
 		}
 		finally {
 			if (this.client) {
-				this.client.close();
+				void this.client.close();
 			}
 		}
 	}
