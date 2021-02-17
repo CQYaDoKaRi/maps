@@ -2,6 +2,9 @@ import express from 'express';
 import { Collection, MongoClient } from 'mongodb'
 import { mongo } from './mongo';
 
+import { log } from './log';
+const syslog: log = new log('maps.mongo');
+
 export class mongoApi extends mongo {
 	/**
 	 * コンストラクター
@@ -70,7 +73,7 @@ export class mongoApi extends mongo {
 						}
 					}
 					catch(e){
-						console.error(e);
+						syslog.error(e);
 					}
 				}
 
@@ -94,7 +97,7 @@ export class mongoApi extends mongo {
 						}
 					}
 					catch(e){
-						console.error(e);
+						syslog.error(e);
 					}
 				}
 
@@ -167,7 +170,7 @@ export class mongoApi extends mongo {
 				);
 		}
 		catch(e){
-			console.error(e);
+			syslog.error(e);
 			res.status(400).send({ message : 'param error' });
 			res.end();
 		}
@@ -257,7 +260,7 @@ export class mongoApi extends mongo {
 				);
 		}
 		catch(e){
-			console.error(e);
+			syslog.error(e);
 			res.status(400).send({ message : 'param[coordinates] error' });
 			res.end();
 		}

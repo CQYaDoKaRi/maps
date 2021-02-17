@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { mongoCreate } from './mongoCreate';
 import { mongoApi } from './mongoApi';
 
+import { log } from './log';
 import { page } from './page';
 import { api } from './api';
 import { apiMapsDeg } from './apiMapsDeg';
@@ -13,6 +14,7 @@ import { apiMapsDistance } from './apiMapsDistance';
 import { apiMapsTile } from './apiMapsTile';
 
 const hostname = os.hostname();
+const syslog: log = new log('maps');
 
 const app:express.Express = express();
 const router: express.Router = express.Router();
@@ -80,5 +82,5 @@ app.use(router);
 app.use('/', express.static('public'));
 
 app.listen(8080, () => {
-	console.log('Start server : maps')
+	syslog.info('Start server : maps');
 });

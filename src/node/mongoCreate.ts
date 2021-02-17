@@ -4,6 +4,10 @@ import { Collection } from 'mongodb'
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
 import { mongo } from './mongo';
 
+import { log } from './log';
+const syslog: log = new log('maps.mongo');
+
+
 interface geojson {
 	features : geojsonFeatures[]
 }
@@ -57,7 +61,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - pref ...'));
+			syslog.info(chalk.blue('MongoDB > create - pref ...'));
 
 			// - データ
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPref.geojson`, 'utf-8'));
@@ -80,7 +84,7 @@ export class mongoCreate extends mongo {
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			console.log(chalk.blue('MongoDB > create - pref ... completed'));
+			syslog.info(chalk.blue('MongoDB > create - pref ... completed'));
 		}
 		finally {
 			if (this.client) {
@@ -108,7 +112,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - prefCapital ...'));
+			syslog.info(chalk.blue('MongoDB > create - prefCapital ...'));
 			// - データ：都道府県庁
 			const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 			const dMapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
@@ -135,7 +139,7 @@ export class mongoCreate extends mongo {
 					loc: '2dsphere'
 				}
 			);
-			console.log(chalk.blue('MongoDB > create - prefCapital ... completed'));
+			syslog.info(chalk.blue('MongoDB > create - prefCapital ... completed'));
 		}
 		finally {
 			if (this.client) {
@@ -163,7 +167,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - prefCity ...'));
+			syslog.info(chalk.blue('MongoDB > create - prefCity ...'));
 
 			// - データ
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPrefCity.geojson`, 'utf-8'));
@@ -186,7 +190,7 @@ export class mongoCreate extends mongo {
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			console.log(chalk.blue('MongoDB > create - prefCity ... completed'));
+			syslog.info(chalk.blue('MongoDB > create - prefCity ... completed'));
 		}
 		finally {
 			if (this.client) {
@@ -214,7 +218,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - postOffice ...'));
+			syslog.info(chalk.blue('MongoDB > create - postOffice ...'));
 
 			// - データ
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPostOffice.geojson`, 'utf-8'));
@@ -241,7 +245,7 @@ export class mongoCreate extends mongo {
 					loc: '2dsphere'
 				}
 			);
-			console.log(chalk.blue('MongoDB > create - postOffice ... completed'));
+			syslog.info(chalk.blue('MongoDB > create - postOffice ... completed'));
 		}
 		finally {
 			if (this.client) {
@@ -269,7 +273,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			console.log(chalk.blue('MongoDB > create - roadsiteStation ...'));
+			syslog.info(chalk.blue('MongoDB > create - roadsiteStation ...'));
 
 			// - 地図：データ
 			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dRoadsiteStation.geojson`, 'utf-8'));
@@ -296,7 +300,7 @@ export class mongoCreate extends mongo {
 					loc: '2dsphere'
 				}
 			);
-			console.log(chalk.blue('MongoDB > create - roadsiteStation ... completed'));
+			syslog.info(chalk.blue('MongoDB > create - roadsiteStation ... completed'));
 		}
 		finally {
 			if (this.client) {
