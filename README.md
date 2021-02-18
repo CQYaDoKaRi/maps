@@ -8,7 +8,7 @@
 ## 環境
 - Node.js(ts-node, ts-node-dev) + Express.js
 - docker
-- gulp + eslint + tsc + babel + webpack
+- gulp + prettier + eslint + tsc + babel + webpack
 ## 言語
 - TypeScript + React
 - JavaScript(ES2015)
@@ -35,28 +35,50 @@ npm install
 ```
 build.sh
 ```
+- gulp + prettier
+	- [./src] のソースファイルを自動整形して保存
+- gulp + eslint
+	- [./src] のソースファイルを構文チェック
 - gulp + tsc
-	- TypeScript を tsconfig.json の設定でコンパイルして出力[./dist/public]
-	- TypeScript を tsconfig.node.json の設定でコンパイル[./dist/node]
+	- TypeScript を tsconfig.json の設定でコンパイルして出力 [./dist/public]
+	- TypeScript を tsconfig.node.json の設定でコンパイル [./dist/node]
 - gulp + babel
-	- tsc でコンパイルした JavaScript[./dist/public] を変換して出力[./dist/public.babel]
+	- tsc でコンパイルした JavaScript[./dist/public] を変換して出力 [./dist/public.babel]
 - gulp + webpack
-	- babel で変換した JavaScript[./dist/public.babel] を結合・圧縮して出力[./public/js]
+	- babel で変換した JavaScript[./dist/public.babel] を結合・圧縮して出力 [./public/js]
 - gulp + uglify
-	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力[./public/js/appp.min.js]
+	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力 [./public/js/appp.min.js]
 - gulp + sass
-	- scss をコンパイル、結合、圧縮して出力[./public/css]
+	- scss をコンパイル、結合、圧縮して出力 [./public/css]
 
 # ビルド - 開発モード(TypeScript)
 ```
 build.sh dev
 ```
+- gulp + eslint
+	- [./src] のソースファイルを構文チェック
 - gulp + tsc
 	- TypeScript を tsconfig.json の設定でコンパイルして出力[./dist/public]
 - gulp + uglify
 	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力[./public/js/appp.min.js]
 - gulp + tsc
 	- TypeScript のファイルを監視しコンパイル
+
+# ソースコードのチェック
+- 構文チェック＋自動整形
+	```
+	npm run check
+	```
+
+- 構文チェック
+	```
+	npm run formatter
+	```
+
+- 自動整形
+	```
+	npm run linter
+	```
 
 # 起動
 docker コンテナで Node.js、MongoDB, Mongo Express を起動します  
