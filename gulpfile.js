@@ -3,6 +3,10 @@ const path = require("path");
 const del = require("del");
 const concat = require("gulp-concat");
 
+// prettier
+const prettier = require("gulp-prettier");
+const prettierConfig = require("./.prettierrc.js");
+
 // eslint
 const eslint = require("gulp-eslint");
 
@@ -10,6 +14,7 @@ const eslint = require("gulp-eslint");
 const ts = require("gulp-typescript");
 const tsProject = ts.createProject("tsconfig.json");
 const tsProjectNode = ts.createProject("tsconfig.node.json");
+const tsProjectLint = ts.createProject("tsconfig.eslint.json");
 
 // babel
 const babel = require("gulp-babel");
@@ -35,12 +40,8 @@ oApp.include();
 const env = {
 	root: "./"
 	, rootPublic: "./public"
-	, lint : {
-		src: [
-			"./src*/**/*.ts"
-			, "./src*/**/*.tsx"
-			, "./src*/**/*.js"
-		]
+	, src : {
+		dist : "./src"
 	}
  	, babel : {
 		path: "./dist/public.babel"
@@ -77,10 +78,17 @@ const env = {
 	}
 }
 
+// prettier
+const formatter = () => {
+	return tsProjectLint.src()
+		.pipe(prettier(prettierConfig))
+		.pipe(gulp.dest(env.src.dist))
+	;
+}
+
 // eslint
-const lint = () => {
-	return gulp
-		.src(env.lint.src)
+const linter = () => {
+	return tsProjectLint.src()
 		.pipe(eslint(
 			{
 				useEslintrc: true
@@ -219,7 +227,8 @@ exports.scss = task_scss;
 const task_build = gulp.series(
 	gulp.parallel(
 		gulp.series(
-			lint
+			formatter
+			, linter
 			, gulp.parallel(tsc, tscNode)
 			, jsBabel
 			, gulp.parallel(jsWebpack, jsWebpackDev)
@@ -232,10 +241,10 @@ exports.build = task_build;
 
 // task - watch - build
 const watch_build = () => {
-	// lint for node
-	gulp.watch("./src")
+	// linter
+	gulp.watch(env.src.src)
 	.on("change"
-		, gulp.series(lint)
+		, gulp.series(linter)
 	);
 
 	// tsc + babel
