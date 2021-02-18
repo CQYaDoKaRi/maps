@@ -1,13 +1,13 @@
-import express from 'express';
+import express from "express";
 
 export class page {
-	private uri = '';
+	private uri = "";
 
 	/**
 	 * コンストラクター
 	 * @param uri API URI
 	 */
-	constructor(uri: string){
+	constructor(uri: string) {
 		this.uri = uri;
 	}
 
@@ -16,25 +16,23 @@ export class page {
 	 * @param router express - Router
 	 */
 	public regist(router: express.Router): void {
-		router.get(this.uri,
-			(req:express.Request, res:express.Response) => {
-				const html = [];
+		router.get(this.uri, (req: express.Request, res: express.Response) => {
+			const html = [];
 
-				html.push('<!DOCTYPE html>');
-				html.push('<html>');
-				html.push('<head>');
+			html.push("<!DOCTYPE html>");
+			html.push("<html>");
+			html.push("<head>");
 
-				html.push('<meta http-equiv=\'refresh\' content=\'0; URL=index.html\'>');
-				html.push('<title>maps</title>');
+			html.push("<meta http-equiv='refresh' content='0; URL=index.html'>");
+			html.push("<title>maps</title>");
 
-				html.push('</head>');
-				html.push('<body>');
-				html.push('</body>');
-				html.push('</html>');
+			html.push("</head>");
+			html.push("<body>");
+			html.push("</body>");
+			html.push("</html>");
 
-				res.send(html.join(''));
-				res.end();
-			}
-		);
+			res.send(html.join(""));
+			res.end();
+		});
 	}
 }

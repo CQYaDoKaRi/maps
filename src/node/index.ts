@@ -1,30 +1,30 @@
-import os from 'os';
-import express from 'express';
-import bodyParser from 'body-parser';
+import os from "os";
+import express from "express";
+import bodyParser from "body-parser";
 
-import { mongoCreate } from './mongoCreate';
-import { mongoApi } from './mongoApi';
+import { mongoCreate } from "./mongoCreate";
+import { mongoApi } from "./mongoApi";
 
-import { log } from './log';
-import { page } from './page';
-import { api } from './api';
-import { apiMapsDeg } from './apiMapsDeg';
-import { apiMapsLatLon } from './apiMapsLatLon';
-import { apiMapsDistance } from './apiMapsDistance';
-import { apiMapsTile } from './apiMapsTile';
+import { log } from "./log";
+import { page } from "./page";
+import { api } from "./api";
+import { apiMapsDeg } from "./apiMapsDeg";
+import { apiMapsLatLon } from "./apiMapsLatLon";
+import { apiMapsDistance } from "./apiMapsDistance";
+import { apiMapsTile } from "./apiMapsTile";
 
 const hostname = os.hostname();
-const syslog: log = new log('maps');
+const syslog: log = new log("maps");
 
-const app:express.Express = express();
+const app: express.Express = express();
 const router: express.Router = express.Router();
 
-const apiURI = '/api/maps';
+const apiURI = "/api/maps";
 
 // MongoDB
-if (hostname === 'maps') {
+if (hostname === "maps") {
 	const mongoApiUri: string = apiURI;
-	const mongoApiHost = 'mongo';
+	const mongoApiHost = "mongo";
 	const mongoApiPort = 8517;
 
 	// - Create
@@ -37,7 +37,7 @@ if (hostname === 'maps') {
 }
 
 // page
-const oPage: page = new page('/');
+const oPage: page = new page("/");
 oPage.regist(router);
 
 // api
@@ -60,27 +60,27 @@ oApiMapsTile.regist(router);
 // app
 // - CORS の許可
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
 
 // - POST
-app.use(bodyParser.urlencoded(
-	{
-		extended: true
-		, limit: '10mb'
-	}
-));
-app.use(bodyParser.json(
-	{
-		limit: '10mb'
-	}
-));
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+		limit: "10mb",
+	})
+);
+app.use(
+	bodyParser.json({
+		limit: "10mb",
+	})
+);
 
 app.use(router);
-app.use('/', express.static('public'));
+app.use("/", express.static("public"));
 
 app.listen(8080, () => {
-	syslog.info('Start server : maps');
+	syslog.info("Start server : maps");
 });

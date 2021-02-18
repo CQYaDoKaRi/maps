@@ -10,7 +10,7 @@ import { indexMenuTitle } from "./indexViewMenu";
  * ページ
  * @param oView indexView
  */
-function page(oView: indexView) : void {
+function page(oView: indexView): void {
 	const oMaps: maps = new maps();
 	let oAppMaps: appMaps | null = null;
 	const oappMapsGSI = new appMapsGSI(oMaps);
@@ -28,10 +28,10 @@ function page(oView: indexView) : void {
 	let _MapLon = 139.767125;
 	let _MapZ = 5;
 	const _MapOptions = {
-		w: 100
-		, wUnit: "%"
-		, h: 600
-		, hUnit: "px"
+		w: 100,
+		wUnit: "%",
+		h: 600,
+		hUnit: "px",
 	};
 
 	/*==============================================================================================*/
@@ -91,8 +91,8 @@ function page(oView: indexView) : void {
 		oDiv.appendChild(dl);
 
 		let options = {
-			color: "red"
-			, popup :item_base.pref
+			color: "red",
+			popup: item_base.pref,
 		};
 		oAppMaps.point(item_base.lat, item_base.lon, options);
 
@@ -145,16 +145,15 @@ function page(oView: indexView) : void {
 
 				oDiv.appendChild(dl);
 
-
 				options = {
-					color: "blue"
-					, popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>緯度：${item.lat}</li><li>経度：${item.lon}</li></ol>`
+					color: "blue",
+					popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>緯度：${item.lat}</li><li>経度：${item.lon}</li></ol>`,
 				};
 				oAppMaps.point(item.lat, item.lon, options);
 
 				options = {
-					color: "green"
-					, popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>${item_base.pref}から距離[${item.distH}m],方角[${item.a}]で求めた地点</li></ol>`
+					color: "green",
+					popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>${item_base.pref}から距離[${item.distH}m],方角[${item.a}]で求めた地点</li></ol>`,
 				};
 				oAppMaps.point(item.c_lat, item.c_lon, options);
 
@@ -163,8 +162,10 @@ function page(oView: indexView) : void {
 				atob.push([item.lat, item.lon]);
 
 				options = {
-					color: "#4169e1"
-					, popup: `<ol style="list-style-type:none;"><li>${item_base.pref}→${item.pref}</li><li>距離：${item.distH.toLocaleString()}</li><li>方角：${item.a}</li></ol>`
+					color: "#4169e1",
+					popup: `<ol style="list-style-type:none;"><li>${item_base.pref}→${
+						item.pref
+					}</li><li>距離：${item.distH.toLocaleString()}</li><li>方角：${item.a}</li></ol>`,
 				};
 				oAppMaps.arc(atob, options);
 			}
@@ -357,8 +358,8 @@ function page(oView: indexView) : void {
 			oDiv.append(oImg);
 
 			if (oMaps) {
-				const oMapTileDem : Promise<mapsTileDem> | null = oMaps.tileDemTxt(vTile);
-				if(oMapTileDem){
+				const oMapTileDem: Promise<mapsTileDem> | null = oMaps.tileDemTxt(vTile);
+				if (oMapTileDem) {
 					void oMapTileDem.then((data: mapsTileDem) => {
 						if (!data.tile) {
 							return;
@@ -369,15 +370,13 @@ function page(oView: indexView) : void {
 						}
 						if (isNaN(data.e)) {
 							o.innerHTML = "標高データなし";
-						}
-						else {
+						} else {
 							o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
 						}
-					}
-					);
+					});
 				}
 
-				const oMapTileDemPng : Promise<mapsTileDem> | null = oMaps.tileDemPng(vTile);
+				const oMapTileDemPng: Promise<mapsTileDem> | null = oMaps.tileDemPng(vTile);
 				if (oMapTileDemPng) {
 					void oMapTileDemPng.then((data: mapsTileDem) => {
 						if (!data.tile) {
@@ -389,12 +388,10 @@ function page(oView: indexView) : void {
 						}
 						if (isNaN(data.e)) {
 							o.innerHTML = "標高データなし";
-						}
-						else {
+						} else {
 							o.innerHTML = data.e.toLocaleString() + " m" + "<br>" + data.url;
 						}
-					}
-					);
+					});
 				}
 			}
 		}
@@ -420,8 +417,7 @@ function page(oView: indexView) : void {
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190519, data);
 				o.refresh(1100, 500, 150);
-			}
-			);
+			});
 
 			//
 			const oDiv20190428 = document.createElement("div");
@@ -435,9 +431,7 @@ function page(oView: indexView) : void {
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190428, data);
 				o.refresh(1100, 500, 150);
-			}
-			);
-
+			});
 
 			//
 			const oDiv20180811 = document.createElement("div");
@@ -451,8 +445,7 @@ function page(oView: indexView) : void {
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20180811, data);
 				o.refresh(1100, 500, 150);
-			}
-			);
+			});
 		}
 	}
 	/*==============================================================================================*/
@@ -474,11 +467,19 @@ window.onload = () => {
 	const oView: indexView = new indexView();
 
 	const title: indexMenuTitle[] = [
-		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" }
-		, { key: "Scale", title: "ズームレベルから縮尺を求める" }
-		, { key: "Tile", title: "緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める" }
-		, { key: "DataGpx", title: "GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示" }
-		, { key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" }
+		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
+		{ key: "Scale", title: "ズームレベルから縮尺を求める" },
+		{
+			key: "Tile",
+			title:
+				"緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める",
+		},
+		{
+			key: "DataGpx",
+			title:
+				"GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示",
+		},
+		{ key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" },
 	];
 	title.map((item: indexMenuTitle) => {
 		oView.setMenuTitle(item);

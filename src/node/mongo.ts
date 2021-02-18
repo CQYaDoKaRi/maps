@@ -1,10 +1,10 @@
-import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb';
+import { MongoClient, MongoClientOptions, Db, Collection } from "mongodb";
 
 export class mongo {
-	public uri = '';
+	public uri = "";
 
-	private dbName = 'maps';
-	private dbURL = '';
+	private dbName = "maps";
+	private dbURL = "";
 	public client: MongoClient | null = null;
 	private clientOptions: MongoClientOptions = {};
 
@@ -40,8 +40,7 @@ export class mongo {
 
 			// 接続：collection
 			return db.collection(collectionName);
-		}
-		catch {
+		} catch {
 			if (this.client) {
 				void this.client.close();
 			}
@@ -55,7 +54,7 @@ export class mongo {
 	 * @returns
 	 */
 	public async connectPref(): Promise<Collection | null> {
-		return await this.connect('pref');
+		return await this.connect("pref");
 	}
 
 	/**
@@ -63,7 +62,7 @@ export class mongo {
 	 * @returns
 	 */
 	public async connectPrefCapital(): Promise<Collection | null> {
-		return await this.connect('prefCapital');
+		return await this.connect("prefCapital");
 	}
 
 	/**
@@ -71,7 +70,7 @@ export class mongo {
 	 * @returns
 	 */
 	public async connectPrefCity(): Promise<Collection | null> {
-		return await this.connect('prefCity');
+		return await this.connect("prefCity");
 	}
 
 	/**
@@ -79,7 +78,7 @@ export class mongo {
 	 * @returns
 	 */
 	public async connectPostOffice(): Promise<Collection | null> {
-		return await this.connect('postOffice');
+		return await this.connect("postOffice");
 	}
 
 	/**
@@ -87,6 +86,6 @@ export class mongo {
 	 * @returns
 	 */
 	public async connectRoadsiteStation(): Promise<Collection | null> {
-		return await this.connect('roadsiteStation');
+		return await this.connect("roadsiteStation");
 	}
 }

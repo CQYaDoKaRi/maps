@@ -82,16 +82,16 @@ export class mapsDataPrefCapital {
 	 */
 	private set(pref: string, addr: string, lat: number, lon: number): void {
 		this.d.push({
-			pref: pref
-			, addr: addr
-			, lat: lat
-			, lon: lon
-			, distT : 0.0
-			, distH : 0.0
-			, distS : 0.0
-			, a : 0.0
-			, c_lat : 0.0
-			, c_lon : 0.0
+			pref: pref,
+			addr: addr,
+			lat: lat,
+			lon: lon,
+			distT: 0.0,
+			distH: 0.0,
+			distS: 0.0,
+			a: 0.0,
+			c_lat: 0.0,
+			c_lon: 0.0,
 		});
 	}
 

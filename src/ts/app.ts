@@ -40,29 +40,29 @@ class app {
 		return this._cssLib;
 	}
 
-    /**
-     * CSS
-     * @param src ソースパス
-     */
-	public css(src: string): void{
+	/**
+	 * CSS
+	 * @param src ソースパス
+	 */
+	public css(src: string): void {
 		this._css.push(src);
 		this.documentCss(src);
 	}
 
-    /**
-     * CSS for lib
-     * @param src ソースパス
-     */
-	public cssLib(src: string): void{
+	/**
+	 * CSS for lib
+	 * @param src ソースパス
+	 */
+	public cssLib(src: string): void {
 		this._cssLib.push(src);
 		this.documentCss(src);
 	}
 
-    /**
-     * document - CSS
-     * @param src ソースパス
-     */
-	public documentCss(src: string): void{
+	/**
+	 * document - CSS
+	 * @param src ソースパス
+	 */
+	public documentCss(src: string): void {
 		if (typeof document !== "undefined" && document) {
 			const head: HTMLElement = document.getElementsByTagName("head")[0];
 			const link: HTMLLinkElement = document.createElement("link");
@@ -74,28 +74,28 @@ class app {
 		}
 	}
 
-    /**
-     * JavaScript
-     * @param src ソースパス
-     */
+	/**
+	 * JavaScript
+	 * @param src ソースパス
+	 */
 	public js(src: string): void {
 		this._js.push(src);
 		this.documentJs(src);
 	}
 
-    /**
-     * JavaScript for lib
-     * @param src ソースパス
-     */
+	/**
+	 * JavaScript for lib
+	 * @param src ソースパス
+	 */
 	public jsLib(src: string): void {
 		this._jsLib.push(src);
 		this.documentJs(src);
 	}
 
-    /**
-     * document - JavaScript
-     * @param src ソースパス
-     */
+	/**
+	 * document - JavaScript
+	 * @param src ソースパス
+	 */
 	private documentJs(src: string): void {
 		if (typeof document !== "undefined" && document) {
 			const script: HTMLScriptElement = document.createElement("script");
@@ -118,10 +118,10 @@ class app {
 		}
 	}
 
-    /**
-     * document - JavaScript - 追加
-     * @param script Script(JavaScript)オブジェクト
-     */
+	/**
+	 * document - JavaScript - 追加
+	 * @param script Script(JavaScript)オブジェクト
+	 */
 	private documentJsAdd(script: HTMLScriptElement): void {
 		document.getElementsByTagName("head")[0].appendChild(script);
 	}
@@ -129,7 +129,7 @@ class app {
 	/**
 	 * include
 	 */
-	public include(): void{
+	public include(): void {
 		this.includeCss();
 		this.includeJs();
 	}
@@ -137,7 +137,7 @@ class app {
 	/**
 	 * include CSS
 	 */
-	public includeCss(): void{
+	public includeCss(): void {
 		this.cssLib("css/font-awesome.css");
 
 		this.css("css/index.css");
@@ -146,7 +146,7 @@ class app {
 	/**
 	 * include JavaScript
 	 */
-	public includeJs(): void{
+	public includeJs(): void {
 		this.js("js/index.js");
 	}
 }
@@ -159,24 +159,23 @@ interface module {
 if (typeof module !== "undefined" && module && module.exports) {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.app = app;
-}
-else{
-	(function() {
+} else {
+	(function () {
 		let fDev = false;
 
-        // 引数処理
-        const params: string[] = location.search.substring(1).split("&");
-        for (let i = 0; i < params.length; i++) {
-            const v: string = params[i];
-            const n: number = v.search(/=/);
-            const key: string = n !== -1 ? v.slice(0, n).toLocaleLowerCase() : "";
-            const val: string = decodeURI(v.slice(v.indexOf("=", 0) + 1));
-            if (key) {
+		// 引数処理
+		const params: string[] = location.search.substring(1).split("&");
+		for (let i = 0; i < params.length; i++) {
+			const v: string = params[i];
+			const n: number = v.search(/=/);
+			const key: string = n !== -1 ? v.slice(0, n).toLocaleLowerCase() : "";
+			const val: string = decodeURI(v.slice(v.indexOf("=", 0) + 1));
+			if (key) {
 				// 開発モード：minify あり / なし
-                if (key === "dev" && val === "1") {
+				if (key === "dev" && val === "1") {
 					fDev = true;
-                }
-            }
+				}
+			}
 		}
 
 		if (fDev) {
@@ -184,8 +183,7 @@ else{
 			oApp.include();
 
 			console.log("\u001b[31m開発モード\u001b[30m");
-		}
-		else {
+		} else {
 			const oApp: app = new app();
 			oApp.js("js/index.min.js");
 			oApp.css("css/index.min.css");

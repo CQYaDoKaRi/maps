@@ -1,25 +1,25 @@
-import fs from 'fs';
-import chalk from 'chalk';
-import { mongo } from './mongo';
-import { Collection } from 'mongodb';
-import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
+import fs from "fs";
+import chalk from "chalk";
+import { mongo } from "./mongo";
+import { Collection } from "mongodb";
+import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
 
-import { log } from './log';
-const syslog: log = new log('maps.mongo');
+import { log } from "./log";
+const syslog: log = new log("maps.mongo");
 
 interface geojson {
-	features : geojsonFeatures[]
+	features: geojsonFeatures[];
 }
 
 interface geojsonFeatures {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	properties: any
+	properties: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	, geometry: any
+	geometry: any;
 }
 
 export class mongoCreate extends mongo {
-	private pathGeoJSON = './public/data/';
+	private pathGeoJSON = "./public/data/";
 
 	/**
 	 * コンストラクター
@@ -57,43 +57,37 @@ export class mongoCreate extends mongo {
 		try {
 			// 件数
 			const n = await collection.find().count();
-			if(n > 0){
+			if (n > 0) {
 				return;
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue('MongoDB > create - pref ...'));
+			syslog.info(chalk.blue("MongoDB > create - pref ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPref.geojson`, 'utf-8'));
+			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPref.geojson`, "utf-8"));
 			const oData: geojsonFeatures[] = json.features;
 
 			await Promise.all(
-				oData.map(
-					async(item: geojsonFeatures) => {
-						try{
-							await collection.insertOne(
-								{
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									properties: item.properties
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									, loc: item.geometry
-								}
-							);
-						}
-						catch(e){
-							syslog.error(e);
-						}
+				oData.map(async (item: geojsonFeatures) => {
+					try {
+						await collection.insertOne({
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							properties: item.properties,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							loc: item.geometry,
+						});
+					} catch (e) {
+						syslog.error(e);
 					}
-				)
+				})
 			);
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			syslog.info(chalk.blue('MongoDB > create - pref ... completed'));
-		}
-		finally {
+			syslog.info(chalk.blue("MongoDB > create - pref ... completed"));
+		} finally {
 			if (this.client) {
 				void this.client.close();
 			}
@@ -114,42 +108,36 @@ export class mongoCreate extends mongo {
 		try {
 			// 件数
 			const n = await collection.find().count();
-			if(n > 0){
+			if (n > 0) {
 				return;
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue('MongoDB > create - prefCapital ...'));
+			syslog.info(chalk.blue("MongoDB > create - prefCapital ..."));
 			// - データ：都道府県庁
 			const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 			const dMapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
 			await Promise.all(
-				dMapsDataPrefCapital.map(
-					async(item: mapsDataPrefCapitalItem) => {
-						try{
-							await collection.insertOne({
-								pref: item.pref
-								, addr: item.addr
-								, loc: [item.lon, item.lat]
-							});
-						}
-						catch(e){
-							syslog.error(e);
-						}
+				dMapsDataPrefCapital.map(async (item: mapsDataPrefCapitalItem) => {
+					try {
+						await collection.insertOne({
+							pref: item.pref,
+							addr: item.addr,
+							loc: [item.lon, item.lat],
+						});
+					} catch (e) {
+						syslog.error(e);
 					}
-				)
+				})
 			);
 
 			// - データ：座標にインデックスを作成
-			await collection.createIndex(
-				{
-					loc: '2dsphere'
-				}
-			);
-			syslog.info(chalk.blue('MongoDB > create - prefCapital ... completed'));
-		}
-		finally {
+			await collection.createIndex({
+				loc: "2dsphere",
+			});
+			syslog.info(chalk.blue("MongoDB > create - prefCapital ... completed"));
+		} finally {
 			if (this.client) {
 				void this.client.close();
 			}
@@ -170,43 +158,37 @@ export class mongoCreate extends mongo {
 		try {
 			// 件数
 			const n = await collection.find().count();
-			if(n > 0){
+			if (n > 0) {
 				return;
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue('MongoDB > create - prefCity ...'));
+			syslog.info(chalk.blue("MongoDB > create - prefCity ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPrefCity.geojson`, 'utf-8'));
+			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPrefCity.geojson`, "utf-8"));
 			const oData: geojsonFeatures[] = json.features;
 
 			await Promise.all(
-				oData.map(
-					async(item: geojsonFeatures) => {
-						try{
-							await collection.insertOne(
-								{
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									properties: item.properties
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									, loc: item.geometry
-								}
-							);
-						}
-						catch(e){
-							syslog.error(e);
-						}
+				oData.map(async (item: geojsonFeatures) => {
+					try {
+						await collection.insertOne({
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							properties: item.properties,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							loc: item.geometry,
+						});
+					} catch (e) {
+						syslog.error(e);
 					}
-				)
+				})
 			);
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			syslog.info(chalk.blue('MongoDB > create - prefCity ... completed'));
-		}
-		finally {
+			syslog.info(chalk.blue("MongoDB > create - prefCity ... completed"));
+		} finally {
 			if (this.client) {
 				void this.client.close();
 			}
@@ -227,47 +209,39 @@ export class mongoCreate extends mongo {
 		try {
 			// 件数
 			const n = await collection.find().count();
-			if(n > 0){
+			if (n > 0) {
 				return;
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue('MongoDB > create - postOffice ...'));
+			syslog.info(chalk.blue("MongoDB > create - postOffice ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPostOffice.geojson`, 'utf-8'));
+			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dPostOffice.geojson`, "utf-8"));
 			const oData: geojsonFeatures[] = json.features;
 
 			await Promise.all(
-				oData.map(
-					async(item: geojsonFeatures) => {
-						try{
-							await collection.insertOne(
-								{
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									properties: item.properties
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									, loc: item.geometry
-								}
-							);
-						}
-						catch(e){
-							syslog.error(e);
-						}
+				oData.map(async (item: geojsonFeatures) => {
+					try {
+						await collection.insertOne({
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							properties: item.properties,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							loc: item.geometry,
+						});
+					} catch (e) {
+						syslog.error(e);
 					}
-				)
+				})
 			);
 
 			// - データ：座標にインデックスを作成
-			await collection.createIndex(
-				{
-					loc: '2dsphere'
-				}
-			);
-			syslog.info(chalk.blue('MongoDB > create - postOffice ... completed'));
-		}
-		finally {
+			await collection.createIndex({
+				loc: "2dsphere",
+			});
+			syslog.info(chalk.blue("MongoDB > create - postOffice ... completed"));
+		} finally {
 			if (this.client) {
 				void this.client.close();
 			}
@@ -288,47 +262,39 @@ export class mongoCreate extends mongo {
 		try {
 			// 件数
 			const n = await collection.find().count();
-			if(n > 0){
+			if (n > 0) {
 				return;
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue('MongoDB > create - roadsiteStation ...'));
+			syslog.info(chalk.blue("MongoDB > create - roadsiteStation ..."));
 
 			// - 地図：データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dRoadsiteStation.geojson`, 'utf-8'));
+			const json: geojson = JSON.parse(fs.readFileSync(`${this.pathGeoJSON}/dRoadsiteStation.geojson`, "utf-8"));
 			const oData: geojsonFeatures[] = json.features;
 
 			await Promise.all(
-				oData.map(
-					async(item: geojsonFeatures) => {
-						try{
-							await collection.insertOne(
-								{
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									properties: item.properties
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									, loc: item.geometry
-								}
-							);
-						}
-						catch(e){
-							syslog.error(e);
-						}
+				oData.map(async (item: geojsonFeatures) => {
+					try {
+						await collection.insertOne({
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							properties: item.properties,
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							loc: item.geometry,
+						});
+					} catch (e) {
+						syslog.error(e);
 					}
-				)
+				})
 			);
 
 			// - データ：座標にインデックスを作成
-			await collection.createIndex(
-				{
-					loc: '2dsphere'
-				}
-			);
-			syslog.info(chalk.blue('MongoDB > create - roadsiteStation ... completed'));
-		}
-		finally {
+			await collection.createIndex({
+				loc: "2dsphere",
+			});
+			syslog.info(chalk.blue("MongoDB > create - roadsiteStation ... completed"));
+		} finally {
 			if (this.client) {
 				void this.client.close();
 			}

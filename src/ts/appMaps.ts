@@ -62,12 +62,12 @@ export class appMaps {
 
 		const mapOptions: L.MapOptions = {
 			// ズームレベル制限：最小
-			minZoom: 4
+			minZoom: 4,
 			// 表示範囲制限：左上, 右下
-			, maxBounds: [
-				[45.55722222, 122.93250000]
-				,[20.42527777, 153.98666666]
-			]
+			maxBounds: [
+				[45.55722222, 122.9325],
+				[20.42527777, 153.98666666],
+			],
 		};
 
 		this.oMap = L.map(this.iMapApp, mapOptions);
@@ -88,7 +88,7 @@ export class appMaps {
 		}
 
 		// スケール
-		L.control.scale({imperial: false}).addTo(this.oMap);
+		L.control.scale({ imperial: false }).addTo(this.oMap);
 
 		this.view(this.lat, this.lon, this.z);
 	}
@@ -113,7 +113,7 @@ export class appMaps {
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public resize(w: number, h: number): void {
-		if(this.oMapApp) {
+		if (this.oMapApp) {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
 			this.oMapApp.style.width = `${this.options.w}px`;
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
@@ -183,31 +183,26 @@ export class appMaps {
 	/**
 	 * レイヤー：ベース（地理院地図）
 	 */
-	public layerBase(): void{
+	public layerBase(): void {
 		if (!this.oMap) {
 			return;
 		}
-		L.tileLayer(
-			"https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
-			, {
-				attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>"
-			}
-		).addTo(this.oMap);
+		L.tileLayer("https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", {
+			attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>GSI</a>",
+		}).addTo(this.oMap);
 	}
 
 	/**
 	 * レイヤー：都道府県、市区町村界
 	 */
-	public layerPref(): void{
+	public layerPref(): void {
 		if (!this.oMap) {
 			return;
 		}
 		this.layerPrefEvtZoomEnd(null);
-		this.oMap.on("zoomend",
-			(e: L.LeafletEvent) => {
-				this.layerPrefEvtZoomEnd(e);
-			}
-		);
+		this.oMap.on("zoomend", (e: L.LeafletEvent) => {
+			this.layerPrefEvtZoomEnd(e);
+		});
 	}
 
 	/**
@@ -215,7 +210,7 @@ export class appMaps {
 	 * @param e
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	private layerPrefEvtZoomEnd(e: L.LeafletEvent | null){
+	private layerPrefEvtZoomEnd(e: L.LeafletEvent | null) {
 		if (!this.oMap) {
 			return;
 		}
@@ -227,7 +222,7 @@ export class appMaps {
 			this.dPref.set(this.oMap);
 		}
 		// 市区町村界
-		else{
+		else {
 			this.dPref.remove(this.oMap);
 			this.dPrefCity.set(this.oMap);
 		}
