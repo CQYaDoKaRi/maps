@@ -758,7 +758,7 @@ export class maps {
 	 */
 	public Locale(t: string): void {
 		if (t === "ja") {
-			this.EARTH_LOCALE = t
+			this.EARTH_LOCALE = t;
 		}
 		else {
 			this.EARTH_LOCALE = "";
@@ -1229,10 +1229,10 @@ export class maps {
 							delete this.TILE_DEM_URL[key];
 
 							resolve(new mapsTileDem(tile, t, url, dem, e));
-						}
+						};
 						oImg.onerror = () => {
 							void this.tileDemRequest(key, tile, t, true);
-						}
+						};
 						oImg.crossOrigin = "anonymous";
 						oImg.src = url;
 					}

@@ -32,7 +32,7 @@ export class apiMapsDeg {
 				const oMaps: maps = new maps();
 
 				if (req.query.deg) {
-					const deg: number = +req.query.deg
+					const deg: number = +req.query.deg;
 					if (!Number.isNaN(deg)) {
 						data.status = true;
 						data.name = oMaps.deg2Name(deg);

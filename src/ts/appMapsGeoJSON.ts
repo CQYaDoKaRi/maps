@@ -119,7 +119,7 @@ export class appMapsGeoJSON {
 
 							this.setAttr(oMap, feature, layer);
 						}
-					}
+					};
 
 					this.layer = L.geoJSON(dGeojson, options);
 					this.layer.addTo(oMap);

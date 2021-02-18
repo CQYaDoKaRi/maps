@@ -417,7 +417,7 @@ export class mapsDataGpxChart {
 		const toolTipItem: ChartTooltipItem = {
 			index: i._index
 			, datasetIndex: i._datasetIndex
-		}
+		};
 		this.eChartHoverCallback(toolTipItem);
 	}
 

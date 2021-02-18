@@ -1,4 +1,4 @@
-import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb'
+import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb';
 
 export class mongo {
 	public uri = '';
@@ -20,7 +20,7 @@ export class mongo {
 		this.dbURL = `mongodb://${host}:${port}`;
 
 		this.clientOptions.useNewUrlParser = true;
-		this.clientOptions.useUnifiedTopology = true
+		this.clientOptions.useUnifiedTopology = true;
 	}
 
 	/**

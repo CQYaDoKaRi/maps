@@ -1,5 +1,5 @@
 // npm install --save-dev react @types/react
-import React from "react"
+import React from "react";
 // npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
 

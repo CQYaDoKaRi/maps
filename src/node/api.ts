@@ -1,6 +1,6 @@
 import express from 'express';
-import swaggerUi from 'swagger-ui-express'
-import yamljs from 'yamljs'
+import swaggerUi from 'swagger-ui-express';
+import yamljs from 'yamljs';
 
 export class api {
 	private uri = '';

@@ -68,7 +68,7 @@ export class appMaps {
 				[45.55722222, 122.93250000]
 				,[20.42527777, 153.98666666]
 			]
-		}
+		};
 
 		this.oMap = L.map(this.iMapApp, mapOptions);
 		this.lat = lat;
