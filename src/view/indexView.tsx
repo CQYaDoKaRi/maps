@@ -17,7 +17,7 @@ export class indexView {
 	 * 表示/非表示
 	 * @param key タイトルキー
 	 */
-	public display(key: string): void{
+	public display(key: string): void {
 		this.title.map((item: indexMenuTitle) => {
 			let disp = "none";
 			if (item.key === key) {
@@ -36,7 +36,7 @@ export class indexView {
 	 * @param tkey ターゲットタイトルキー
 	 * @returns 処理ステータス
 	 */
-	public status(key: string, tkey: string): boolean{
+	public status(key: string, tkey: string): boolean {
 		let ret = true;
 		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
 		if (item && item.key === tkey) {
@@ -51,7 +51,7 @@ export class indexView {
 	 * @param key タイトルキー
 	 * @returns タイトル
 	 */
-	public getMenuTitle(key: string): string{
+	public getMenuTitle(key: string): string {
 		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
 		return item ? item.title : "";
 	}
@@ -60,7 +60,7 @@ export class indexView {
 	 * 設定：メニュー - タイトル
 	 * @param item タイトル
 	 */
-	public setMenuTitle(item: indexMenuTitle): void{
+	public setMenuTitle(item: indexMenuTitle): void {
 		this.title.push(item);
 		this.init[item.key] = false;
 	}
@@ -69,12 +69,9 @@ export class indexView {
 	 * 描画 - メニュー
 	 * @param container Div
 	 */
-	public renderMenu(container: HTMLElement | null): void{
+	public renderMenu(container: HTMLElement | null): void {
 		if (container) {
-			ReactDOM.render(
-				<IndexViewMenu titles={this.title} />
-				, container
-			);
+			ReactDOM.render(<IndexViewMenu titles={this.title} />, container);
 		}
 	}
 
@@ -82,12 +79,9 @@ export class indexView {
 	 * 描画 - コンテンツ
 	 * @param container Div
 	 */
-	public renderContents(container: HTMLElement | null): void{
+	public renderContents(container: HTMLElement | null): void {
 		if (container) {
-			ReactDOM.render(
-				<IndexViewContents />
-				, container
-			);
+			ReactDOM.render(<IndexViewContents />, container);
 		}
 	}
 }

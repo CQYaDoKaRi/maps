@@ -1,48 +1,44 @@
-import path from 'path';
-import log4js from 'log4js';
+import path from "path";
+import log4js from "log4js";
 
-export class log{
+export class log {
 	private logger: log4js.Logger;
 
 	/**
 	 * コンストラクター
 	 * @param name ログファイル名
 	 */
-	constructor(name: string){
+	constructor(name: string) {
 		log4js.configure({
-			appenders:
-				{
-					console: {
-						type: "console"
-						, level	: "all"
-						, layout: {
-							type: 'pattern'
-							, pattern: '[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %m',
-						}
-					}
-					, system: {
-						type: "file"
-						, filename: path.join(__dirname, `./../../logs/${name}.log`)
-						, layout: {
-							type: 'pattern'
-							, pattern: '[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %m',
-						}
-						// 5MB
-						, maxLogSize: 5242880
-						// 世代管理(古いファイルは gz で圧縮)
-						, backups: 10
-						, compress: true
-					}
-				}
-				,categories: {
-					default: {
-						appenders: [
-							'console'
-							, 'system'
-						]
-						, level: "all"
-					}
-				}
+			appenders: {
+				console: {
+					type: "console",
+					level: "all",
+					layout: {
+						type: "pattern",
+						pattern: "[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %m",
+					},
+				},
+				system: {
+					type: "file",
+					filename: path.join(__dirname, `./../../logs/${name}.log`),
+					layout: {
+						type: "pattern",
+						pattern: "[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %m",
+					},
+					// 5MB
+					maxLogSize: 5242880,
+					// 世代管理(古いファイルは gz で圧縮)
+					backups: 10,
+					compress: true,
+				},
+			},
+			categories: {
+				default: {
+					appenders: ["console", "system"],
+					level: "all",
+				},
+			},
 		});
 
 		this.logger = log4js.getLogger();
@@ -52,7 +48,7 @@ export class log{
 	 * ログ：info
 	 * @param msg メッセージ
 	 */
-	public info(msg: string): void{
+	public info(msg: string): void {
 		this.logger.info(msg);
 	}
 
@@ -60,7 +56,7 @@ export class log{
 	 * ログ：error
 	 * @param msg エラー
 	 */
-	public error(msg: string): void{
+	public error(msg: string): void {
 		this.logger.error(msg);
 	}
 }

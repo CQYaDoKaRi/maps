@@ -6,9 +6,9 @@
 		// - Enable incremental compilation
 		// , "incremental": true
 		// - Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.
-		"target": "ES5"
+		"target": "ES5",
 		// - Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.
-		, "module": "ESNext"
+		"module": "ESNext",
 		// - Specify library files to be included in the compilation.
 		// , "lib": []
 		// - Allow javascript files to be compiled.
@@ -16,7 +16,7 @@
 		// - Report errors in .js files.
 		// , "checkJs": true
 		// - Specify JSX code generation: 'preserve', 'react-native', or 'react'.
-		, "jsx": "react"
+		"jsx": "react",
 		// - Generates corresponding '.d.ts' file.
 		// , "declaration": true
 		// - Generates a sourcemap for each corresponding '.d.ts' file.
@@ -26,7 +26,7 @@
 		// - Concatenate and emit output to single file.
 		// , "outFile": "./"
 		// - Redirect output structure to the directory.
-		, "outDir": "./dist/public"
+		"outDir": "./dist/public",
 		// - Specify the root directory of input files. Use to control the output directory structure with --outDir.
 		// , "rootDir": "./"
 		// - Enable project compilation
@@ -46,7 +46,7 @@
 
 		// = Strict Type-Checking Options
 		// - Enable all strict type-checking options.
-		, "strict": true
+		"strict": true,
 		// - Raise error on expressions and declarations with an implied 'any' type.
 		// , "noImplicitAny": true
 		// - Enable strict null checks.
@@ -76,7 +76,7 @@
 
 		// = Module Resolution Options
 		// - Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).
-		, "moduleResolution": "node"
+		"moduleResolution": "node",
 		// - Base directory to resolve non-absolute module names.
 		// , "baseUrl": "./"
 		// - A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.
@@ -84,16 +84,13 @@
 		// - List of root folders whose combined content represents the structure of the project at runtime.
 		// , "rootDirs": []
 		// - List of folders to include type definitions from.
-		 , "typeRoots": [
-			"src/ts.types"
-			, "node_modules/@types"
-		 ]
+		"typeRoots": ["src/ts.types", "node_modules/@types"],
 		// - Type declaration files to be included in compilation.
 		// , "types": []
 		// - Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
 		// , "allowSyntheticDefaultImports": true
 		// - Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
-		, "esModuleInterop": true
+		"esModuleInterop": true,
 		// - Do not resolve the real path of symlinks.
 		// , "preserveSymlinks": true
 		// - Allow accessing UMD globals from modules.
@@ -117,19 +114,10 @@
 
 		// = Advanced Options
 		// - Skip type checking of declaration files.
-		, "skipLibCheck": true
+		"skipLibCheck": true,
 		// - Disallow inconsistently-cased references to the same file.
-		, "forceConsistentCasingInFileNames": true
-	}
-	, "include":
-	[
-		"./src/ts/*.ts"
-		, "./src/ts.types/**/*.ts"
-		, "./src/view/*.ts"
-		, "./src/view/*.tsx"
-	]
-	, "exclude":
-	[
-		"./src/ts/*.test.ts"
-	]
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["./src/ts/*.ts", "./src/ts.types/**/*.ts", "./src/view/*.ts", "./src/view/*.tsx"],
+	"exclude": ["./src/ts/*.test.ts"]
 }

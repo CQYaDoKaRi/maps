@@ -57,10 +57,10 @@ export class appMapsGSI {
 				oImgP.style.fontSize = "24px";
 				oImgP.style.color = "#FF0000";
 				oImgP.style.position = "absolute";
-				oImgP.style.top = `${vImgY + this.oImgPos[n].px_y - (w * 0.5)}px`;
-				oImgP.style.left = `${vImgX + this.oImgPos[n].px_x - (h * 0.5)}px`;
+				oImgP.style.top = `${vImgY + this.oImgPos[n].px_y - w * 0.5}px`;
+				oImgP.style.left = `${vImgX + this.oImgPos[n].px_x - h * 0.5}px`;
 
-				if(this.oDiv) {
+				if (this.oDiv) {
 					this.oDiv.append(oImgP);
 				}
 			});

@@ -1,19 +1,19 @@
-import express from 'express';
-import { maps } from '../ts/maps';
+import express from "express";
+import { maps } from "../ts/maps";
 
 interface apiMapsDegData {
-	status: boolean
-	, name: string
+	status: boolean;
+	name: string;
 }
 
 export class apiMapsDeg {
-	private uri = '';
+	private uri = "";
 
 	/**
 	 * コンストラクター
 	 * @param uri API URI
 	 */
-	constructor(uri: string){
+	constructor(uri: string) {
 		this.uri = uri;
 	}
 
@@ -22,26 +22,24 @@ export class apiMapsDeg {
 	 * @param router express - Router
 	 */
 	public regist(router: express.Router): void {
-		router.get(this.uri + '/deg2name',
-			(req:express.Request, res:express.Response) => {
-				const data: apiMapsDegData = {
-					status: false
-					, name: ""
-				};
+		router.get(this.uri + "/deg2name", (req: express.Request, res: express.Response) => {
+			const data: apiMapsDegData = {
+				status: false,
+				name: "",
+			};
 
-				const oMaps: maps = new maps();
+			const oMaps: maps = new maps();
 
-				if (req.query.deg) {
-					const deg: number = +req.query.deg;
-					if (!Number.isNaN(deg)) {
-						data.status = true;
-						data.name = oMaps.deg2Name(deg);
-					}
+			if (req.query.deg) {
+				const deg: number = +req.query.deg;
+				if (!Number.isNaN(deg)) {
+					data.status = true;
+					data.name = oMaps.deg2Name(deg);
 				}
-
-				res.json(data);
-				res.end();
 			}
-		);
+
+			res.json(data);
+			res.end();
+		});
 	}
 }
