@@ -1,7 +1,7 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import { mongo } from './mongo';
-import { Collection } from 'mongodb'
+import { Collection } from 'mongodb';
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from '../ts/mapsDataPrefCapital';
 
 import { log } from './log';

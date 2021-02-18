@@ -1,6 +1,6 @@
 import express from 'express';
 import { mongo } from './mongo';
-import { Collection, MongoClient } from 'mongodb'
+import { Collection, MongoClient } from 'mongodb';
 
 import { log } from './log';
 const syslog: log = new log('maps.mongo');
@@ -290,7 +290,7 @@ export class mongoApi extends mongo {
 										, 'lat': 0
 										, 'lon': 0
 
-									}
+									};
 								}
 							}
 						);

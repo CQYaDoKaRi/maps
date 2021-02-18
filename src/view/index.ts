@@ -129,7 +129,7 @@ function page(oView: indexView) : void {
 				dd_lat.innerHTML = `${item.lat}`;
 				dd_lon.innerHTML = `${item.lon}`;
 				dd_distT.innerHTML = `${item.distT / 1000}`;
-				dd_distH.innerHTML = `${item.distH / 1000}`
+				dd_distH.innerHTML = `${item.distH / 1000}`;
 				dd_distS.innerHTML = `${item.distS / 1000}`;
 				dd_a.innerHTML = `${item.a}`;
 
@@ -351,7 +351,7 @@ function page(oView: indexView) : void {
 			oImg.src = vUrl;
 			oImg.onload = () => {
 				oappMapsGSI.Symbol(24, 24);
-			}
+			};
 
 			oDiv.append(oTable);
 			oDiv.append(oImg);
@@ -494,5 +494,5 @@ window.onload = () => {
 	 */
 	window.onhashchange = () => {
 		page(oView);
-	}
-}
+	};
+};
