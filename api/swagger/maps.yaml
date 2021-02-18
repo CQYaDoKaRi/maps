@@ -1,21 +1,21 @@
 openapi: 3.0.0
 info:
   title: maps
-  version: '1.0'
+  version: "1.0"
   contact:
     email: test@dev.com
   description: 地図API
 servers:
-  - url: 'http://localhost:8080'
+  - url: "http://localhost:8080"
 paths:
   /api/maps/deg2name:
     get:
-      summary: '方位角を12方位名に変換'
+      summary: "方位角を12方位名に変換"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -32,7 +32,7 @@ paths:
                 example:
                   value:
                     status: true
-                    name: 'E'
+                    name: "E"
       operationId: get-api-maps-deg2name
       description: 方位角を12方位名に変換
       parameters:
@@ -49,12 +49,12 @@ paths:
     parameters: []
   /api/maps/tky2jgdg:
     get:
-      summary: '日本測地系を世界測地系に変換（1次式）'
+      summary: "日本測地系を世界測地系に変換（1次式）"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -98,12 +98,12 @@ paths:
     parameters: []
   /api/maps/jgd2tkyg:
     get:
-      summary: '世界測地系を日本測地系に変換（1次式）'
+      summary: "世界測地系を日本測地系に変換（1次式）"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -147,12 +147,12 @@ paths:
     parameters: []
   /api/maps/distancet:
     get:
-      summary: '２地点間の距離（球面三角法）'
+      summary: "２地点間の距離（球面三角法）"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -208,12 +208,12 @@ paths:
     parameters: []
   /api/maps/distanceh:
     get:
-      summary: '２地点間の距離（ヒュベニ）'
+      summary: "２地点間の距離（ヒュベニ）"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -269,12 +269,12 @@ paths:
     parameters: []
   /api/maps/distances:
     get:
-      summary: '２地点間の距離（測地線航海算法）'
+      summary: "２地点間の距離（測地線航海算法）"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -330,12 +330,12 @@ paths:
     parameters: []
   /api/maps/distanceto:
     get:
-      summary: '角度・距離から緯度経度を取得'
+      summary: "角度・距離から緯度経度を取得"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -395,12 +395,12 @@ paths:
     parameters: []
   /api/maps/direction:
     get:
-      summary: '２地点間の角度'
+      summary: "２地点間の角度"
       tags:
         - maps
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -456,12 +456,12 @@ paths:
     parameters: []
   /api/maps/tile:
     get:
-      summary: '緯度経度・ズームレベルからタイル座標を取得'
+      summary: "緯度経度・ズームレベルからタイル座標を取得"
       tags:
         - mapsTile
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -525,12 +525,12 @@ paths:
     parameters: []
   /api/maps/tile2latlon:
     get:
-      summary: 'タイル座標から緯度経度を取得'
+      summary: "タイル座標から緯度経度を取得"
       tags:
         - mapsTile
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -568,7 +568,7 @@ paths:
             format: int32
             default: 6469
           in: query
-          name: 'y'
+          name: "y"
           required: true
           description: タイル座標Y
         - schema:
@@ -582,12 +582,12 @@ paths:
     parameters: []
   /api/maps/tilescale:
     get:
-      summary: 'タイル座標のズームレベルから縮尺を取得'
+      summary: "タイル座標のズームレベルから縮尺を取得"
       tags:
         - mapsTile
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -635,12 +635,12 @@ paths:
     parameters: []
   /api/maps/tile2z:
     get:
-      summary: 'タイル座標のズームレベルを変更した場合のタイル座標を取得'
+      summary: "タイル座標のズームレベルを変更した場合のタイル座標を取得"
       tags:
         - mapsTile
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -688,7 +688,7 @@ paths:
             format: int32
             default: 6469
           in: query
-          name: 'y'
+          name: "y"
           required: true
           description: タイル座標Y
         - schema:
@@ -710,11 +710,11 @@ paths:
     parameters: []
   /api/maps/tiledemurl/png:
     get:
-      summary: '標高タイルURLを取得(png)'
+      summary: "標高タイルURLを取得(png)"
       tags:
         - mapsTile
       responses:
-        '200':
+        "200":
           description: |-
             ズームレベル 9 以上の場合、  
             DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
@@ -757,20 +757,20 @@ paths:
                     status: true
                     urls:
                       - x: 29011
-                        'y': 12939
+                        "y": 12939
                         z: 15
-                        ext: 'png'
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png'
+                        ext: "png"
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png"
                       - x: 29011
-                        'y': 12939
+                        "y": 12939
                         z: 15
                         ext: png
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png'
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png"
                       - x: 14505
-                        'y': 6469
+                        "y": 6469
                         z: 14
-                        ext: 'png'
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png'
+                        ext: "png"
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png"
       operationId: get-api-maps-tiledemurl-png
       description: 標高タイルURLを取得(png)
       parameters:
@@ -787,7 +787,7 @@ paths:
             format: int32
             default: 12939
           in: query
-          name: 'y'
+          name: "y"
           required: true
           description: タイル座標Y
         - schema:
@@ -801,11 +801,11 @@ paths:
     parameters: []
   /api/maps/tiledemurl/txt:
     get:
-      summary: '標高タイルURLを取得(txt)'
+      summary: "標高タイルURLを取得(txt)"
       tags:
         - mapsTile
       responses:
-        '200':
+        "200":
           description: |-
             ズームレベル 9 以上の場合、  
             DEM5A、DEM5Bは、ズームレベル15 のタイル座標に変換  
@@ -848,20 +848,20 @@ paths:
                     status: true
                     urls:
                       - x: 29011
-                        'y': 12939
+                        "y": 12939
                         z: 15
-                        ext: 'txt'
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt'
+                        ext: "txt"
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt"
                       - x: 29011
-                        'y': 12939
+                        "y": 12939
                         z: 15
                         ext: txt
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt'
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt"
                       - x: 14505
-                        'y': 6469
+                        "y": 6469
                         z: 14
-                        ext: 'txt'
-                        url: 'https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt'
+                        ext: "txt"
+                        url: "https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt"
       operationId: get-api-maps-tiledemurl-txt
       description: 標高タイルURLを取得(png)
       parameters:
@@ -878,7 +878,7 @@ paths:
             format: int32
             default: 12939
           in: query
-          name: 'y'
+          name: "y"
           required: true
           description: タイル座標Y
         - schema:
@@ -892,12 +892,12 @@ paths:
     parameters: []
   /api/maps/mongo/prefcapital/near:
     get:
-      summary: '指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得'
+      summary: "指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得"
       tags:
         - mapsMongo
       responses:
-        '200':
-          description: '指定した緯度経度に近い順に返す'
+        "200":
+          description: "指定した緯度経度に近い順に返す"
           headers: {}
           content:
             application/json:
@@ -924,17 +924,17 @@ paths:
               examples:
                 example:
                   value:
-                    - pref: '東京都'
-                      addr: '東京都新宿区西新宿2-8-1'
+                    - pref: "東京都"
+                      addr: "東京都新宿区西新宿2-8-1"
                       lat: 35.689753
                       lon: 139.691731
                       distance: 0
-                    - pref : '埼玉県'
-                      addr: '埼玉県さいたま市浦和区高砂3-15-1'
+                    - pref: "埼玉県"
+                      addr: "埼玉県さいたま市浦和区高砂3-15-1"
                       lat: 35.857431
                       lon: 139.648901
                       distance: 19062.334307637168
-                    - pref: '神奈川県'
+                    - pref: "神奈川県"
                       addr: 神奈川県横浜市中区日本大通1
                       lat: 35.447495
                       lon: 139.6424
@@ -963,20 +963,20 @@ paths:
             format: int32
             default: 3
           in: query
-          name: 'n'
+          name: "n"
           required: true
           description: |-
             取得件数(0, 1 ～ 100)  
-            0 を指定した場合、最大件数（100件）  
+            0 を指定した場合、最大件数（100件）
     parameters: []
   /api/maps/mongo/postoffice/inpolygon:
     post:
-      summary: '指定したポリゴンに含まれる郵便局を取得'
+      summary: "指定したポリゴンに含まれる郵便局を取得"
       tags:
         - mapsMongo
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -997,11 +997,11 @@ paths:
               examples:
                 example:
                   value:
-                    - name: '東京中央郵便局'
+                    - name: "東京中央郵便局"
                       lat: 35.679849
                       lon: 139.764766
-        '400':
-          description: ''
+        "400":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -1014,22 +1014,22 @@ paths:
               examples:
                 example:
                   value:
-                    message: 'param[coordinates] error'
+                    message: "param[coordinates] error"
       operationId: get-api-maps-mongo-postoffice-inpolygon
       description: 指定したポリゴンに含まれる郵便局を取得
       parameters:
         - schema:
             type: string
-            default: 'Polygon'
+            default: "Polygon"
           in: query
           name: gtype
           required: true
           description: |-
             GeoJSON - Polygon Type  
-            [Polygon, MultiPolygon]  
+            [Polygon, MultiPolygon]
         - schema:
             type: string
-            default: '[[[139.69099,35.707074],[139.69099,35.656599],[139.790211,35.656599],[139.790211,35.707074],[139.69099,35.707074]]]'
+            default: "[[[139.69099,35.707074],[139.69099,35.656599],[139.790211,35.656599],[139.790211,35.707074],[139.69099,35.707074]]]"
           in: query
           name: gcoordinates
           required: true
@@ -1039,20 +1039,20 @@ paths:
             format: int32
             default: 3
           in: query
-          name: 'n'
+          name: "n"
           required: true
           description: |-
             取得件数(0, 1 ～ 10000)  
-            0 を指定した場合、最大件数（10000件）  
+            0 を指定した場合、最大件数（10000件）
     parameters: []
   /api/maps/mongo/roadsitestation/inpolygon:
     post:
-      summary: '指定したポリゴンに含まれる道の駅を取得'
+      summary: "指定したポリゴンに含まれる道の駅を取得"
       tags:
         - mapsMongo
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -1073,11 +1073,11 @@ paths:
               examples:
                 example:
                   value:
-                    - name: '八王子滝山'
+                    - name: "八王子滝山"
                       lat: 35.6866238
                       lon: 139.341474899999014
-        '400':
-          description: ''
+        "400":
+          description: ""
           headers: {}
           content:
             application/json:
@@ -1090,22 +1090,22 @@ paths:
               examples:
                 example:
                   value:
-                    message: 'param[coordinates] error'
+                    message: "param[coordinates] error"
       operationId: get-api-maps-mongo-roadsitestation-inpolygon
       description: 指定したポリゴンに含まれる郵便局を取得
       parameters:
         - schema:
             type: string
-            default: 'Polygon'
+            default: "Polygon"
           in: query
           name: gtype
           required: true
           description: |-
             GeoJSON - Polygon Type  
-            [Polygon, MultiPolygon]  
+            [Polygon, MultiPolygon]
         - schema:
             type: string
-            default: '[[[138.411255,36.031332],[138.411255,34.980502],[139.674683,34.980502],[139.674683,36.031332],[138.411255,36.031332]]]'
+            default: "[[[138.411255,36.031332],[138.411255,34.980502],[139.674683,34.980502],[139.674683,36.031332],[138.411255,36.031332]]]"
           in: query
           name: gcoordinates
           required: true
@@ -1115,19 +1115,19 @@ paths:
             format: int32
             default: 3
           in: query
-          name: 'n'
+          name: "n"
           required: true
           description: |-
             取得件数(0, 1 ～ 10000)  
-            0 を指定した場合、最大件数（10000件）  
+            0 を指定した場合、最大件数（10000件）
     parameters: []
 tags:
   - name: maps
-    description: ''
+    description: ""
   - name: mapsTile
-    description: ''
+    description: ""
   - name: mapsMongo
-    description: 'MongoDB のデータを検索'
+    description: "MongoDB のデータを検索"
 components:
   schemas: {}
   securitySchemes: {}
