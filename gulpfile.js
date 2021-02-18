@@ -3,6 +3,9 @@ const path = require("path");
 const del = require("del");
 const concat = require("gulp-concat");
 
+// eslint
+const eslint = require("gulp-eslint");
+
 // ts
 const ts = require("gulp-typescript");
 const tsProject = ts.createProject("tsconfig.json");
@@ -32,6 +35,13 @@ oApp.include();
 const env = {
 	root: "./"
 	, rootPublic: "./public"
+	, lint : {
+		src: [
+			"./src*/**/*.ts"
+			, "./src*/**/*.tsx"
+			, "./src*/**/*.js"
+		]
+	}
  	, babel : {
 		path: "./dist/public.babel"
 		, src: [
@@ -65,6 +75,21 @@ const env = {
 		, srcLib: oApp.getCssLib()
 		, minIndex: "index.min.css"
 	}
+}
+
+// eslint
+const lint = () => {
+	return gulp
+		.src(env.lint.src)
+		.pipe(eslint(
+			{
+				useEslintrc: true
+			}
+			)
+		)
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError())
+	;
 }
 
 // typescript - comple
@@ -194,7 +219,8 @@ exports.scss = task_scss;
 const task_build = gulp.series(
 	gulp.parallel(
 		gulp.series(
-			gulp.parallel(tsc, tscNode)
+			lint
+			, gulp.parallel(tsc, tscNode)
 			, jsBabel
 			, gulp.parallel(jsWebpack, jsWebpackDev)
 			, jsAppMinify
@@ -206,6 +232,12 @@ exports.build = task_build;
 
 // task - watch - build
 const watch_build = () => {
+	// lint for node
+	gulp.watch("./src")
+	.on("change"
+		, gulp.series(lint)
+	);
+
 	// tsc + babel
 	// +
 	// webpack, js-app
