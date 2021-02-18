@@ -22,5 +22,7 @@ module.exports = {
 		, "plugin:@typescript-eslint/recommended-requiring-type-checking"
 	]
 	, rules: {
+		"semi": "error"
+		, "no-var": "error"
 	}
 };
