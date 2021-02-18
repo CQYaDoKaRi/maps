@@ -1,18 +1,10 @@
 {
-	"extends": "./tsconfig.json"
-	, "compilerOptions": {
-		"target": "ES2015"
-		  , "module": "commonjs"
-		  , "outDir": "./dist/node"
-	}
-	, "include":
-	[
-		"./src/node/*.ts"
-		, "./src/ts/*.ts"
-	]
-	, "exclude":
-	[
-		"./src/node/*.test.ts"
-		, "./src/ts/*.test.ts"
-	]
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"target": "ES2015",
+		"module": "commonjs",
+		"outDir": "./dist/node"
+	},
+	"include": ["./src/node/*.ts", "./src/ts/*.ts"],
+	"exclude": ["./src/node/*.test.ts", "./src/ts/*.test.ts"]
 }
