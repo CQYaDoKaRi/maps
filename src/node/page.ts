@@ -18,7 +18,7 @@ export class page {
 	public regist(router: express.Router): void {
 		router.get(this.uri,
 			(req:express.Request, res:express.Response) => {
-				let html = [];
+				const html = [];
 
 				html.push('<!DOCTYPE html>');
 				html.push('<html>');

@@ -4,7 +4,7 @@ import { maps } from '../ts/maps';
 interface apiMapsDegData {
 	status: boolean
 	, name: string
-};
+}
 
 export class apiMapsDeg {
 	private uri = '';
@@ -24,7 +24,7 @@ export class apiMapsDeg {
 	public regist(router: express.Router): void {
 		router.get(this.uri + '/deg2name',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsDegData = {
+				const data: apiMapsDegData = {
 					status: false
 					, name: ""
 				};

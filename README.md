@@ -9,6 +9,7 @@
 - Node.js(ts-node, ts-node-dev) + Express.js
 - docker
 - gulp + tsc + babel + webpack
+- eslint
 ## 言語
 - TypeScript + React
 - JavaScript(ES2015)

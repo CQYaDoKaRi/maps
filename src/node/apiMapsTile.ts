@@ -5,7 +5,7 @@ interface apiMapsLatLonData {
 	status: boolean
 	, lat: number
 	, lon: number
-};
+}
 
 interface apiMapsTileData {
 	status: boolean
@@ -14,14 +14,14 @@ interface apiMapsTileData {
 	, z: number
 	, px_x: number
 	, px_y: number
-};
+}
 
 interface apiMapsTileUrlData {
 	status: boolean
 	, x: number
 	, y: number
 	, z: number
-};
+}
 
 interface apiMapsTileUrlInfoData {
 	x: number
@@ -29,17 +29,17 @@ interface apiMapsTileUrlInfoData {
 	, z: number
 	, ext: string
 	, url: string
-};
+}
 
 interface apiMapsTileUrlsData {
 	status: boolean
 	, urls: apiMapsTileUrlInfoData[]
-};
+}
 
 interface apiMapsTileScale {
 	status: boolean
 	, scale: number
-};
+}
 
 export class apiMapsTile {
 	private uri = '';
@@ -59,7 +59,7 @@ export class apiMapsTile {
 	 * @returns 結果
 	 */
 	private tileDemUrl(type: string, req:express.Request): apiMapsTileUrlsData{
-		let data: apiMapsTileUrlsData = {
+		const data: apiMapsTileUrlsData = {
 			status: false
 			, urls: []
 		};
@@ -107,7 +107,7 @@ export class apiMapsTile {
 		// 緯度経度・ズームレベルからタイル座標を取得
 		router.get(this.uri + '/tile',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsTileData = {
+				const data: apiMapsTileData = {
 					status: false
 					, x: 0
 					, y: 0
@@ -141,7 +141,7 @@ export class apiMapsTile {
 		// タイル座標から緯度経度を取得
 		router.get(this.uri + '/tile2latlon',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsLatLonData = {
+				const data: apiMapsLatLonData = {
 					status: false
 					, lat: 0
 					, lon: 0
@@ -169,7 +169,7 @@ export class apiMapsTile {
 		// タイル座標のズームレベルから縮尺を取得
 		router.get(this.uri + '/tilescale',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsTileScale = {
+				const data: apiMapsTileScale = {
 					status: false
 					, scale: 0
 				};
@@ -195,7 +195,7 @@ export class apiMapsTile {
 		// タイル座標のズームレベルを変更した場合のタイル座標を取得
 		router.get(this.uri + '/tile2z',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsTileUrlData = {
+				const data: apiMapsTileUrlData = {
 					status: false
 					, x: 0
 					, y: 0

@@ -4,18 +4,18 @@ import { maps, mapsLatLon } from '../ts/maps';
 interface apiMapsDistanceData {
 	status: boolean
 	, distance: number
-};
+}
 
 interface apiMapsDirectionData {
 	status: boolean
 	, a: number
-};
+}
 
 interface apiMapsDistanceToData {
 	status: boolean
 	, lat: number
 	, lon: number
-};
+}
 
 export class apiMapsDistance {
 	private uri = '';
@@ -35,7 +35,7 @@ export class apiMapsDistance {
 	 * @returns 結果
 	 */
 	private distance(type: string, req:express.Request): apiMapsDistanceData{
-		let data: apiMapsDistanceData = {
+		const data: apiMapsDistanceData = {
 			status: false
 			, distance: 0
 		};
@@ -77,7 +77,7 @@ export class apiMapsDistance {
 	 * @returns 結果
 	 */
 	private distanceTo(req:express.Request): apiMapsDistanceToData{
-		let data: apiMapsDistanceToData = {
+		const data: apiMapsDistanceToData = {
 			status: false
 			, lat: 0
 			, lon: 0
@@ -107,7 +107,7 @@ export class apiMapsDistance {
 	 * @returns 結果
 	 */
 	private direction(req:express.Request): apiMapsDirectionData{
-		let data: apiMapsDirectionData = {
+		const data: apiMapsDirectionData = {
 			status: false
 			, a: 0
 		};

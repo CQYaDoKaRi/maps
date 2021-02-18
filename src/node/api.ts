@@ -19,7 +19,8 @@ export class api {
 	 */
 	public regist(app: express.Express): void {
 		// maps - SwaggerUI
-		const swaggerDocument = yamljs.load('./api/swagger/maps.yaml');
-		app.use(this.uri + '/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const swaggerDocument: swaggerUi.JsonObject = yamljs.load('./api/swagger/maps.yaml');
+		app.use(this.uri + '/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 	}
 }

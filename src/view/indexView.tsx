@@ -37,7 +37,7 @@ export class indexView {
 	 * @returns 処理ステータス
 	 */
 	public status(key: string, tkey: string): boolean{
-		let ret: boolean = true;
+		let ret = true;
 		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
 		if (item && item.key === tkey) {
 			ret = this.init[item.key];
@@ -69,7 +69,7 @@ export class indexView {
 	 * 描画 - メニュー
 	 * @param container Div
 	 */
-	public renderMenu(container: HTMLElement | null){
+	public renderMenu(container: HTMLElement | null): void{
 		if (container) {
 			ReactDOM.render(
 				<IndexViewMenu titles={this.title} />
@@ -82,7 +82,7 @@ export class indexView {
 	 * 描画 - コンテンツ
 	 * @param container Div
 	 */
-	public renderContents(container: HTMLElement | null){
+	public renderContents(container: HTMLElement | null): void{
 		if (container) {
 			ReactDOM.render(
 				<IndexViewContents />
@@ -92,9 +92,12 @@ export class indexView {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.indexView = indexView;
 }

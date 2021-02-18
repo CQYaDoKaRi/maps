@@ -16,7 +16,7 @@ function page(oView: indexView) : void {
 	const oappMapsGSI = new appMapsGSI(oMaps);
 
 	const vHash: string = window.location.hash;
-	let vHashDiv: string = "";
+	let vHashDiv = "";
 	if (vHash.length > 0) {
 		vHashDiv = vHash.substring(1);
 	}
@@ -24,14 +24,15 @@ function page(oView: indexView) : void {
 
 	/*==============================================================================================*/
 	// 地図
-	let _MapLat: number = 35.681236;
-	let _MapLon: number = 139.767125;
-	let _MapZ: number = 5;
-	let _MapOptions: { [key: string]: any } = {};
-	_MapOptions.w = 100;
-	_MapOptions.wUnit = "%";
-	_MapOptions.h = 600;
-	_MapOptions.hUnit = "px";
+	let _MapLat = 35.681236;
+	let _MapLon = 139.767125;
+	let _MapZ = 5;
+	const _MapOptions = {
+		w: 100
+		, wUnit: "%"
+		, h: 600
+		, hUnit: "px"
+	};
 
 	/*==============================================================================================*/
 	if (!oView.status("Distance", vHashDiv)) {
@@ -43,7 +44,7 @@ function page(oView: indexView) : void {
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
-		const base:number = 12;
+		const base = 12;
 		const item_base = dmapsDataPrefCapital[base];
 		const oDiv: HTMLElement | null = document.getElementById("appDistance");
 		oAppMaps = new appMaps("appDistanceMap", _MapLat, _MapLon, _MapZ, _MapOptions);
@@ -89,12 +90,13 @@ function page(oView: indexView) : void {
 
 		oDiv.appendChild(dl);
 
-		let options: { [key: string]: any } = {};
-		options.color = "red";
-		options.popup = item_base.pref;
+		let options = {
+			color: "red"
+			, popup :item_base.pref
+		};
 		oAppMaps.point(item_base.lat, item_base.lon, options);
 
-		dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number, dmapsDataPrefCapital: mapsDataPrefCapitalItem[]) => {
+		dmapsDataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number) => {
 			if (!oDiv || !oAppMaps) {
 				return;
 			}
@@ -120,16 +122,16 @@ function page(oView: indexView) : void {
 				item.c_lat = c.lat;
 				item.c_lon = c.lon;
 
-				dd_c_lat.innerHTML = "" + item.c_lat;
-				dd_c_lon.innerHTML = "" + item.c_lon;
+				dd_c_lat.innerHTML = `${item.c_lat}`;
+				dd_c_lon.innerHTML = `${item.c_lon}`;
 
 				dt.innerHTML = item.pref;
-				dd_lat.innerHTML = "" + item.lat;
-				dd_lon.innerHTML = "" + item.lon;
-				dd_distT.innerHTML = "" + item.distT / 1000;
-				dd_distH.innerHTML = "" + item.distH / 1000;
-				dd_distS.innerHTML = "" + item.distS / 1000;
-				dd_a.innerHTML = "" + item.a;
+				dd_lat.innerHTML = `${item.lat}`;
+				dd_lon.innerHTML = `${item.lon}`;
+				dd_distT.innerHTML = `${item.distT / 1000}`;
+				dd_distH.innerHTML = `${item.distH / 1000}`
+				dd_distS.innerHTML = `${item.distS / 1000}`;
+				dd_a.innerHTML = `${item.a}`;
 
 				dl.appendChild(dt);
 				dl.appendChild(dd_lat);
@@ -144,30 +146,33 @@ function page(oView: indexView) : void {
 				oDiv.appendChild(dl);
 
 
-				options = {};
-				options.color = "blue";
-				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>緯度：" + item.lat + "</li><li>経度：" + item.lon + "</li></ol>";
+				options = {
+					color: "blue"
+					, popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>緯度：${item.lat}</li><li>経度：${item.lon}</li></ol>`
+				};
 				oAppMaps.point(item.lat, item.lon, options);
 
-				options = {};
-				options.color = "green";
-				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item.pref + "</li><li>" + item_base.pref + "から距離[" + item.distH + "m],方角[" + item.a + "]で求めた地点" + "</li></ol>";
+				options = {
+					color: "green"
+					, popup: `<ol style="list-style-type:none;"><li>${item.pref}</li><li>${item_base.pref}から距離[${item.distH}m],方角[${item.a}]で求めた地点</li></ol>`
+				};
 				oAppMaps.point(item.c_lat, item.c_lon, options);
 
 				const atob: number[][] = [];
-				atob.push(new Array(item_base.lat, item_base.lon));
-				atob.push(new Array(item.lat, item.lon));
+				atob.push([item_base.lat, item_base.lon]);
+				atob.push([item.lat, item.lon]);
 
-				options = {};
-				options.color = "#4169e1";
-				options.popup = "<ol style=\"list-style-type: none;\"><li>" + item_base.pref + "→" + item.pref + "</li><li>距離：" + item.distH.toLocaleString() + "</li><li>方角：" + item.a + "</li></ol>";
+				options = {
+					color: "#4169e1"
+					, popup: `<ol style="list-style-type:none;"><li>${item_base.pref}→${item.pref}</li><li>距離：${item.distH.toLocaleString()}</li><li>方角：${item.a}</li></ol>`
+				};
 				oAppMaps.arc(atob, options);
 			}
 		});
 	}
 	/*==============================================================================================*/
 	if (!oView.status("Scale", vHashDiv)) {
-		const vDPI: number = 96;
+		const vDPI = 96;
 
 		_MapLat = 35.65809922;
 		_MapLon = 139.741357472;
@@ -184,7 +189,7 @@ function page(oView: indexView) : void {
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appScaleTitleSub");
 		if (oDivTitleSub) {
-			oDivTitleSub.innerHTML = "日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ " + _MapLat + " ]、解像度 [ " + vDPI + " ] dpi で計算";
+			oDivTitleSub.innerHTML = `日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ ${_MapLat} ]、解像度 [ ${vDPI} ] dpi で計算`;
 		}
 
 		const oTable: HTMLElement = document.createElement("table");
@@ -204,7 +209,7 @@ function page(oView: indexView) : void {
 			oTableTr = document.createElement("tr");
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "" + i;
+			oTableTd.innerHTML = `${i}`;
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
@@ -223,7 +228,7 @@ function page(oView: indexView) : void {
 		_MapLat = 35.360771305;
 		_MapLon = 138.7273035;
 
-		let vUrl: string = "";
+		let vUrl = "";
 
 		let oDiv: HTMLElement | null = document.getElementById("Tile");
 		if (oDiv) {
@@ -237,7 +242,7 @@ function page(oView: indexView) : void {
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appTileTitleSub");
 		if (oDivTitleSub) {
-			oDivTitleSub.innerHTML = "富士山山頂の緯度[ " + _MapLat + " ]、緯度 [ " + _MapLon + " ] からタイルとタイル情報を計算";
+			oDivTitleSub.innerHTML = `富士山山頂の緯度[ ${_MapLat} ]、緯度 [ ${_MapLon} ] からタイルとタイル情報を計算`;
 		}
 
 		oDiv = document.getElementById("appTile");
@@ -250,7 +255,7 @@ function page(oView: indexView) : void {
 		for (let i = _MapZ; i < 19; i++) {
 			const vTile: mapsTile = oMaps.tile(_MapLat, _MapLon, i);
 			let vTileLatLon: mapsLatLon | null = null;
-			vUrl = "https://cyberjapandata.gsi.go.jp/xyz/std/" + vTile.z + "/" + vTile.x + "/" + vTile.y + ".png"
+			vUrl = `https://cyberjapandata.gsi.go.jp/xyz/std/${vTile.z}/${vTile.x}/${vTile.y}.png`;
 
 			const oTable: HTMLElement = document.createElement("table");
 			oTable.style.width = "890px";
@@ -264,7 +269,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "" + vTile.z;
+			oTableTd.innerHTML = `${vTile.z}`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -278,7 +283,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "" + vTile.x + ", " + vTile.y;
+			oTableTd.innerHTML = `${vTile.x}, ${vTile.y}`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -292,7 +297,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "" + vTile.px_x + ", " + vTile.px_y;
+			oTableTd.innerHTML = `${vTile.px_x}, ${vTile.px_y}`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -308,7 +313,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "" + vTileLatLon.lat + ", " + vTileLatLon.lon;
+			oTableTd.innerHTML = `${vTileLatLon.lat}, ${vTileLatLon.lon}`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -321,7 +326,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Txt\"></div>";
+			oTableTd.innerHTML = `<div id="appTileDem${vTile.z}Txt"></div>`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -335,7 +340,7 @@ function page(oView: indexView) : void {
 			oTableTr.append(oTableTd);
 
 			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "<div id=\"appTileDem" + vTile.z + "Png\"></div>";
+			oTableTd.innerHTML = `<div id="appTileDem${vTile.z}Png"></div>`;
 			oTableTr.append(oTableTd);
 
 			oTable.append(oTableTr);
@@ -344,7 +349,7 @@ function page(oView: indexView) : void {
 			oappMapsGSI.setTile(oImg, vTile);
 
 			oImg.src = vUrl;
-			oImg.onload = (e) => {
+			oImg.onload = () => {
 				oappMapsGSI.Symbol(24, 24);
 			}
 
@@ -354,15 +359,15 @@ function page(oView: indexView) : void {
 			if (oMaps) {
 				const oMapTileDem : Promise<mapsTileDem> | null = oMaps.tileDemTxt(vTile);
 				if(oMapTileDem){
-					oMapTileDem.then((data: mapsTileDem) => {
+					void oMapTileDem.then((data: mapsTileDem) => {
 						if (!data.tile) {
 							return;
 						}
-						const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Txt");
+						const o: HTMLElement | null = document.getElementById(`appTileDem${data.tile.z}Txt`);
 						if (!o) {
 							return;
 						}
-						if (data.e === NaN) {
+						if (isNaN(data.e)) {
 							o.innerHTML = "標高データなし";
 						}
 						else {
@@ -374,15 +379,15 @@ function page(oView: indexView) : void {
 
 				const oMapTileDemPng : Promise<mapsTileDem> | null = oMaps.tileDemPng(vTile);
 				if (oMapTileDemPng) {
-					oMapTileDemPng.then((data: mapsTileDem) => {
+					void oMapTileDemPng.then((data: mapsTileDem) => {
 						if (!data.tile) {
 							return;
 						}
-						const o: HTMLElement | null = document.getElementById("appTileDem" + data.tile.z + "Png");
+						const o: HTMLElement | null = document.getElementById(`appTileDem${data.tile.z}Png`);
 						if (!o) {
 							return;
 						}
-						if (data.e === NaN) {
+						if (isNaN(data.e)) {
 							o.innerHTML = "標高データなし";
 						}
 						else {
@@ -410,7 +415,7 @@ function page(oView: indexView) : void {
 			oDiv.appendChild(oDiv20190519_Title);
 			oDiv.appendChild(oDiv20190519);
 
-			oMaps.gpx("./data/20190519.gpx").then((data: mapsDataGpx) => {
+			void oMaps.gpx("./data/20190519.gpx").then((data: mapsDataGpx) => {
 				oDiv20190519_Title.innerHTML = data.getName();
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190519, data);
@@ -425,7 +430,7 @@ function page(oView: indexView) : void {
 			oDiv.appendChild(oDiv20190428_Title);
 			oDiv.appendChild(oDiv20190428);
 
-			oMaps.gpx("./data/20190428.gpx").then((data: mapsDataGpx) => {
+			void oMaps.gpx("./data/20190428.gpx").then((data: mapsDataGpx) => {
 				oDiv20190428_Title.innerHTML = data.getName();
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190428, data);
@@ -441,7 +446,7 @@ function page(oView: indexView) : void {
 			oDiv.appendChild(oDiv20180811_Title);
 			oDiv.appendChild(oDiv20180811);
 
-			oMaps.gpx("./data/20180811.gpx").then((data: mapsDataGpx) => {
+			void oMaps.gpx("./data/20180811.gpx").then((data: mapsDataGpx) => {
 				oDiv20180811_Title.innerHTML = data.getName();
 
 				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20180811, data);

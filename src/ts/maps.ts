@@ -3,7 +3,7 @@
  */
 enum mapsTypeDistance {
 	// 球面三角法
-	  SphericalTrigonometry
+	SphericalTrigonometry
 	// ヒュベニ
 	, Hubeny
 	// 測地線航海算法
@@ -14,7 +14,7 @@ enum mapsTypeDistance {
  * 地図：種別：タイル
  */
 enum mapsTypeTile {
-	  TXT
+	TXT
 	, PNG
 }
 
@@ -25,12 +25,12 @@ export class mapsLatLon {
 	/**
 	 * 緯度
 	 */
-	public lat: number = 0.0;
+	public lat = 0.0;
 
 	/**
 	 * 経度
 	 */
-	public lon: number = 0.0;
+	public lon = 0.0;
 }
 
 /**
@@ -40,27 +40,27 @@ export class mapsTile {
 	/**
 	 * タイル座標X
 	 */
-	public x: number = 0;
+	public x = 0;
 
 	/**
 	 * タイル座標Y
 	 */
-	public y: number = 0;
+	public y = 0;
 
 	/**
 	 * タイル座標Z
 	 */
-	public z: number = 0;
+	public z = 0;
 
 	/**
 	 * タイル内座標X[pixel]
 	 */
-	public px_x: number = 0;
+	public px_x = 0;
 
 	/**
 	 * タイル内座標Y[pixel]
 	 */
-	public px_y: number = 0;
+	public px_y = 0;
 }
 
 /**
@@ -75,17 +75,17 @@ export class mapsTileUrl {
 	/**
 	 * タイルURL
 	 */
-	public url: string = "";
+	public url = "";
 
 	/**
 	 * タイル種別
 	 */
-	public type: string = "";
+	public type = "";
 
 	/**
 	 * タイル拡張子
 	 */
-	public ext: string = "";
+	public ext = "";
 
 	/**
 	 * 設定
@@ -128,7 +128,7 @@ export class mapsTileUrl {
 		}
 		this.type = type;
 		this.ext = ext;
-		this.url = url + this.type + "/" + this.tile.z + "/" + this.tile.x + "/" + this.tile.y + "." + this.ext;
+		this.url = `${url}${this.type}/${this.tile.z}/${this.tile.x}/${this.tile.y}.${this.ext}`;
 	}
 }
 
@@ -144,7 +144,7 @@ export class mapsTileDem {
 	/**
 	 * タイルURL
 	 */
-	public url: string = "";
+	public url = "";
 
 	/**
 	 * 標高データ
@@ -164,7 +164,7 @@ export class mapsTileDem {
 	/**
 	 * 標高（m）
 	 */
-	public e: number = 0;
+	public e = 0;
 
 	/**
 	 * constructor
@@ -173,15 +173,18 @@ export class mapsTileDem {
 	 * @param t タイル種別
 	 * @param e 標高(m)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 	constructor(tile: mapsTile, t: mapsTypeTile, url: string, data: any, e: number) {
 		this.tile = tile;
 		this.t = t;
 		this.url = url;
 		if (t == mapsTypeTile.TXT) {
 			this.dem = [];
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			this.demTxt = data;
 		}
 		else if (t == mapsTypeTile.PNG) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			this.dem = data;
 			this.demTxt = [];
 		}
@@ -197,8 +200,11 @@ export class mapsTileDem {
 		let ret: number[] = [];
 		if (this.t == mapsTypeTile.TXT) {
 			if (this.dem.length === 0) {
-				this.dem = Array(this.demTxt.length);
-				this.demTxt.map((dem: string, n: number, demTxt: string[]) => {
+				this.dem = [];
+				for (let i = 0; i < this.demTxt.length; i++) {
+					this.dem.push(0);
+				}
+				this.demTxt.map((dem: string, n: number) => {
 					this.dem[n] = NaN;
 					if (/^[+,-]?([1-9]\d*|0)(\.\d+)?$/.test(dem)) {
 						this.dem[n] = parseFloat(dem);
@@ -214,13 +220,32 @@ export class mapsTileDem {
 }
 
 /**
+ * 地図：データ：Garmin GPSログ(GPX) - DataNode
+ */
+interface mapsDataGpxNode extends ChildNode {
+	attributes ?: mapsDataGpxNodeAttributes
+}
+
+/**
+ * 地図：データ：Garmin GPSログ(GPX) - DataNode - Attributes
+ */
+interface mapsDataGpxNodeAttributes {
+	lat?: {
+		value?: string
+	}
+	lon?: {
+		value?: string
+	}
+}
+
+/**
  * 地図：データ：Garmin GPSログ(GPX)
  */
 export class mapsDataGpx {
 	/**
 	 * ファイル名
 	 */
-	private src: string = "";
+	private src = "";
 
 	/**
 	 * XML
@@ -231,7 +256,7 @@ export class mapsDataGpx {
 	/**
 	 * タイトル
 	 */
-	private name: string = "";
+	private name: string | null = "";
 
 	/**
 	 * ログ
@@ -241,27 +266,27 @@ export class mapsDataGpx {
 	/**
 	 * ログ：時間
 	 */
-	private logsTMS: number = 0;
+	private logsTMS = 0;
 
 	/**
 	 * ログ：範囲：緯度（南）
 	 */
-	private logsBoundsS: number = 90.0;
+	private logsBoundsS = 90.0;
 
 	/**
 	 * ログ：範囲：緯度（北）
 	 */
-	private logsBoundsN: number = -90.0;
+	private logsBoundsN = -90.0;
 
 	/**
 	 * ログ：範囲：経度（東）
 	 */
-	private logsBoundsE: number = -180.0;
+	private logsBoundsE = -180.0;
 
 	/**
 	 * ログ：範囲：経度（西）
 	 */
-	private logsBoundsW: number = 180.0;
+	private logsBoundsW = 180.0;
 
 	/**
 	 * constructor
@@ -276,7 +301,7 @@ export class mapsDataGpx {
 
 			this.read(this.xml);
 
-			this.logs.map((log: mapsDataGpxLog, n: number, logs: mapsDataGpxLog[]) => {
+			this.logs.map((log: mapsDataGpxLog) => {
 				if (this.logsBoundsS > log.lat) {
 					this.logsBoundsS = log.lat;
 				}
@@ -297,40 +322,47 @@ export class mapsDataGpx {
 	 * 読み込み
 	 * @param node データ
 	 */
-	private read(node: any) {
+	private read(node: XMLDocument | ChildNode) {
 		if (this.xml !== null) {
-			let n: number = 0;
+			let n = 0;
 			if (node.nodeName === "name") {
 				this.name = node.textContent;
 			}
 			else if (node.nodeName === "trkseg") {
 				const oMap = new maps();
-				let distance: number = 0;
+				let distance = 0;
 
 				for (n = 0; n < node.childNodes.length; n++) {
-					const nodeLogs: HTMLElement = node.childNodes[n];
+					const nodeLogs: mapsDataGpxNode = node.childNodes[n];
 					if (nodeLogs.nodeName === "trkpt") {
-						const nodeLogsTrkpt: any = nodeLogs.attributes;
+						if (!nodeLogs.attributes) {
+							continue;
+						}
+						const nodeLogsTrkpt: mapsDataGpxNodeAttributes = nodeLogs.attributes;
 						if (typeof nodeLogsTrkpt["lat"] === "object" && typeof nodeLogsTrkpt["lon"] === "object") {
-							const trkpt = new mapsDataGpxLog(parseFloat(nodeLogsTrkpt.lat.value), parseFloat(nodeLogsTrkpt.lon.value));
+							const trkpt = new mapsDataGpxLog(
+								nodeLogsTrkpt.lat.value ? parseFloat(nodeLogsTrkpt.lat.value) : 0
+								, nodeLogsTrkpt.lon.value ? parseFloat(nodeLogsTrkpt.lon.value) : 0
+							);
 
 							for (let nn = 0; nn < nodeLogs.childNodes.length; nn++) {
 								const nodeLogsInfo: ChildNode = nodeLogs.childNodes[nn];
 								if (nodeLogsInfo.childNodes.length > 0) {
-									const nodeLogsInfoData: any = nodeLogsInfo.childNodes[0];
+									const nodeLogsInfoData: ChildNode = nodeLogsInfo.childNodes[0];
 									if (nodeLogsInfo.nodeName === "time") {
-										trkpt.time = new Date(nodeLogsInfoData.nodeValue);
-
-										const time_year: string = "" + trkpt.time.getFullYear();
-										const time_month: string = ("0" + trkpt.time.getMonth()).slice(-2);
-										const time_day: string = ("0" + trkpt.time.getDate()).slice(-2);
-										const time_hour: string = ("0" + trkpt.time.getHours()).slice(-2);
-										const time_minute: string = ("0" + trkpt.time.getMinutes()).slice(-2);
-										const time_second: string = ("0" + trkpt.time.getSeconds()).slice(-2);
-										trkpt.timeFormatJP = time_year + "年" + time_month + "月" + time_day + "日 " + time_hour + "時" + time_minute + "分" + time_second + "秒";
+										trkpt.time = nodeLogsInfoData.nodeValue ? new Date(nodeLogsInfoData.nodeValue) : null;
+										if (trkpt.time) {
+											const time_year = `${trkpt.time.getFullYear()}`;
+											const time_month: string = `0${trkpt.time.getMonth()}`.slice(-2);
+											const time_day: string = `0${trkpt.time.getDate()}`.slice(-2);
+											const time_hour: string = `0${trkpt.time.getHours()}`.slice(-2);
+											const time_minute: string = `0${trkpt.time.getMinutes()}`.slice(-2);
+											const time_second: string = `0${trkpt.time.getSeconds()}`.slice(-2);
+											trkpt.timeFormatJP = `${time_year}年${time_month}月${time_day}日 ${time_hour}時${time_minute}分${time_second}秒`;
+										}
 									}
 									else if (nodeLogsInfo.nodeName === "ele") {
-										trkpt.e = parseFloat(nodeLogsInfoData.nodeValue);
+										trkpt.e = nodeLogsInfoData.nodeValue ? parseFloat(nodeLogsInfoData.nodeValue) : 0;
 									}
 								}
 							}
@@ -396,7 +428,7 @@ export class mapsDataGpx {
 	 * 名前
 	 */
 	public getName(): string {
-		return this.name;
+		return this.name ? this.name : "";
 	}
 
 	/**
@@ -431,47 +463,47 @@ export class mapsDataGpxLog {
 	/**
 	 * 緯度
 	 */
-	public lat: number = 0.0;
+	public lat = 0.0;
 
 	/**
 	 * 経度
 	 */
-	public lon: number = 0.0;
+	public lon = 0.0;
 
 	/**
 	 * 標高(m)
 	 */
-	public e: number = 0;
+	public e = 0;
 
 	/**
 	 * 距離(m)
 	 */
-	public distance: number = 0;
+	public distance = 0;
 
 	/**
 	 * 距離(m, km)（表示用）
 	 */
-	public distanceText: string = "";
+	public distanceText = "";
 
 	/**
 	 * 角度
 	 */
-	public direction: number = 0;
+	public direction = 0;
 
 	/**
 	 * 方位
 	 */
-	public directionName: string = "";
+	public directionName = "";
 
 	/**
 	 * 勾配
 	 */
-	public incline: number = 0;
+	public incline = 0;
 
 	/**
 	 * 速度（時速）
 	 */
-	public speed: number = 0;
+	public speed = 0;
 
 	/**
 	 * constructor
@@ -560,7 +592,7 @@ export class maps {
 	// 楕円体タイプ
 	// ""   : GSR80
 	// "ja" : Bessel（日本測地系）
-	private EARTH_LOCALE: string = "";
+	private EARTH_LOCALE = "";
 
 	/**
 	 * タイル
@@ -599,13 +631,6 @@ export class maps {
 	 * タイル：標高タイルURL
 	 */
 	private TILE_DEM_URL: { [key: number]: mapsTileUrl[] } = {}
-
-	/**
-	 * constructor
-	 */
-	constructor() {
-
-	}
 
 	/**
 	 * 逆双曲線正弦
@@ -685,9 +710,9 @@ export class maps {
 	 * @returns 方位名
 	 */
 	public deg2Name(deg: number): string {
-		let ret: string = "N";
+		let ret = "N";
 
-		let f: boolean = true;
+		let f = true;
 		if(deg < 0){
 			f = false;
 		}
@@ -699,8 +724,8 @@ export class maps {
 			deg = 360 - deg;
 		}
 
-		const d: number = 22.5;
-		for (let n: number = 0, _deg = d; _deg !== 360; _deg += d, n++) {
+		const d = 22.5;
+		for (let n = 0, _deg = d; _deg !== 360; _deg += d, n++) {
 			if(n === 0){
 				_deg /= 2;
 			}
@@ -749,7 +774,7 @@ export class maps {
 	 */
 	public tky2jgdG(lat: number, lon: number): mapsLatLon {
 		const ret: mapsLatLon = {
-			  lat: 0
+			lat: 0
 			, lon: 0
 		};
 
@@ -767,7 +792,7 @@ export class maps {
 	 */
 	public jgd2tkyG(lat: number, lon: number): mapsLatLon {
 		const ret: mapsLatLon = {
-			  lat: 0
+			lat: 0
 			, lon: 0
 		};
 
@@ -823,7 +848,7 @@ export class maps {
      * @return 距離(m)
      */
 	public distance(type: mapsTypeDistance, lat1: number, lon1: number, lat2: number, lon2: number): number {
-		let ret: number = 0;
+		let ret = 0;
 
 		const A: number = this.EARTH["A" + this.EARTH_LOCALE];
 		const BdivA: number = this.EARTH["BdivA" + this.EARTH_LOCALE];
@@ -890,7 +915,7 @@ export class maps {
 	 */
 	public distanceTo(lat: number, lon: number, a: number, len: number): mapsLatLon {
 		const ret: mapsLatLon = {
-			  lat: 0
+			lat: 0
 			, lon: 0
 		};
 
@@ -912,7 +937,6 @@ export class maps {
 		let ss: number;
 
 		let x: number;
-		let y: number;
 		let _s: number;
 		do {
 			_s = s;
@@ -923,7 +947,7 @@ export class maps {
 		while (Math.abs(_s - s) > 1e-9);
 
 		x = Math.sin(u1) * Math.cos(s) + Math.cos(u1) * Math.sin(s) * Math.cos(a);
-		y = (1 - F) * Math.pow(Math.pow(Math.sin(ua), 2) + Math.pow(Math.sin(u1) * Math.sin(s) - Math.cos(u1) * Math.cos(s) * Math.cos(a), 2), 0.5);
+		const y = (1 - F) * Math.pow(Math.pow(Math.sin(ua), 2) + Math.pow(Math.sin(u1) * Math.sin(s) - Math.cos(u1) * Math.cos(s) * Math.cos(a), 2), 0.5);
 
 		const l = Math.atan(Math.sin(s) * Math.sin(a) / (Math.cos(u1) * Math.cos(s) - Math.sin(u1) * Math.sin(s) * Math.cos(a)));
 		const c = (F / 16) * Math.pow(Math.cos(ua), 2) * (4 + F * (4 - 3 * Math.pow(Math.cos(ua), 2)));
@@ -973,7 +997,7 @@ export class maps {
 		let _aCos: number;
 		let _aCosU: number;
 		let _c: number;
-		let _n: number = 0;
+		let _n = 0;
 		do {
 			sSin = Math.sin(_s);
 			sCos = Math.cos(_s);
@@ -1098,7 +1122,7 @@ export class maps {
 
 		const key: number = Date.now();
 
-		let f: boolean = true;
+		let f = true;
 		if (t === mapsTypeTile.TXT) {
 			this.TILE_DEM_URL[key] = this.tileDemUrlTxt(tile.x, tile.y, tile.z);
 		}
@@ -1145,7 +1169,7 @@ export class maps {
 	 * @returns Promise<mapsTileDem>
 	 */
 	private tileDemRequest(key: number, tile: mapsTile, t: mapsTypeTile, f: boolean): Promise<mapsTileDem> {
-		return new Promise<mapsTileDem>((resolve: (data: mapsTileDem) => void, reject: (reson: any) => void) => {
+		return new Promise<mapsTileDem>((resolve: (data: mapsTileDem) => void) => {
 			if (key in this.TILE_DEM_URL) {
 				if (f === true) {
 					this.TILE_DEM_URL[key].shift();
@@ -1160,22 +1184,23 @@ export class maps {
 							}
 						).then(response => {
 							if (response.status === 200) {
-								response.text().then(text => {
-									let dem: string[] = [];
-									let e: number = NaN;
-									if (text.length > 0) {
-										dem = text.replace(/\r\n/g, "\n").replace(/\n/g, ",").slice(0, -1).split(",");
-										e = this.tileDemData2ETxt(dem, tile.px_x, tile.px_y);
-									}
-									delete this.TILE_DEM_URL[key];
+								void response.text().then(
+									(text: string) => {
+										let dem: string[] = [];
+										let e = NaN;
+										if (text.length > 0) {
+											dem = text.replace(/\r\n/g, "\n").replace(/\n/g, ",").slice(0, -1).split(",");
+											e = this.tileDemData2ETxt(dem, tile.px_x, tile.px_y);
+										}
+										delete this.TILE_DEM_URL[key];
 
-									resolve(new mapsTileDem(tile, t, url, dem, e));
-								}
+										resolve(new mapsTileDem(tile, t, url, dem, e));
+									}
 								);
 							}
 						}
-						).catch(error => {
-							this.tileDemRequest(key, tile, t, true);
+						).catch(() => {
+							void this.tileDemRequest(key, tile, t, true);
 						}
 						);
 					}
@@ -1184,7 +1209,7 @@ export class maps {
 
 						oImg.onload = () => {
 							let dem: number[] = [];
-							let e: number = NaN;
+							let e = NaN;
 
 							const oCanvas: HTMLCanvasElement = document.createElement("canvas");
 							oCanvas.width = 256;
@@ -1196,7 +1221,7 @@ export class maps {
 								const data: Uint8ClampedArray = oCanvasCTX.getImageData(0, 0, 256, 256).data;
 
 								if (data.length > 0) {
-									dem = this.tileDemDataPng(data, tile.x, tile.y, tile.z)
+									dem = this.tileDemDataPng(data);
 									e = this.tileDemData2E(dem, tile.px_x, tile.px_y);
 								}
 							}
@@ -1206,7 +1231,7 @@ export class maps {
 							resolve(new mapsTileDem(tile, t, url, dem, e));
 						}
 						oImg.onerror = () => {
-							this.tileDemRequest(key, tile, t, true);
+							void this.tileDemRequest(key, tile, t, true);
 						}
 						oImg.crossOrigin = "anonymous";
 						oImg.src = url;
@@ -1233,12 +1258,12 @@ export class maps {
 	 * @param t タイル種別
 	 * @returns 標高タイル情報(配列)
 	 */
-	public tileDemUrl(x: number, y: number, z: number, t: mapsTypeTile): mapsTileUrl[]{
+	public tileDemUrl(x: number, y: number, z: number, t: mapsTypeTile): mapsTileUrl[] {
 		const ret: mapsTileUrl[] = [];
 
-		const url: string = "https://cyberjapandata.gsi.go.jp/xyz/";
-		let urlType: string = "_png";
-		let urlExt: string = "png";
+		const url = "https://cyberjapandata.gsi.go.jp/xyz/";
+		let urlType = "_png";
+		let urlExt = "png";
 		if (t === mapsTypeTile.TXT) {
 			urlType = "";
 			urlExt = "txt";
@@ -1359,7 +1384,7 @@ export class maps {
 	 */
 	private tileDemUrlInit(d: string[]): { [key: string]: boolean } {
 		const ret: { [key: string]: boolean } = {};
-		d.map((key: string, n: number, d: string[]) => {
+		d.map((key: string) => {
 			ret[key] = true;
 		});
 		return ret;
@@ -1376,7 +1401,7 @@ export class maps {
 	 */
 	public tileDemUrlExist(area: { [key: string]: boolean }, x: number, y: number, z: number, toz: number): boolean {
 		const tile: mapsTile = this.tile2z(x, y, z, toz);
-		if (tile.z + "/" + tile.x + "/" + tile.y in area) {
+		if (`${tile.z}/${tile.x}/${tile.y}` in area) {
 			return true;
 		}
 		else {
@@ -1387,18 +1412,18 @@ export class maps {
 	/**
 	 * 標高タイルデータ（PNG形式）から標高データ配列を取得
 	 * @param data 標高データ（PNG形式の配列）
-	 * @param x タイル座標X
-	 * @param y タイル座標Y
-	 * @param z タイル座標Z
 	 * @returns 標高データ配列
 	 */
-	public tileDemDataPng(data: Uint8ClampedArray, x: number, y: number, z: number): number[] {
-		const ret: number[] = Array(this.TILE.SIZE * this.TILE.SIZE);
+	public tileDemDataPng(data: Uint8ClampedArray): number[] {
+		const ret: number[] = [];
+		for (let i = 0; i < this.TILE.SIZE * this.TILE.SIZE; i++) {
+			ret.push(0);
+		}
 
-		let n: number = 0;
+		let n = 0;
 		for (let iy = 0; iy < this.TILE.SIZE; ++iy) {
 			for (let ix = 0; ix < this.TILE.SIZE; ++ix) {
-				let i = (iy * this.TILE.SIZE * 4) + (ix * 4);
+				const i: number = (iy * this.TILE.SIZE * 4) + (ix * 4);
 
 				const r: number = data[i + 0];
 				const g: number = data[i + 1];
@@ -1432,7 +1457,7 @@ export class maps {
 	 * @returns 標高(m)
 	 */
 	public tileDemData2E(data: number[], px_x: number, px_y: number): number {
-		let ret: number = 0;
+		let ret = 0;
 		if (Array.isArray(data)) {
 			if (data.length === this.TILE.SIZE * this.TILE.SIZE) {
 				const i: number = (px_y * this.TILE.SIZE) + (px_x);
@@ -1452,7 +1477,7 @@ export class maps {
 	 * @returns 標高(m)
 	 */
 	public tileDemData2ETxt(data: string[], px_x: number, px_y: number): number {
-		let ret: number = NaN;
+		let ret = NaN;
 		if (Array.isArray(data)) {
 			if (data.length === this.TILE.SIZE * this.TILE.SIZE) {
 				const i: number = (px_y * this.TILE.SIZE) + (px_x);
@@ -1473,25 +1498,26 @@ export class maps {
 	 * @returns Promise<mapsDataGpx>
 	 */
 	public gpx(url: string): Promise<mapsDataGpx> {
-		return new Promise<mapsDataGpx>((resolve: (data: mapsDataGpx) => void, reject: (reson: any) => void) => {
+		return new Promise<mapsDataGpx>((resolve: (data: mapsDataGpx) => void) => {
 			fetch(url,
 				{
 					method: "GET"
 				}
 			).then(response => {
 				if (response.status === 200) {
-					response.text().then(text => {
-						if (text.length > 0) {
-							resolve(new mapsDataGpx(url, text));
+					void response.text().then(
+						(text: string) => {
+							if (text.length > 0) {
+								resolve(new mapsDataGpx(url, text));
+							}
 						}
-					}
 					);
 				}
 				else {
 					resolve(new mapsDataGpx(url, null));
 				}
 			}
-			).catch(error => {
+			).catch(() => {
 				resolve(new mapsDataGpx(url, null));
 			}
 			);
@@ -1500,15 +1526,24 @@ export class maps {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	exports: any;
 }
 if (typeof module !== "undefined" && module && module.exports) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.maps = maps;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsLatLon = mapsLatLon;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsTile = mapsTile;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsTileUrl = mapsTileUrl;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsTileDem = mapsTileDem;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsDataGpx = mapsDataGpx;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	module.exports.mapsDataGpxLog = mapsDataGpxLog;
 }

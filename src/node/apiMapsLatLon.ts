@@ -5,7 +5,7 @@ interface apiMapsLatLonData {
 	status: boolean
 	, lat: number
 	, lon: number
-};
+}
 
 export class apiMapsLatLon {
 	private uri = '';
@@ -25,7 +25,7 @@ export class apiMapsLatLon {
 	public regist(router: express.Router): void {
 		router.get(this.uri + '/tky2jgdg',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsLatLonData = {
+				const data: apiMapsLatLonData = {
 					status: false
 					, lat: 0
 					, lon: 0
@@ -51,7 +51,7 @@ export class apiMapsLatLon {
 
 		router.get(this.uri + '/jgd2tkyg',
 			(req:express.Request, res:express.Response) => {
-				let data: apiMapsLatLonData = {
+				const data: apiMapsLatLonData = {
 					status: false
 					, lat: 0
 					, lon: 0
