@@ -6,25 +6,32 @@
 
 # 使用技術
 ## 環境
-- Node.js(ts-node, ts-node-dev) + Express.js
-- docker
-- gulp + prettier + eslint + tsc + babel + webpack
+- [Node.js](https://nodejs.org/ja/) (ts-node, ts-node-dev)
+	+ [Express.js](https://expressjs.com/ja/)
+- [docker](https://www.docker.com/)
+- [gulp](https://gulpjs.com/)
+	+ [prettier](https://prettier.io/)
+	+ [eslint](https://eslint.org/)
+	+ [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
+	+ [babel](https://babeljs.io/)
+	+ [webpack](https://webpack.js.org/)
 ## 言語
-- TypeScript + React
-- JavaScript(ES2015)
-- SCSS
 - HTML5
-- Swagger(OpenAPI v3)
-- ShellScript(bash)
+- TypeScript
+	+ [React](https://ja.reactjs.org/)
+- [JavaScript](https://www.typescriptlang.org/) (ES2015)
+- SCSS
+- [Swagger](https://swagger.io/) (OpenAPI v3)
+- ShellScript (bash)
 ## ライブラリー
-- leaflet
-- Char.js
+- [leaflet](https://leafletjs.com/)
+- [Char.js](https://www.chartjs.org/)
 ## テスト
-- Jest(ts-jest)
-- Cypress
+- [Jest](https://jestjs.io/ja/) (ts-jest)
+- [Cypress](https://www.cypress.io/)
 ## データベース
-- MongoDB
-- Mongo Express
+- [MongoDB](https://www.mongodb.com/)
+- [Mongo Express](https://github.com/mongo-express)
 
 # インストール
 ```
