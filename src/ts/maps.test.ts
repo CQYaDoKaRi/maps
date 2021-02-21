@@ -161,3 +161,16 @@ test("タイル座標のズームレベルから縮尺を取得", (): void => {
 	const dpi = 96;
 	expect(oMaps.tileScale(z, lat, dpi)).toBe(29286.42419123685);
 });
+
+test("タイル座標のズームレベルを変更した場合のタイル座標を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 14505;
+	const y = 6469;
+	const z = 14;
+	const toz = 15;
+	const tile: mapsTile = oMaps.tile2z(x, y, z, toz);
+	expect(tile.x).toBe(29010);
+	expect(tile.y).toBe(12938);
+	expect(tile.z).toBe(15);
+});
