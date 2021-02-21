@@ -1,4 +1,4 @@
-import { maps, mapsLatLon, mapsTile } from "./maps";
+import { maps, mapsLatLon, mapsTile, mapsTileUrl } from "./maps";
 
 test("方位角を方位名(略字)に変換", (): void => {
 	const oMaps: maps = new maps();
@@ -173,4 +173,86 @@ test("タイル座標のズームレベルを変更した場合のタイル座�
 	expect(tile.x).toBe(29010);
 	expect(tile.y).toBe(12938);
 	expect(tile.z).toBe(15);
+});
+
+test("標高タイルURLを取得(png)", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 29011;
+	const y = 12939;
+	const z = 15;
+	const tileUrs: mapsTileUrl[] = oMaps.tileDemUrlPng(x, y, z);
+
+	let i = 0;
+	tileUrs.map((tileUrl: mapsTileUrl) => {
+		if (tileUrl.tile) {
+			switch (i) {
+				case 0:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png");
+					break;
+				case 1:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png");
+					break;
+				case 2:
+					expect(tileUrl.tile.x).toBe(14505);
+					expect(tileUrl.tile.y).toBe(6469);
+					expect(tileUrl.tile.z).toBe(14);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png");
+					break;
+				default:
+					break;
+			}
+		}
+		i++;
+	});
+});
+
+test("標高タイルURLを取得(txt)", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 29011;
+	const y = 12939;
+	const z = 15;
+	const tileUrs: mapsTileUrl[] = oMaps.tileDemUrlTxt(x, y, z);
+
+	let i = 0;
+	tileUrs.map((tileUrl: mapsTileUrl) => {
+		if (tileUrl.tile) {
+			switch (i) {
+				case 0:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt");
+					break;
+				case 1:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt");
+					break;
+				case 2:
+					expect(tileUrl.tile.x).toBe(14505);
+					expect(tileUrl.tile.y).toBe(6469);
+					expect(tileUrl.tile.z).toBe(14);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt");
+					break;
+				default:
+					break;
+			}
+		}
+		i++;
+	});
 });
