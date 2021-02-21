@@ -1,4 +1,4 @@
-import { maps } from "./maps";
+import { maps, mapsLatLon } from "./maps";
 
 test("方位角を方位名(略字)に変換", (): void => {
 	const oMaps: maps = new maps();
@@ -54,6 +54,26 @@ test("方位角を方位名(略字)に変換", (): void => {
 	expect(oMaps.deg2Name(641.25)).toBe("WNW");
 	expect(oMaps.deg2Name(663.75)).toBe("NW");
 	expect(oMaps.deg2Name(686.25)).toBe("NNW");
+});
+
+test("日本測地系を世界測地系に変換（1次式）", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.67755556;
+	const lon = 139.7704444;
+	const pos: mapsLatLon = oMaps.tky2jgdG(lat, lon);
+	expect(pos.lat).toBe(35.68078249647387);
+	expect(pos.lon).toBe(139.7672349196828);
+});
+
+test("世界測地系を日本測地系に変換（1次式）", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.68078249;
+	const lon = 139.767235;
+	const pos: mapsLatLon = oMaps.jgd2tkyG(lat, lon);
+	expect(pos.lat).toBe(35.67755561088216);
+	expect(pos.lon).toBe(139.77044447609083);
 });
 
 test("２地点間の距離-球面三角法", (): void => {
