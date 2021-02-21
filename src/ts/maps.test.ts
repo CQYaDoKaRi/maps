@@ -117,3 +117,13 @@ test("角度・距離から緯度経度を取得", (): void => {
 	expect(pos.lat).toBe(43.06473675180286);
 	expect(pos.lon).toBe(141.3469832298937);
 });
+
+test("２地点間の角度", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat1 = 35.689753;
+	const lon1 = 139.691731;
+	const lat2 = 43.064301;
+	const lon2 = 141.346874;
+	expect(oMaps.direction(lat1, lon1, lat2, lon2)).toBe(9.362103972638495);
+});
