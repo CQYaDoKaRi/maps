@@ -1,6 +1,5 @@
-import { maps } from "./maps";
+import { maps, mapsLatLon, mapsTile, mapsTileUrl } from "./maps";
 
-// 方位角を方位名(略字)に変換
 test("方位角を方位名(略字)に変換", (): void => {
 	const oMaps: maps = new maps();
 
@@ -55,4 +54,205 @@ test("方位角を方位名(略字)に変換", (): void => {
 	expect(oMaps.deg2Name(641.25)).toBe("WNW");
 	expect(oMaps.deg2Name(663.75)).toBe("NW");
 	expect(oMaps.deg2Name(686.25)).toBe("NNW");
+});
+
+test("日本測地系を世界測地系に変換（1次式）", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.67755556;
+	const lon = 139.7704444;
+	const pos: mapsLatLon = oMaps.tky2jgdG(lat, lon);
+	expect(pos.lat).toBe(35.68078249647387);
+	expect(pos.lon).toBe(139.7672349196828);
+});
+
+test("世界測地系を日本測地系に変換（1次式）", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.68078249;
+	const lon = 139.767235;
+	const pos: mapsLatLon = oMaps.jgd2tkyG(lat, lon);
+	expect(pos.lat).toBe(35.67755561088216);
+	expect(pos.lon).toBe(139.77044447609083);
+});
+
+test("２地点間の距離-球面三角法", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat1 = 35.689753;
+	const lon1 = 139.691731;
+	const lat2 = 35.447495;
+	const lon2 = 139.6424;
+	expect(oMaps.distanceT(lat1, lon1, lat2, lon2)).toBe(27335.473262593438);
+});
+
+test("２地点間の距離-ヒュベニ", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat1 = 35.689753;
+	const lon1 = 139.691731;
+	const lat2 = 35.447495;
+	const lon2 = 139.6424;
+	expect(oMaps.distanceH(lat1, lon1, lat2, lon2)).toBe(27248.24567995688);
+});
+
+test("２地点間の距離-測地線航海算法", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat1 = 35.689753;
+	const lon1 = 139.691731;
+	const lat2 = 35.447495;
+	const lon2 = 139.6424;
+	expect(oMaps.distanceS(lat1, lon1, lat2, lon2)).toBe(32204.322252668517);
+});
+
+test("角度・距離から緯度経度を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.689753;
+	const lon = 139.691731;
+	const a = 9.362103972638495;
+	const len = 831070.2256498174;
+	const pos: mapsLatLon = oMaps.distanceTo(lat, lon, a, len);
+	expect(pos.lat).toBe(43.06473675180286);
+	expect(pos.lon).toBe(141.3469832298937);
+});
+
+test("２地点間の角度", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat1 = 35.689753;
+	const lon1 = 139.691731;
+	const lat2 = 43.064301;
+	const lon2 = 141.346874;
+	expect(oMaps.direction(lat1, lon1, lat2, lon2)).toBe(9.362103972638495);
+});
+
+test("緯度経度・ズームレベルからタイル座標を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.360771305;
+	const lon = 138.7273035;
+	const z = 14;
+	const tile: mapsTile = oMaps.tile(lat, lon, z);
+	expect(tile.x).toBe(14505);
+	expect(tile.y).toBe(6469);
+	expect(tile.z).toBe(14);
+	expect(tile.px_x).toBe(162);
+	expect(tile.px_y).toBe(148);
+});
+
+test("タイル座標から緯度経度を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 14505;
+	const y = 6469;
+	const z = 14;
+	const pos: mapsLatLon = oMaps.tile2LatLon(x, y, z);
+	expect(pos.lat).toBe(35.371135022801006);
+	expect(pos.lon).toBe(138.71337890625);
+});
+
+test("タイル座標のズームレベルから縮尺を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.65809922;
+	const z = 14;
+	const dpi = 96;
+	expect(oMaps.tileScale(z, lat, dpi)).toBe(29286.42419123685);
+});
+
+test("タイル座標のズームレベルを変更した場合のタイル座標を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 14505;
+	const y = 6469;
+	const z = 14;
+	const toz = 15;
+	const tile: mapsTile = oMaps.tile2z(x, y, z, toz);
+	expect(tile.x).toBe(29010);
+	expect(tile.y).toBe(12938);
+	expect(tile.z).toBe(15);
+});
+
+test("標高タイルURLを取得(png)", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 29011;
+	const y = 12939;
+	const z = 15;
+	const tileUrs: mapsTileUrl[] = oMaps.tileDemUrlPng(x, y, z);
+
+	let i = 0;
+	tileUrs.map((tileUrl: mapsTileUrl) => {
+		if (tileUrl.tile) {
+			switch (i) {
+				case 0:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/15/29011/12939.png");
+					break;
+				case 1:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5b_png/15/29011/12939.png");
+					break;
+				case 2:
+					expect(tileUrl.tile.x).toBe(14505);
+					expect(tileUrl.tile.y).toBe(6469);
+					expect(tileUrl.tile.z).toBe(14);
+					expect(tileUrl.ext).toBe("png");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem_png/14/14505/6469.png");
+					break;
+				default:
+					break;
+			}
+		}
+		i++;
+	});
+});
+
+test("標高タイルURLを取得(txt)", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 29011;
+	const y = 12939;
+	const z = 15;
+	const tileUrs: mapsTileUrl[] = oMaps.tileDemUrlTxt(x, y, z);
+
+	let i = 0;
+	tileUrs.map((tileUrl: mapsTileUrl) => {
+		if (tileUrl.tile) {
+			switch (i) {
+				case 0:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5a/15/29011/12939.txt");
+					break;
+				case 1:
+					expect(tileUrl.tile.x).toBe(29011);
+					expect(tileUrl.tile.y).toBe(12939);
+					expect(tileUrl.tile.z).toBe(15);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem5b/15/29011/12939.txt");
+					break;
+				case 2:
+					expect(tileUrl.tile.x).toBe(14505);
+					expect(tileUrl.tile.y).toBe(6469);
+					expect(tileUrl.tile.z).toBe(14);
+					expect(tileUrl.ext).toBe("txt");
+					expect(tileUrl.url).toBe("https://cyberjapandata.gsi.go.jp/xyz/dem/14/14505/6469.txt");
+					break;
+				default:
+					break;
+			}
+		}
+		i++;
+	});
 });
