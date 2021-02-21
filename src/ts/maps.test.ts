@@ -1,4 +1,4 @@
-import { maps, mapsLatLon } from "./maps";
+import { maps, mapsLatLon, mapsTile } from "./maps";
 
 test("方位角を方位名(略字)に変換", (): void => {
 	const oMaps: maps = new maps();
@@ -126,4 +126,18 @@ test("２地点間の角度", (): void => {
 	const lat2 = 43.064301;
 	const lon2 = 141.346874;
 	expect(oMaps.direction(lat1, lon1, lat2, lon2)).toBe(9.362103972638495);
+});
+
+test("緯度経度・ズームレベルからタイル座標を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.360771305;
+	const lon = 138.7273035;
+	const z = 14;
+	const tile: mapsTile = oMaps.tile(lat, lon, z);
+	expect(tile.x).toBe(14505);
+	expect(tile.y).toBe(6469);
+	expect(tile.z).toBe(14);
+	expect(tile.px_x).toBe(162);
+	expect(tile.px_y).toBe(148);
 });
