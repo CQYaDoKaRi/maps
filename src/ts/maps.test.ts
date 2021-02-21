@@ -152,3 +152,12 @@ test("タイル座標から緯度経度を取得", (): void => {
 	expect(pos.lat).toBe(35.371135022801006);
 	expect(pos.lon).toBe(138.71337890625);
 });
+
+test("タイル座標のズームレベルから縮尺を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.65809922;
+	const z = 14;
+	const dpi = 96;
+	expect(oMaps.tileScale(z, lat, dpi)).toBe(29286.42419123685);
+});
