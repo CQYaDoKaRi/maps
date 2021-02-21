@@ -105,3 +105,15 @@ test("２地点間の距離-測地線航海算法", (): void => {
 	const lon2 = 139.6424;
 	expect(oMaps.distanceS(lat1, lon1, lat2, lon2)).toBe(32204.322252668517);
 });
+
+test("角度・距離から緯度経度を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const lat = 35.689753;
+	const lon = 139.691731;
+	const a = 9.362103972638495;
+	const len = 831070.2256498174;
+	const pos: mapsLatLon = oMaps.distanceTo(lat, lon, a, len);
+	expect(pos.lat).toBe(43.06473675180286);
+	expect(pos.lon).toBe(141.3469832298937);
+});
