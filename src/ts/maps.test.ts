@@ -141,3 +141,14 @@ test("緯度経度・ズームレベルからタイル座標を取得", (): void
 	expect(tile.px_x).toBe(162);
 	expect(tile.px_y).toBe(148);
 });
+
+test("タイル座標から緯度経度を取得", (): void => {
+	const oMaps: maps = new maps();
+
+	const x = 14505;
+	const y = 6469;
+	const z = 14;
+	const pos: mapsLatLon = oMaps.tile2LatLon(x, y, z);
+	expect(pos.lat).toBe(35.371135022801006);
+	expect(pos.lon).toBe(138.71337890625);
+});
