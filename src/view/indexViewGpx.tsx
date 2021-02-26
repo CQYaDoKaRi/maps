@@ -4,7 +4,7 @@ import { maps, mapsDataGpx } from "../ts/maps";
 import { mapsDataGpxChart } from "../ts/mapsGpxChart";
 
 // npm install --save react-dropzone
-import Dropzone, { DropzoneRef } from "react-dropzone";
+import Dropzone, { DropzoneRef, FileRejection } from "react-dropzone";
 
 /**
  * React Component - IndexViewGpx - props
@@ -65,10 +65,25 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 
 	/**
 	 * イベント：ファイルアップロード
-	 * @param files File
+	 * @param accepted 処理対象ファイル
+	 * @param rejected 処理非対象ファイル
 	 */
-	private eFile(files: File[]): void {
-		files.forEach((file: File) => {
+	private eFile(accepted: File[], rejected: FileRejection[]): void {
+		if (rejected.length > 0) {
+			this.setState({
+				gpxChart: false,
+				gpxTitle: false,
+			});
+			if (this.oChart.current) {
+				this.oChart.current.innerHTML = "";
+			}
+			if (this.oChartTitle.current) {
+				this.oChartTitle.current.innerHTML = "";
+			}
+			return;
+		}
+
+		accepted.forEach((file: File) => {
 			const reader: FileReader = new FileReader();
 			reader.addEventListener("loadend", this.eFileLoad.bind(this, file.name, reader));
 			reader.readAsText(file);
@@ -126,7 +141,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 					<option>20190428.gpx</option>
 					<option>20180811.gpx</option>
 				</select>
-				<Dropzone ref={this.oDropzone} accept=".gpx" onDrop={(e: File[]) => this.eFile(e)}>
+				<Dropzone
+					ref={this.oDropzone}
+					accept={".gpx"}
+					maxFiles={1}
+					onDrop={(accepted: File[], rejected: FileRejection[]) => this.eFile(accepted, rejected)}
+				>
 					{({ getRootProps, getInputProps }) => (
 						<div className="contentsUpload" {...getRootProps()}>
 							<input {...getInputProps()} />
