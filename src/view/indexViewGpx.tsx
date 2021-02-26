@@ -19,9 +19,19 @@ type IndexViewGpxProps = {
 };
 
 /**
+ * React Component - IndexViewGpx - Status
+ */
+type IndexViewGpxStatus = {
+	// GPX Chart
+	gpxChart: boolean;
+	// GPX Chart - タイトル
+	gpxTitle: boolean;
+};
+
+/**
  * React Component - IndexViewGpx
  */
-export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
+export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGpxStatus> {
 	// フォルダ
 	private vDir = "./data/";
 	// GPX Chart
@@ -37,6 +47,11 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
 	 */
 	constructor(props: IndexViewGpxProps) {
 		super(props);
+
+		this.state = {
+			gpxChart: false,
+			gpxTitle: false,
+		};
 	}
 
 	/**
@@ -94,9 +109,11 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
 		if (this.oChart.current) {
 			const o: mapsDataGpxChart = new mapsDataGpxChart(this.oChart.current, data);
 			o.refresh(this.props.w, this.props.h, this.props.xw);
+			this.setState({ gpxChart: true });
 		}
 		if (this.oChartTitle.current) {
 			this.oChartTitle.current.innerHTML = data.getName();
+			this.setState({ gpxTitle: true });
 		}
 	}
 
@@ -110,17 +127,23 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
 					<option>20180811.gpx</option>
 				</select>
 				<Dropzone ref={this.oDropzone} accept=".gpx" onDrop={(e: File[]) => this.eFile(e)}>
-					{
-						({getRootProps, getInputProps}) => (
-							<div className="contentsUpload" {...getRootProps()}>
-								<input {...getInputProps()} />
-								<div>GPXファイル（*.gpx）をアップロード</div>
-							</div>
-						)
-					}
+					{({ getRootProps, getInputProps }) => (
+						<div className="contentsUpload" {...getRootProps()}>
+							<input {...getInputProps()} />
+							<div>GPXファイル（*.gpx）をアップロード</div>
+						</div>
+					)}
 				</Dropzone>
-				<div ref={this.oChartTitle}></div>
-				<div ref={this.oChart}></div>
+				<div
+					className="contentsGpxFname"
+					ref={this.oChartTitle}
+					style={{ display: this.state.gpxTitle ? "block" : "none" }}
+				></div>
+				<div
+					className="contentsGpxChart"
+					ref={this.oChart}
+					style={{ display: this.state.gpxChart ? "block" : "none" }}
+				></div>
 			</div>
 		);
 	}
