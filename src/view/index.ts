@@ -1,5 +1,4 @@
-import { maps, mapsLatLon, mapsTile, mapsTileDem, mapsDataGpx } from "../ts/maps";
-import { mapsDataGpxChart } from "../ts/mapsGpxChart";
+import { maps, mapsLatLon, mapsTile, mapsTileDem } from "../ts/maps";
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
 import { appMaps } from "../ts/appMaps";
 import { appMapsGSI } from "../ts/appMapsGSI";
@@ -403,49 +402,9 @@ function page(oView: indexView): void {
 			oDivTitle.innerHTML = oView.getMenuTitle("DataGpx");
 		}
 
-		const oDiv: HTMLElement | null = document.getElementById("appDataGpx");
-		if (oDiv) {
-			//
-			const oDiv20190519 = document.createElement("div");
-			const oDiv20190519_Title = document.createElement("div");
-
-			oDiv.appendChild(oDiv20190519_Title);
-			oDiv.appendChild(oDiv20190519);
-
-			void oMaps.gpx("./data/20190519.gpx").then((data: mapsDataGpx) => {
-				oDiv20190519_Title.innerHTML = data.getName();
-
-				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190519, data);
-				o.refresh(1100, 500, 150);
-			});
-
-			//
-			const oDiv20190428 = document.createElement("div");
-			const oDiv20190428_Title = document.createElement("div");
-
-			oDiv.appendChild(oDiv20190428_Title);
-			oDiv.appendChild(oDiv20190428);
-
-			void oMaps.gpx("./data/20190428.gpx").then((data: mapsDataGpx) => {
-				oDiv20190428_Title.innerHTML = data.getName();
-
-				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20190428, data);
-				o.refresh(1100, 500, 150);
-			});
-
-			//
-			const oDiv20180811 = document.createElement("div");
-			const oDiv20180811_Title = document.createElement("div");
-
-			oDiv.appendChild(oDiv20180811_Title);
-			oDiv.appendChild(oDiv20180811);
-
-			void oMaps.gpx("./data/20180811.gpx").then((data: mapsDataGpx) => {
-				oDiv20180811_Title.innerHTML = data.getName();
-
-				const o: mapsDataGpxChart = new mapsDataGpxChart(oDiv20180811, data);
-				o.refresh(1100, 500, 150);
-			});
+		const oContentsGpx: HTMLElement | null = document.getElementById("appDataGpx");
+		if (oContentsGpx) {
+			oView.renderGpx(oContentsGpx);
 		}
 	}
 	/*==============================================================================================*/
@@ -486,7 +445,11 @@ window.onload = () => {
 	});
 
 	oView.renderMenu(document.getElementById("menu"));
-	oView.renderContents(document.getElementById("contents"));
+
+	const oContents = document.getElementById("contents");
+	if (oContents) {
+		oView.renderContents(oContents);
+	}
 
 	page(oView);
 

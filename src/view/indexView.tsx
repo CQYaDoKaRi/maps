@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 
 import { IndexViewMenu, indexMenuTitle } from "./indexViewMenu";
 import { IndexViewContents } from "./indexViewContents";
+import { IndexViewGpx } from "./indexViewGpx";
 
 /**
  * indexView
@@ -72,6 +73,19 @@ export class indexView {
 	public renderMenu(container: HTMLElement | null): void {
 		if (container) {
 			ReactDOM.render(<IndexViewMenu titles={this.title} />, container);
+		}
+	}
+
+	/**
+	 * 描画 - Gpx
+	 * @param container Div
+	 */
+	public renderGpx(container: HTMLElement | null): void {
+		if (container) {
+			const vGpxChartW = 1100;
+			const vGpxhartH = 500;
+			const vGpxhartXW = 150;
+			ReactDOM.render(<IndexViewGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />, container);
 		}
 	}
 
