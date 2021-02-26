@@ -109,12 +109,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
 					<option>20190428.gpx</option>
 					<option>20180811.gpx</option>
 				</select>
-				<Dropzone ref={this.oDropzone} onDrop={(e: File[]) => this.eFile(e)}>
+				<Dropzone ref={this.oDropzone} accept=".gpx" onDrop={(e: File[]) => this.eFile(e)}>
 					{
 						({getRootProps, getInputProps}) => (
 							<div className="contentsUpload" {...getRootProps()}>
 								<input {...getInputProps()} />
-								<div>DGPXファイルをアップロード</div>
+								<div>GPXファイル（*.gpx）をアップロード</div>
 							</div>
 						)
 					}
