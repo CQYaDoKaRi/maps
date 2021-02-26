@@ -59,12 +59,13 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps> {
 	render(): JSX.Element {
 		return (
 			<div>
-				<select onChange={(e) => this.eChange(e)}>
+				<select className="contentsSelect" onChange={(e) => this.eChange(e)}>
 					<option>未選択</option>
 					<option>20190519.gpx</option>
 					<option>20190428.gpx</option>
 					<option>20180811.gpx</option>
 				</select>
+				<div className="contentsUpload">GPXファイルをドラッグしてアップロード</div>
 				<div ref={this.oChartTitle}></div>
 				<div ref={this.oChart}></div>
 			</div>
