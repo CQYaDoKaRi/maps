@@ -1,7 +1,6 @@
 // npm install --save-dev react @types/react
 import React from "react";
-import { maps, mapsDataGpx } from "../ts/maps";
-import { mapsDataGpxChart } from "../ts/mapsGpxChart";
+import ViewMapsDataGpxChart from "./ViewMapsDataGpxChart";
 
 // npm install --save react-dropzone
 import Dropzone, { DropzoneRef, FileRejection } from "react-dropzone";
@@ -22,10 +21,13 @@ type IndexViewGpxProps = {
  * React Component - IndexViewGpx - Status
  */
 type IndexViewGpxStatus = {
-	// GPX Chart
-	gpxChart: boolean;
-	// GPX Chart - タイトル
-	gpxTitle: boolean;
+	// データ：GPX
+	Data: {
+		// ファイル名
+		fname: string;
+		// TEXT データ
+		data: string;
+	};
 };
 
 /**
@@ -49,8 +51,10 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 		super(props);
 
 		this.state = {
-			gpxChart: false,
-			gpxTitle: false,
+			Data: {
+				fname: "",
+				data: "",
+			},
 		};
 	}
 
@@ -60,7 +64,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	 */
 	private eChange(o: React.ChangeEvent<HTMLSelectElement>): void {
 		const fname = `${this.vDir}${o.target.value}`;
-		this.draw(fname === "未選択" ? "" : fname);
+		this.setState({
+			Data: {
+				fname: fname === "未選択" ? "" : fname,
+				data: "",
+			},
+		});
 	}
 
 	/**
@@ -70,10 +79,6 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	 */
 	private eFile(accepted: File[], rejected: FileRejection[]): void {
 		if (rejected.length > 0) {
-			this.setState({
-				gpxChart: false,
-				gpxTitle: false,
-			});
 			if (this.oChart.current) {
 				this.oChart.current.innerHTML = "";
 			}
@@ -93,43 +98,15 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	/**
 	 * イベント：ファイルアップロード：loadend
 	 * @param fname ファイル名
-	 * @param reader FileReader
+	 * @param reader GPX データ
 	 */
 	private eFileLoad(fname: string, reader: FileReader): void {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const txt: any = reader.result;
-		this.drawData(new mapsDataGpx(fname, txt));
-	}
-
-	/**
-	 * GPX Chart の描画
-	 * @param fname ファイル名
-	 */
-	private draw(fname: string): void {
-		if (!fname) {
-			return;
-		}
-
-		const oMaps: maps = new maps();
-		void oMaps.gpx(fname).then((data: mapsDataGpx) => {
-			this.drawData(data);
+		this.setState({
+			Data: {
+				fname: fname,
+				data: reader.result as string,
+			},
 		});
-	}
-
-	/**
-	 * GPX Chart の描画
-	 * @param data データ
-	 */
-	private drawData(data: mapsDataGpx): void {
-		if (this.oChart.current) {
-			const o: mapsDataGpxChart = new mapsDataGpxChart(this.oChart.current, data);
-			o.refresh(this.props.w, this.props.h, this.props.xw);
-			this.setState({ gpxChart: true });
-		}
-		if (this.oChartTitle.current) {
-			this.oChartTitle.current.innerHTML = data.getName();
-			this.setState({ gpxTitle: true });
-		}
 	}
 
 	render(): JSX.Element {
@@ -154,16 +131,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 						</div>
 					)}
 				</Dropzone>
-				<div
-					className="contentsGpxFname"
-					ref={this.oChartTitle}
-					style={{ display: this.state.gpxTitle ? "block" : "none" }}
-				></div>
-				<div
-					className="contentsGpxChart"
-					ref={this.oChart}
-					style={{ display: this.state.gpxChart ? "block" : "none" }}
-				></div>
+				<ViewMapsDataGpxChart
+					w={this.props.w}
+					h={this.props.h}
+					xw={this.props.xw}
+					gpx={this.state.Data}
+				></ViewMapsDataGpxChart>
 			</div>
 		);
 	}
