@@ -1121,6 +1121,40 @@ paths:
             取得件数(0, 1 ～ 10000)  
             0 を指定した場合、最大件数（10000件）
     parameters: []
+  /api/view/gpx/files:
+    get:
+      summary: "GPX ファイルリストを取得"
+      tags:
+        - view
+      responses:
+        "200":
+          description: ""
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fname:
+                      type: string
+                      description: ファイル名
+                    size:
+                      type: number
+                      description: サイズ(bytes)
+                    date:
+                      type: string
+                      description: 日付
+              examples:
+                example:
+                  value:
+                    - name: "20180811.gpx"
+                      lat: 1467676
+                      lon: 2021/01/01 00:00:00
+      operationId: get-api-view-gpx-files
+      description: GPX ファイルリストを取得
+    parameters: []
 tags:
   - name: maps
     description: ""
@@ -1128,6 +1162,8 @@ tags:
     description: ""
   - name: mapsMongo
     description: "MongoDB のデータを検索"
+  - name: view
+    description: "サイト表示"
 components:
   schemas: {}
   securitySchemes: {}
