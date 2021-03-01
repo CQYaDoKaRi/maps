@@ -25,7 +25,11 @@ const ViewMapsDataGpxFileDropzone: React.FC<Props> = (props) => {
 	return (
 		<div className="contentsUpload" {...getRootProps()}>
 			<input {...getInputProps()} />
-			{isDragActive ? <p>GPXファイル（*.gpx）をドロップしてアップロード</p> : <p>GPXファイル（*.gpx）をアップロード</p>}
+			{isDragActive ? (
+				<div>GPXファイル（*.gpx）をドロップしてアップロード</div>
+			) : (
+				<div>GPXファイル（*.gpx）をアップロード</div>
+			)}
 		</div>
 	);
 };

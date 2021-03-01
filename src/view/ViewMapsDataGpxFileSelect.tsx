@@ -1,5 +1,9 @@
 // npm install --save-dev react @types/react
 import React, { useState } from "react";
+// npm install --save-dev react-bootstrap bootstrap
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 interface gpxFile {
 	name: string;
@@ -20,7 +24,7 @@ type Props = {
 	// 更新
 	refresh: boolean;
 	// イベント
-	onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+	onChange: (value: string) => void;
 };
 
 /**
@@ -65,12 +69,31 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 		}
 	}, [props.refresh]);
 
+	// value={props.value}
+	//onChange={props.onChange.bind(this)}
 	return (
-		<select className="contentsSelect" onChange={props.onChange.bind(this)} value={props.value}>
-			{files.map((item: gpxFile, index: number) => (
-				<option key={index}>{item.name}</option>
-			))}
-		</select>
+		<DropdownButton
+			className="contentsSelect"
+			title={props.value}
+			onChange={(e) => {
+				console.log(e);
+			}}
+		>
+			{files.map((item: gpxFile, index: number) => {
+				return (
+					<Dropdown.Item
+						key={index}
+						active={item.name === props.value}
+						onSelect={(key: string | null, o: React.BaseSyntheticEvent<Event>) => {
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+							props.onChange(o.target.innerText as string);
+						}}
+					>
+						{item.name}
+					</Dropdown.Item>
+				);
+			})}
+		</DropdownButton>
 	);
 };
 

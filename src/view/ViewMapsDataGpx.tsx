@@ -67,10 +67,9 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 
 	/**
 	 * イベント：GPX ファイル選択
-	 * @param o select
+	 * @param value 選択値
 	 */
-	const eChange = (o: React.ChangeEvent<HTMLSelectElement>) => {
-		const value = o.target.value;
+	const eChange = (value: string) => {
 		setFileSelect(value);
 
 		const extN = value.indexOf(".");
@@ -126,8 +125,8 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 				nameDropzone={vNameDropzone}
 				value={fileSelect}
 				refresh={true}
-				onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-					eChange(e);
+				onChange={(value: string) => {
+					eChange(value);
 				}}
 			/>
 			{dropzone && (
