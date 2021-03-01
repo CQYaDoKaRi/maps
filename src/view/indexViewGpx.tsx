@@ -1,10 +1,11 @@
 // npm install --save-dev react @types/react
 import React from "react";
 import ViewMapsDataGpxFileSelect from "./ViewMapsDataGpxFileSelect";
+import ViewMapsDataGpxFileDropzone from "./ViewMapsDataGpxFileDropzone";
 import ViewMapsDataGpxChart from "./ViewMapsDataGpxChart";
 
 // npm install --save react-dropzone
-import Dropzone, { DropzoneRef, FileRejection } from "react-dropzone";
+import { FileRejection } from "react-dropzone";
 
 /**
  * React Component - IndexViewGpx - props
@@ -37,12 +38,6 @@ type IndexViewGpxStatus = {
 export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGpxStatus> {
 	// フォルダ
 	private vDir = "./data/";
-	// GPX Chart
-	private oChart: React.RefObject<HTMLDivElement> = React.createRef();
-	// GPX Chart - タイトル
-	private oChartTitle: React.RefObject<HTMLDivElement> = React.createRef();
-	// Dropzone
-	private oDropzone: React.RefObject<DropzoneRef> = React.createRef();
 
 	/**
 	 * コンストラクター
@@ -85,12 +80,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	 */
 	private eFile(accepted: File[], rejected: FileRejection[]): void {
 		if (rejected.length > 0) {
-			if (this.oChart.current) {
-				this.oChart.current.innerHTML = "";
-			}
-			if (this.oChartTitle.current) {
-				this.oChartTitle.current.innerHTML = "";
-			}
+			this.setState({
+				Data: {
+					fname: "",
+					data: "",
+				},
+			});
 			return;
 		}
 
@@ -123,26 +118,13 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 						this.eChange(e);
 					}}
-				></ViewMapsDataGpxFileSelect>
-				<Dropzone
-					ref={this.oDropzone}
-					accept={".gpx"}
-					maxFiles={1}
-					onDrop={(accepted: File[], rejected: FileRejection[]) => this.eFile(accepted, rejected)}
-				>
-					{({ getRootProps, getInputProps }) => (
-						<div className="contentsUpload" {...getRootProps()}>
-							<input {...getInputProps()} />
-							<div>GPXファイル（*.gpx）をアップロード</div>
-						</div>
-					)}
-				</Dropzone>
-				<ViewMapsDataGpxChart
-					w={this.props.w}
-					h={this.props.h}
-					xw={this.props.xw}
-					gpx={this.state.Data}
-				></ViewMapsDataGpxChart>
+				/>
+				<ViewMapsDataGpxFileDropzone
+					onDrop={(accepted: File[], rejected: FileRejection[]) => {
+						this.eFile(accepted, rejected);
+					}}
+				/>
+				<ViewMapsDataGpxChart w={this.props.w} h={this.props.h} xw={this.props.xw} gpx={this.state.Data} />
 			</div>
 		);
 	}
