@@ -36,9 +36,13 @@ type ViewMapsDataGpxState = {
 const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	// フォルダ
 	const vDir = "./data/";
+	const vExt = "gpx";
+	const vNameDefault = "[未選択]";
+	const vNameDropzone = "[アップロード]";
 
 	// state - GPX
 	const [gpx, setGpx] = useState<ViewMapsDataGpxState>({ fname: "", data: "" });
+	const [dropzone, setDropzone] = useState(false);
 
 	/**
 	 * state - GPX
@@ -54,13 +58,20 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	 * @param o select
 	 */
 	const eChange = (o: React.ChangeEvent<HTMLSelectElement>) => {
-		const value = o.target.value === "未選択" ? "" : o.target.value;
+		const value = o.target.value;
+		const extN = value.indexOf(".");
+		const ext = extN > 0 ? value.slice(extN + 1).toLowerCase() : "";
+
 		let fname = "";
-		if (value) {
+		let upload = false;
+		if (ext === vExt) {
 			fname = `${vDir}${o.target.value}`;
+		} else if (value === vNameDropzone) {
+			upload = true;
 		}
 
 		stateGpx(fname, "");
+		setDropzone(upload);
 	};
 
 	/**
@@ -93,16 +104,20 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	return (
 		<div>
 			<ViewMapsDataGpxFileSelect
+				nameDefault={vNameDefault}
+				nameDropzone={vNameDropzone}
 				refresh={true}
 				onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 					eChange(e);
 				}}
 			/>
-			<ViewMapsDataGpxFileDropzone
-				onDrop={(accepted: File[], rejected: FileRejection[]) => {
-					eFile(accepted, rejected);
-				}}
-			/>
+			{dropzone && (
+				<ViewMapsDataGpxFileDropzone
+					onDrop={(accepted: File[], rejected: FileRejection[]) => {
+						eFile(accepted, rejected);
+					}}
+				/>
+			)}
 			<ViewMapsDataGpxChart w={props.w} h={props.h} xw={props.xw} gpx={gpx} />
 		</div>
 	);

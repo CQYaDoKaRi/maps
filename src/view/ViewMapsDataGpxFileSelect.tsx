@@ -11,6 +11,10 @@ interface gpxFile {
  * React Component - ViewMapsDataGpxFileSelect - props
  */
 type Props = {
+	// 選択：未選択
+	nameDefault: string;
+	// 選択：アップロード
+	nameDropzone: string;
 	// 更新
 	refresh: boolean;
 	// イベント
@@ -22,11 +26,16 @@ type Props = {
  * @param props props
  */
 const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
+	const optionDefaultName = props.nameDefault ? props.nameDefault : "[未選択]";
+
 	// option - 初期値
-	const optionDefault: gpxFile = { name: "未選択", size: 0, date: "" };
+	const optionDefault: gpxFile[] = [{ name: optionDefaultName, size: 0, date: "" }];
+	if (props.nameDropzone) {
+		optionDefault.push({ name: props.nameDropzone, size: 0, date: "" });
+	}
 
 	// state
-	const [files, setTiles] = useState<gpxFile[]>([optionDefault]);
+	const [files, setTiles] = useState<gpxFile[]>(optionDefault);
 
 	/**
 	 * React Component - useEffect - props.refresh
@@ -40,10 +49,9 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 					if (response.status === 200) {
 						void response.json().then((files: gpxFile[]) => {
 							if (files) {
-								files.unshift(optionDefault);
+								files = optionDefault.concat(files);
 							} else {
-								files = [];
-								files.push(optionDefault);
+								files = optionDefault;
 							}
 							setTiles(files);
 						});
