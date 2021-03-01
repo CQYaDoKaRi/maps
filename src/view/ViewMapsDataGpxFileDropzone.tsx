@@ -19,7 +19,6 @@ const ViewMapsDataGpxFileDropzone: React.FC<Props> = (props) => {
 	const onDrop = useCallback(props.onDrop, []);
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		accept: ".gpx",
-		maxFiles: 1,
 		onDrop,
 	});
 

@@ -83,10 +83,12 @@ const ViewMapsDataGpxChart: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<div className="contentsGpxFname" style={{ display: props.gpx.fname && title ? "block" : "none" }}>
+			<div className="contentsGpxFname" style={{ display: props.gpx.fname ? "block" : "none" }}>
 				{title}
 			</div>
-			<div className="contentsGpxChart" ref={oChart} style={{ display: props.gpx.fname ? "block" : "none" }}></div>
+			<div className="contentsGpxChart">
+				<div ref={oChart} style={{ display: props.gpx.fname ? "block" : "none" }} />
+			</div>
 		</>
 	);
 };

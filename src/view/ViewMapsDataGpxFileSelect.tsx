@@ -15,6 +15,8 @@ type Props = {
 	nameDefault: string;
 	// 選択：アップロード
 	nameDropzone: string;
+	// 選択値
+	value: string;
 	// 更新
 	refresh: boolean;
 	// イベント
@@ -58,15 +60,15 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 					}
 				})
 				.catch(() => {
-					console.log("[api]=[api/view/gpx/files] request error.");
+					console.error("[api]=[api/view/gpx/files] request error.");
 				});
 		}
 	}, [props.refresh]);
 
 	return (
-		<select className="contentsSelect" onChange={props.onChange.bind(this)}>
-			{files.map((item: gpxFile) => (
-				<option key={item.name}>{item.name}</option>
+		<select className="contentsSelect" onChange={props.onChange.bind(this)} value={props.value}>
+			{files.map((item: gpxFile, index: number) => (
+				<option key={index}>{item.name}</option>
 			))}
 		</select>
 	);

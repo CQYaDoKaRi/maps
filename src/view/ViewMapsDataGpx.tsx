@@ -41,16 +41,28 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	const vNameDropzone = "[アップロード]";
 
 	// state - GPX
-	const [gpx, setGpx] = useState<ViewMapsDataGpxState>({ fname: "", data: "" });
-	const [dropzone, setDropzone] = useState(false);
-
+	const [gpx, setGpx] = useState<ViewMapsDataGpxState[]>([{ fname: "", data: "" }]);
+	const [fileSelect, setFileSelect] = useState(vNameDropzone ? vNameDropzone : vNameDefault);
+	const [dropzone, setDropzone] = useState(vNameDropzone ? true : false);
 	/**
-	 * state - GPX
+	 * state - GPX - set
 	 * @param fname ファイル名
 	 * @param data GPX TEXT データ
 	 */
-	const stateGpx = (fname: string, data: string) => {
-		setGpx({ fname: fname, data: data });
+	const stateGpxSet = (fname: string) => {
+		setGpx([{ fname: fname, data: "" }]);
+	};
+
+	// event - state - GPX - dropzone
+	let nStateGpxDropzone = 0;
+	let eStateGpxDropzone: ViewMapsDataGpxState[] = [];
+	/**
+	 * event - state - GPX - dropzone - init
+	 * @param n ファイル数
+	 */
+	const eStateGpxDropzoneInit = (n: number) => {
+		nStateGpxDropzone = n;
+		eStateGpxDropzone = [];
 	};
 
 	/**
@@ -59,18 +71,20 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	 */
 	const eChange = (o: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = o.target.value;
+		setFileSelect(value);
+
 		const extN = value.indexOf(".");
 		const ext = extN > 0 ? value.slice(extN + 1).toLowerCase() : "";
 
 		let fname = "";
 		let upload = false;
 		if (ext === vExt) {
-			fname = `${vDir}${o.target.value}`;
+			fname = `${vDir}${value}`;
 		} else if (value === vNameDropzone) {
 			upload = true;
 		}
 
-		stateGpx(fname, "");
+		stateGpxSet(fname);
 		setDropzone(upload);
 	};
 
@@ -80,12 +94,13 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	 * @param rejected 処理非対象ファイル
 	 */
 	const eFile = (accepted: File[], rejected: FileRejection[]) => {
-		if (rejected.length > 0) {
-			stateGpx("", "");
-			return;
-		}
+		rejected.map((file: FileRejection) => {
+			console.error(`[GPX-dropzone] rejected[${file.file.name}]`);
+		});
 
-		accepted.forEach((file: File) => {
+		eStateGpxDropzoneInit(accepted.length);
+
+		accepted.map((file: File) => {
 			const reader: FileReader = new FileReader();
 			reader.addEventListener("loadend", eFileLoad.bind(this, file.name, reader));
 			reader.readAsText(file);
@@ -98,7 +113,10 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	 * @param reader GPX データ
 	 */
 	const eFileLoad = (fname: string, reader: FileReader) => {
-		stateGpx(fname, reader.result as string);
+		eStateGpxDropzone.push({ fname: fname, data: reader.result as string });
+		if (eStateGpxDropzone.length === nStateGpxDropzone) {
+			setGpx(eStateGpxDropzone);
+		}
 	};
 
 	return (
@@ -106,6 +124,7 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 			<ViewMapsDataGpxFileSelect
 				nameDefault={vNameDefault}
 				nameDropzone={vNameDropzone}
+				value={fileSelect}
 				refresh={true}
 				onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 					eChange(e);
@@ -118,7 +137,9 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 					}}
 				/>
 			)}
-			<ViewMapsDataGpxChart w={props.w} h={props.h} xw={props.xw} gpx={gpx} />
+			{gpx.map((item: ViewMapsDataGpxState, index: number) => (
+				<ViewMapsDataGpxChart key={index} w={props.w} h={props.h} xw={props.xw} gpx={item} />
+			))}
 		</div>
 	);
 };
