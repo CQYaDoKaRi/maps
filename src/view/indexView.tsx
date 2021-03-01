@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 import { IndexViewMenu, indexMenuTitle } from "./indexViewMenu";
 import { IndexViewContents } from "./indexViewContents";
-import { IndexViewGpx } from "./indexViewGpx";
+import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
  * indexView
@@ -85,7 +85,7 @@ export class indexView {
 			const vGpxChartW = 1100;
 			const vGpxhartH = 500;
 			const vGpxhartXW = 150;
-			ReactDOM.render(<IndexViewGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />, container);
+			ReactDOM.render(<ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />, container);
 		}
 	}
 
