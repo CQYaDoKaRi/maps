@@ -25,7 +25,7 @@ type Props = {
 type ViewMapsDataGpxState = {
 	// ファイル名
 	fname: string;
-	// TEXT データ
+	// テキストデータ
 	data: string;
 };
 

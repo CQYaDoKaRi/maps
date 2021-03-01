@@ -29,7 +29,7 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 	const [files, setTiles] = useState<gpxFile[]>([optionDefault]);
 
 	/**
-	 * React：useEffect：props.refresh
+	 * React Component - useEffect - props.refresh
 	 */
 	React.useEffect(() => {
 		if (props.refresh) {
