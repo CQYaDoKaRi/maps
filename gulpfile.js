@@ -204,7 +204,7 @@ exports.build = task_build;
 // task - watch - build
 const watch_build = () => {
 	// linter
-	gulp.watch(env.src.src).on("change", gulp.series(linter));
+	gulp.watch("./").on("change", gulp.series(linter));
 
 	// tsc + babel
 	// +

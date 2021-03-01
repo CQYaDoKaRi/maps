@@ -71,3 +71,38 @@ table {
 .contentsDistanceTableWidth {
 	width: 1420px;
 }
+
+.contentsSelect {
+	margin: 10px;
+
+	button {
+		width: 100%;
+		text-align: left;
+	}
+
+	div {
+		width: 100%;
+	}
+}
+
+.contentsUpload {
+	margin: 10px;
+	padding: 20px;
+	border: 2px dotted rgb(6, 131, 214);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	background-color: rgb(193, 229, 253);
+}
+
+.contentsGpxFname {
+	margin: 10px;
+	font-size: 16px;
+	height: 24px;
+	border-bottom: 1px dotted rgb(155, 155, 155);
+}
+
+.contentsGpxChart {
+	margin: 10px;
+}

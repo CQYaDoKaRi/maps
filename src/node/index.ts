@@ -12,6 +12,7 @@ import { apiMapsDeg } from "./apiMapsDeg";
 import { apiMapsLatLon } from "./apiMapsLatLon";
 import { apiMapsDistance } from "./apiMapsDistance";
 import { apiMapsTile } from "./apiMapsTile";
+import { apiView } from "./apiView";
 
 const hostname = os.hostname();
 const syslog: log = new log("maps");
@@ -19,7 +20,7 @@ const syslog: log = new log("maps");
 const app: express.Express = express();
 const router: express.Router = express.Router();
 
-const apiURI = "/api/maps";
+let apiURI = "/api/maps";
 
 // MongoDB
 if (hostname === "maps") {
@@ -56,6 +57,11 @@ oApiMapsDistance.regist(router);
 
 const oApiMapsTile: apiMapsTile = new apiMapsTile(apiURI);
 oApiMapsTile.regist(router);
+
+// api - view
+apiURI = "/api";
+const oApiView: apiView = new apiView(apiURI);
+oApiView.regist(router);
 
 // app
 // - CORS の許可
