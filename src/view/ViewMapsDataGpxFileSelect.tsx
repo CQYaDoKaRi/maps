@@ -1,10 +1,10 @@
 // npm install --save-dev react @types/react
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 interface gpxFile {
-	name: string,
-	size: number,
-	date: string,
+	name: string;
+	size: number;
+	date: string;
 }
 
 /**
@@ -23,7 +23,7 @@ type Props = {
  */
 const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 	// option - 初期値
-	const optionDefault: gpxFile = {name:"未選択", size:0, date: ""};
+	const optionDefault: gpxFile = { name: "未選択", size: 0, date: "" };
 
 	// state
 	const [files, setTiles] = useState<gpxFile[]>([optionDefault]);
@@ -39,10 +39,9 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 				.then((response) => {
 					if (response.status === 200) {
 						void response.json().then((files: gpxFile[]) => {
-							if(files){
+							if (files) {
 								files.unshift(optionDefault);
-							}
-							else{
+							} else {
 								files = [];
 								files.push(optionDefault);
 							}
@@ -58,13 +57,9 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 
 	return (
 		<select className="contentsSelect" onChange={props.onChange.bind(this)}>
-			{
-				files.map(
-					(item: gpxFile) => (
-						<option key={item.name}>{item.name}</option>
-					)
-				)
-			}
+			{files.map((item: gpxFile) => (
+				<option key={item.name}>{item.name}</option>
+			))}
 		</select>
 	);
 };

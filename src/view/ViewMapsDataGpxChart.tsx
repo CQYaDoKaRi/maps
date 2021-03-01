@@ -71,6 +71,9 @@ const ViewMapsDataGpxChart: React.FC<Props> = (props) => {
 	 * React：useEffect：props.gpx
 	 */
 	React.useEffect(() => {
+		if (!props.gpx.fname) {
+			return;
+		}
 		if (props.gpx.data) {
 			drawData(props.gpx.fname, props.gpx.data);
 		} else {

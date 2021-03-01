@@ -64,10 +64,15 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	 * @param o select
 	 */
 	private eChange(o: React.ChangeEvent<HTMLSelectElement>): void {
-		const fname = `${this.vDir}${o.target.value}`;
+		const value = o.target.value === "未選択" ? "" : o.target.value;
+		let fname = "";
+		if (value) {
+			fname = `${this.vDir}${o.target.value}`;
+		}
+
 		this.setState({
 			Data: {
-				fname: fname === "未選択" ? "" : fname,
+				fname: fname,
 				data: "",
 			},
 		});
