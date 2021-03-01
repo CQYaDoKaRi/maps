@@ -3,7 +3,7 @@ import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPref
 import { appMaps } from "../ts/appMaps";
 import { appMapsGSI } from "../ts/appMapsGSI";
 import { indexView } from "./indexView";
-import { indexMenuTitle } from "./indexViewMenu";
+import { ViewMenuTitle } from "./ViewMenu";
 
 /**
  * ページ
@@ -425,7 +425,7 @@ function page(oView: indexView): void {
 window.onload = () => {
 	const oView: indexView = new indexView();
 
-	const title: indexMenuTitle[] = [
+	const title: ViewMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
 		{ key: "Scale", title: "ズームレベルから縮尺を求める" },
 		{
@@ -440,7 +440,7 @@ window.onload = () => {
 		},
 		{ key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" },
 	];
-	title.map((item: indexMenuTitle) => {
+	title.map((item: ViewMenuTitle) => {
 		oView.setMenuTitle(item);
 	});
 

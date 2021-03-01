@@ -3,7 +3,7 @@ import React from "react";
 // npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
 
-import { IndexViewMenu, indexMenuTitle } from "./indexViewMenu";
+import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
 import { IndexViewContents } from "./indexViewContents";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
@@ -12,14 +12,14 @@ import ViewMapsDataGpx from "./ViewMapsDataGpx";
  */
 export class indexView {
 	private init: { [key: string]: boolean } = {};
-	private title: indexMenuTitle[] = [];
+	private title: ViewMenuTitle[] = [];
 
 	/**
 	 * 表示/非表示
 	 * @param key タイトルキー
 	 */
 	public display(key: string): void {
-		this.title.map((item: indexMenuTitle) => {
+		this.title.map((item: ViewMenuTitle) => {
 			let disp = "none";
 			if (item.key === key) {
 				disp = "block";
@@ -39,7 +39,7 @@ export class indexView {
 	 */
 	public status(key: string, tkey: string): boolean {
 		let ret = true;
-		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
 		if (item && item.key === tkey) {
 			ret = this.init[item.key];
 			this.init[item.key] = true;
@@ -53,7 +53,7 @@ export class indexView {
 	 * @returns タイトル
 	 */
 	public getMenuTitle(key: string): string {
-		const item: indexMenuTitle | undefined = this.title.find((item: indexMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
 		return item ? item.title : "";
 	}
 
@@ -61,7 +61,7 @@ export class indexView {
 	 * 設定：メニュー - タイトル
 	 * @param item タイトル
 	 */
-	public setMenuTitle(item: indexMenuTitle): void {
+	public setMenuTitle(item: ViewMenuTitle): void {
 		this.title.push(item);
 		this.init[item.key] = false;
 	}
@@ -72,7 +72,7 @@ export class indexView {
 	 */
 	public renderMenu(container: HTMLElement | null): void {
 		if (container) {
-			ReactDOM.render(<IndexViewMenu titles={this.title} />, container);
+			ReactDOM.render(<ViewMenu titles={this.title} />, container);
 		}
 	}
 
