@@ -1,5 +1,6 @@
 // npm install --save-dev react @types/react
 import React from "react";
+import ViewMapsDataGpxFileSelect from "./ViewMapsDataGpxFileSelect";
 import ViewMapsDataGpxChart from "./ViewMapsDataGpxChart";
 
 // npm install --save react-dropzone
@@ -112,12 +113,12 @@ export class IndexViewGpx extends React.Component<IndexViewGpxProps, IndexViewGp
 	render(): JSX.Element {
 		return (
 			<div>
-				<select className="contentsSelect" onChange={(e: React.ChangeEvent<HTMLSelectElement>) => this.eChange(e)}>
-					<option>未選択</option>
-					<option>20190519.gpx</option>
-					<option>20190428.gpx</option>
-					<option>20180811.gpx</option>
-				</select>
+				<ViewMapsDataGpxFileSelect
+					refresh={true}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+						this.eChange(e);
+					}}
+				></ViewMapsDataGpxFileSelect>
 				<Dropzone
 					ref={this.oDropzone}
 					accept={".gpx"}
