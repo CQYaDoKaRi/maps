@@ -5,7 +5,6 @@ import ReactDOM from "react-dom";
 
 import View from "./View";
 import { ViewMenuTitle } from "./ViewMenu";
-import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
  * indexView
@@ -79,27 +78,19 @@ export class indexView {
 	/**
 	 * 描画 - App
 	 * @param container Div
+	 * @param titleKey タイトルキー
 	 */
-	public renderApp(container: HTMLElement | null): void {
-		this.titleKey = this.title.length > 0 ? this.title[0].key : "";
+	public renderApp(container: HTMLElement | null, titleKey: string): void {
+		this.titleKey = titleKey;
+		// 初期値
+		if (!this.titleKey) {
+			this.titleKey = this.title.length > 0 ? this.title[0].key : "";
+		}
 		if (container) {
 			ReactDOM.render(
 				<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
 				container
 			);
-		}
-	}
-
-	/**
-	 * 描画 - Gpx
-	 * @param container Div
-	 */
-	public renderGpx(container: HTMLElement | null): void {
-		if (container) {
-			const vGpxChartW = 1100;
-			const vGpxhartH = 500;
-			const vGpxhartXW = 150;
-			ReactDOM.render(<ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />, container);
 		}
 	}
 }
