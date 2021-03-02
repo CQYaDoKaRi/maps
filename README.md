@@ -15,6 +15,8 @@
 	+ [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
 	+ [babel](https://babeljs.io/)
 	+ [webpack](https://webpack.js.org/)
+- [husky](https://github.com/typicode/husky)
+- [lint-staged](https://github.com/okonet/lint-staged)
 ## 言語
 - HTML5
 - TypeScript
@@ -86,6 +88,16 @@ build.sh dev
 	```
 	npm run linter
 	```
+
+- git commit
+	- husky + lint-staged
+		```
+		# 構文チェック
+		eslint --fix --max-warnings=0
+		+
+		# 自動整形
+		prettier --write
+		```
 
 # 起動
 docker コンテナで Node.js、MongoDB, Mongo Express を起動します  
