@@ -1,6 +1,7 @@
 // npm install --save-dev react @types/react
 import React, { useState } from "react";
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
+import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
  * React Component - View - props
@@ -19,6 +20,11 @@ type Props = {
  * @param props props
  */
 const View: React.FC<Props> = (props) => {
+	// 設定
+	const vGpxChartW = 1100;
+	const vGpxhartH = 500;
+	const vGpxhartXW = 150;
+
 	// state
 	const [titleKey, setTitleKey] = useState(props.titleKey);
 
@@ -57,10 +63,7 @@ const View: React.FC<Props> = (props) => {
 				<div id="appTileTitleSub"></div>
 				<div id="appTile"></div>
 			</div>
-			<div id="DataGpx" className="contents">
-				<div id="appDataGpxTitleSub"></div>
-				<div id="appDataGpx"></div>
-			</div>
+			{titleKey === "DataGpx" && <ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
 			<div id="MongoDB" className="contents">
 				<div id="appMongoDBMap"></div>
 			</div>
