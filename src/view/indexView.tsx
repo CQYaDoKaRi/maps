@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
-import { IndexViewContents } from "./indexViewContents";
+import View from "./View";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
@@ -109,7 +109,7 @@ export class indexView {
 	 */
 	public renderContents(container: HTMLElement | null): void {
 		if (container) {
-			ReactDOM.render(<IndexViewContents />, container);
+			ReactDOM.render(<View />, container);
 		}
 	}
 }
