@@ -35,11 +35,6 @@ function page(oView: indexView): void {
 
 	/*==============================================================================================*/
 	if (!oView.status("Distance", vHashDiv)) {
-		let oDivTitle: HTMLElement | null = document.getElementById("appDistanceTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Distance");
-		}
-
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
@@ -52,7 +47,7 @@ function page(oView: indexView): void {
 			return;
 		}
 
-		oDivTitle = document.createElement("div");
+		const oDivTitle = document.createElement("div");
 		oDivTitle.innerHTML = item_base.pref + "からの距離";
 		oDiv.appendChild(oDivTitle);
 
@@ -182,11 +177,6 @@ function page(oView: indexView): void {
 			oDiv.style.width = "800px";
 		}
 
-		const oDivTitle: HTMLElement | null = document.getElementById("appScaleTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Scale");
-		}
-
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appScaleTitleSub");
 		if (oDivTitleSub) {
 			oDivTitleSub.innerHTML = `日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ ${_MapLat} ]、解像度 [ ${vDPI} ] dpi で計算`;
@@ -233,11 +223,6 @@ function page(oView: indexView): void {
 		let oDiv: HTMLElement | null = document.getElementById("Tile");
 		if (oDiv) {
 			oDiv.style.width = "900px";
-		}
-
-		const oDivTitle: HTMLElement | null = document.getElementById("appTileTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Tile");
 		}
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appTileTitleSub");
@@ -397,11 +382,6 @@ function page(oView: indexView): void {
 	}
 	/*==============================================================================================*/
 	if (!oView.status("DataGpx", vHashDiv)) {
-		const oDivTitle: HTMLElement | null = document.getElementById("appDataGpxTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("DataGpx");
-		}
-
 		const oContentsGpx: HTMLElement | null = document.getElementById("appDataGpx");
 		if (oContentsGpx) {
 			oView.renderGpx(oContentsGpx);
@@ -409,13 +389,8 @@ function page(oView: indexView): void {
 	}
 	/*==============================================================================================*/
 	if (!oView.status("MongoDB", vHashDiv)) {
-		const oDivTitle: HTMLElement | null = document.getElementById("appMongoDBTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("MongoDB");
-
-			oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-			oAppMaps.layerPref();
-		}
+		oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+		oAppMaps.layerPref();
 	}
 }
 
