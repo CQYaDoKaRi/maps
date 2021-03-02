@@ -13,6 +13,7 @@ import ViewMapsDataGpx from "./ViewMapsDataGpx";
 export class indexView {
 	private init: { [key: string]: boolean } = {};
 	private title: ViewMenuTitle[] = [];
+	private titleKey = "";
 
 	/**
 	 * 表示/非表示
@@ -67,12 +68,25 @@ export class indexView {
 	}
 
 	/**
+	 * イベント：メニュー
+	 * @param key 選択値
+	 */
+	private eChangeMenu(key: string): void {
+		this.titleKey = key;
+		window.location.hash = `#${key}`;
+	}
+
+	/**
 	 * 描画 - メニュー
 	 * @param container Div
 	 */
 	public renderMenu(container: HTMLElement | null): void {
 		if (container) {
-			ReactDOM.render(<ViewMenu titles={this.title} />, container);
+			this.titleKey = this.title[0].key;
+			ReactDOM.render(
+				<ViewMenu titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
+				container
+			);
 		}
 	}
 
