@@ -419,11 +419,9 @@ window.onload = () => {
 		oView.setMenuTitle(item);
 	});
 
-	oView.renderMenu(document.getElementById("menu"));
-
-	const oContents = document.getElementById("contents");
+	const oContents = document.getElementById("app");
 	if (oContents) {
-		oView.renderContents(oContents);
+		oView.renderApp(oContents);
 	}
 
 	page(oView);

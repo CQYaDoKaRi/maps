@@ -3,8 +3,8 @@ import React from "react";
 // npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
 
-import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
 import View from "./View";
+import { ViewMenuTitle } from "./ViewMenu";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
@@ -77,14 +77,14 @@ export class indexView {
 	}
 
 	/**
-	 * 描画 - メニュー
+	 * 描画 - App
 	 * @param container Div
 	 */
-	public renderMenu(container: HTMLElement | null): void {
+	public renderApp(container: HTMLElement | null): void {
+		this.titleKey = this.title.length > 0 ? this.title[0].key : "";
 		if (container) {
-			this.titleKey = this.title[0].key;
 			ReactDOM.render(
-				<ViewMenu titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
+				<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
 				container
 			);
 		}
@@ -100,16 +100,6 @@ export class indexView {
 			const vGpxhartH = 500;
 			const vGpxhartXW = 150;
 			ReactDOM.render(<ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />, container);
-		}
-	}
-
-	/**
-	 * 描画 - コンテンツ
-	 * @param container Div
-	 */
-	public renderContents(container: HTMLElement | null): void {
-		if (container) {
-			ReactDOM.render(<View />, container);
 		}
 	}
 }
