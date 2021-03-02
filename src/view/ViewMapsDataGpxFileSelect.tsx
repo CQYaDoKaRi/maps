@@ -69,16 +69,8 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 		}
 	}, [props.refresh]);
 
-	// value={props.value}
-	//onChange={props.onChange.bind(this)}
 	return (
-		<DropdownButton
-			className="contentsSelect"
-			title={props.value}
-			onChange={(e) => {
-				console.log(e);
-			}}
-		>
+		<DropdownButton className="contentsSelect" title={props.value}>
 			{files.map((item: gpxFile, index: number) => {
 				return (
 					<Dropdown.Item

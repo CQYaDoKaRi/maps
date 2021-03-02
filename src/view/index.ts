@@ -3,7 +3,7 @@ import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPref
 import { appMaps } from "../ts/appMaps";
 import { appMapsGSI } from "../ts/appMapsGSI";
 import { indexView } from "./indexView";
-import { indexMenuTitle } from "./indexViewMenu";
+import { ViewMenuTitle } from "./ViewMenu";
 
 /**
  * ページ
@@ -35,11 +35,6 @@ function page(oView: indexView): void {
 
 	/*==============================================================================================*/
 	if (!oView.status("Distance", vHashDiv)) {
-		let oDivTitle: HTMLElement | null = document.getElementById("appDistanceTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Distance");
-		}
-
 		const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 		const dmapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
 
@@ -52,7 +47,7 @@ function page(oView: indexView): void {
 			return;
 		}
 
-		oDivTitle = document.createElement("div");
+		const oDivTitle = document.createElement("div");
 		oDivTitle.innerHTML = item_base.pref + "からの距離";
 		oDiv.appendChild(oDivTitle);
 
@@ -182,11 +177,6 @@ function page(oView: indexView): void {
 			oDiv.style.width = "800px";
 		}
 
-		const oDivTitle: HTMLElement | null = document.getElementById("appScaleTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Scale");
-		}
-
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appScaleTitleSub");
 		if (oDivTitleSub) {
 			oDivTitleSub.innerHTML = `日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ ${_MapLat} ]、解像度 [ ${vDPI} ] dpi で計算`;
@@ -233,11 +223,6 @@ function page(oView: indexView): void {
 		let oDiv: HTMLElement | null = document.getElementById("Tile");
 		if (oDiv) {
 			oDiv.style.width = "900px";
-		}
-
-		const oDivTitle: HTMLElement | null = document.getElementById("appTileTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("Tile");
 		}
 
 		const oDivTitleSub: HTMLElement | null = document.getElementById("appTileTitleSub");
@@ -397,11 +382,6 @@ function page(oView: indexView): void {
 	}
 	/*==============================================================================================*/
 	if (!oView.status("DataGpx", vHashDiv)) {
-		const oDivTitle: HTMLElement | null = document.getElementById("appDataGpxTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("DataGpx");
-		}
-
 		const oContentsGpx: HTMLElement | null = document.getElementById("appDataGpx");
 		if (oContentsGpx) {
 			oView.renderGpx(oContentsGpx);
@@ -409,13 +389,8 @@ function page(oView: indexView): void {
 	}
 	/*==============================================================================================*/
 	if (!oView.status("MongoDB", vHashDiv)) {
-		const oDivTitle: HTMLElement | null = document.getElementById("appMongoDBTitle");
-		if (oDivTitle) {
-			oDivTitle.innerHTML = oView.getMenuTitle("MongoDB");
-
-			oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-			oAppMaps.layerPref();
-		}
+		oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
+		oAppMaps.layerPref();
 	}
 }
 
@@ -425,7 +400,7 @@ function page(oView: indexView): void {
 window.onload = () => {
 	const oView: indexView = new indexView();
 
-	const title: indexMenuTitle[] = [
+	const title: ViewMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
 		{ key: "Scale", title: "ズームレベルから縮尺を求める" },
 		{
@@ -440,15 +415,13 @@ window.onload = () => {
 		},
 		{ key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" },
 	];
-	title.map((item: indexMenuTitle) => {
+	title.map((item: ViewMenuTitle) => {
 		oView.setMenuTitle(item);
 	});
 
-	oView.renderMenu(document.getElementById("menu"));
-
-	const oContents = document.getElementById("contents");
+	const oContents = document.getElementById("app");
 	if (oContents) {
-		oView.renderContents(oContents);
+		oView.renderApp(oContents);
 	}
 
 	page(oView);
