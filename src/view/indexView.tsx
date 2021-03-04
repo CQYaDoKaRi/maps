@@ -2,9 +2,13 @@
 import React from "react";
 // npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
+// npm install --save-dev react-redux @types/react-redux
+import { Provider } from "react-redux";
 
 import View from "./View";
 import { ViewMenuTitle } from "./ViewMenu";
+
+import store, { storeDispatchMenu, storeGetMenuKey } from "./RStore";
 
 /**
  * indexView
@@ -75,6 +79,11 @@ export class indexView {
 		window.location.hash = `#${key}`;
 	}
 
+	private evt(): void {
+		// FIXME:test redux
+		console.log("Get", storeGetMenuKey());
+	}
+
 	/**
 	 * 描画 - App
 	 * @param container Div
@@ -87,8 +96,17 @@ export class indexView {
 			this.titleKey = this.title.length > 0 ? this.title[0].key : "";
 		}
 		if (container) {
+			store.subscribe(() => {
+				this.evt();
+			});
+
+			// FIXME:test redux
+			storeDispatchMenu(this.titleKey);
+
 			ReactDOM.render(
-				<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
+				<Provider store={store}>
+					<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />
+				</Provider>,
 				container
 			);
 		}
