@@ -2,6 +2,27 @@ import { createStore } from "redux";
 import { ActionType } from "./RAction";
 import reducer, { state } from "./RReducer";
 
+/*
+・初期処理
+	[RStore]
+	store を作成
+		store = createStore(reducer);
+	|
+・ステータス送信
+	[RStore]
+	store に {ステータス} を Dispatch する
+		store.dispatch({ステータス})
+	｜
+・ステータス処理
+	[RReducer + RAction]
+	reducer が {ステータス} を処理＆更新
+	｜
+・ステータス取得
+	[RStore]
+	store から {ステータス} を取得する
+		store.getState
+*/
+
 /**
  * store
  */
