@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 import { ActionType } from "./RAction";
-import reducer, { stateUrl } from "./RReducer";
+import reducer, { state } from "./RReducer";
 
 /**
  * store
@@ -21,6 +21,6 @@ export const storeDispatchMenu = (key: string): void => {
  * @returns key タイトルキー
  */
 export const storeGetMenuKey = (): string => {
-	const state: stateUrl = store.getState();
+	const state: state = store.getState();
 	return state.key;
 };
