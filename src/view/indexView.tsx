@@ -2,24 +2,27 @@
 import React from "react";
 // npm install --save-dev react-dom @types/react-dom
 import ReactDOM from "react-dom";
+// npm install --save-dev react-redux @types/react-redux
+import { Provider } from "react-redux";
 
 import View from "./View";
 import { ViewMenuTitle } from "./ViewMenu";
+
+import store, { storeDispatchMenu, storeGetMenuKey } from "./RStore";
 
 /**
  * indexView
  */
 export class indexView {
 	private init: { [key: string]: boolean } = {};
-	private title: ViewMenuTitle[] = [];
-	private titleKey = "";
+	private titleData: ViewMenuTitle[] = [];
 
 	/**
 	 * 表示/非表示
 	 * @param key タイトルキー
 	 */
 	public display(key: string): void {
-		this.title.map((item: ViewMenuTitle) => {
+		this.titleData.map((item: ViewMenuTitle) => {
 			let disp = "none";
 			if (item.key === key) {
 				disp = "block";
@@ -39,7 +42,7 @@ export class indexView {
 	 */
 	public status(key: string, tkey: string): boolean {
 		let ret = true;
-		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.titleData.find((item: ViewMenuTitle) => item.key === key);
 		if (item && item.key === tkey) {
 			ret = this.init[item.key];
 			this.init[item.key] = true;
@@ -53,7 +56,7 @@ export class indexView {
 	 * @returns タイトル
 	 */
 	public getMenuTitle(key: string): string {
-		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.titleData.find((item: ViewMenuTitle) => item.key === key);
 		return item ? item.title : "";
 	}
 
@@ -62,17 +65,15 @@ export class indexView {
 	 * @param item タイトル
 	 */
 	public setMenuTitle(item: ViewMenuTitle): void {
-		this.title.push(item);
+		this.titleData.push(item);
 		this.init[item.key] = false;
 	}
 
 	/**
-	 * イベント：メニュー
-	 * @param key 選択値
+	 * イベント
 	 */
-	private eChangeMenu(key: string): void {
-		this.titleKey = key;
-		window.location.hash = `#${key}`;
+	private evt(): void {
+		window.location.hash = `#${storeGetMenuKey()}`;
 	}
 
 	/**
@@ -80,15 +81,22 @@ export class indexView {
 	 * @param container Div
 	 * @param titleKey タイトルキー
 	 */
-	public renderApp(container: HTMLElement | null, titleKey: string): void {
-		this.titleKey = titleKey;
+	public renderApp(container: HTMLElement | null, key: string): void {
 		// 初期値
-		if (!this.titleKey) {
-			this.titleKey = this.title.length > 0 ? this.title[0].key : "";
+		if (!key) {
+			key = this.titleData.length > 0 ? this.titleData[0].key : "";
 		}
 		if (container) {
+			store.subscribe(() => {
+				this.evt();
+			});
+
+			storeDispatchMenu(key);
+
 			ReactDOM.render(
-				<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />,
+				<Provider store={store}>
+					<View titleData={this.titleData} />
+				</Provider>,
 				container
 			);
 		}

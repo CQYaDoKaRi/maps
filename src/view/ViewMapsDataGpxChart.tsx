@@ -28,6 +28,8 @@ type Props = {
  */
 const ViewMapsDataGpxChart: React.FC<Props> = (props) => {
 	const oChart = useRef(null);
+
+	// state
 	const [title, setTitle] = useState("");
 
 	/**
