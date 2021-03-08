@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { ActionType, ActionUrl } from "./RAction";
+import { ActionKey, actionKey } from "./RAction";
 import { state } from "./RReducer";
 
 /**
@@ -30,8 +30,8 @@ export const mapStateToProps = (state: state): propsState => ({
  * redux - dispatch
  * @param dispatch store に connect した dispatch
  */
-export const mapDispatchToProps = (dispatch: Dispatch<ActionUrl>): propsDispatch => ({
+export const mapDispatchToProps = (dispatch: Dispatch<ActionKey>): propsDispatch => ({
 	storeSetKey: (key: string) => {
-		dispatch({ type: ActionType.menu, key: key });
+		dispatch(actionKey(key));
 	},
 });

@@ -6,18 +6,18 @@ export const ActionType = {
 };
 
 /**
- * action：interface：タイトル = ページ処理
+ * action：interface：キー
  */
-export interface ActionUrl extends Action {
+export interface ActionKey extends Action {
 	type: string;
 	key: string;
 }
 
 /**
- * action：タイトル = ページ処理
- * @param key タイトルキー
+ * action：キー
+ * @param key キー
  */
-export const actionUrl = (key: string): ActionUrl => ({
+export const actionKey = (key: string): ActionKey => ({
 	type: ActionType.menu,
 	key: key,
 });

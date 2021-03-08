@@ -1,6 +1,6 @@
 import { createStore } from "redux";
-import { ActionType } from "./RAction";
-import reducer, { state } from "./RReducer";
+import { actionKey } from "./RAction";
+import reducer from "./RReducer";
 
 /*
 ・初期処理
@@ -34,7 +34,7 @@ export default store;
  * @param key タイトルキー
  */
 export const storeDispatchMenu = (key: string): void => {
-	store.dispatch({ type: ActionType.menu, key: key });
+	store.dispatch(actionKey(key));
 };
 
 /**
@@ -42,6 +42,5 @@ export const storeDispatchMenu = (key: string): void => {
  * @returns key タイトルキー
  */
 export const storeGetMenuKey = (): string => {
-	const state: state = store.getState();
-	return state.key;
+	return store.getState().key;
 };

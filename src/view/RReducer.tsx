@@ -1,4 +1,4 @@
-import { ActionUrl, ActionType, actionUrl } from "./RAction";
+import { ActionType, ActionKey, actionKey } from "./RAction";
 
 // state
 export interface state {
@@ -15,10 +15,10 @@ const stateInit: state = {
  * @param state state
  * @param action action
  */
-export const reducer = (state: state = stateInit, action: ActionUrl): state => {
+export const reducer = (state: state = stateInit, action: ActionKey): state => {
 	switch (action.type) {
 		case ActionType.menu:
-			return { key: actionUrl(action.key).key };
+			return { key: actionKey(action.key).key };
 		default:
 			return state;
 	}
