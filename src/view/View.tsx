@@ -9,8 +9,8 @@ import ViewMapsDataGpx from "./ViewMapsDataGpx";
  * React Component - View - props
  */
 type Props = {
-	// タイトル
-	titles: ViewMenuTitle[];
+	// タイトル：データ
+	titleData: ViewMenuTitle[];
 	// mapStateToProps
 	storeKey: string;
 	// mapDispatchToProps
@@ -37,7 +37,7 @@ const View: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<ViewMenu titles={props.titles} titleKey={props.storeKey} onChange={eChangeMenu} />
+			<ViewMenu titleData={props.titleData} titleKey={props.storeKey} onChange={eChangeMenu} />
 			<div id="Distance" className="contents">
 				<div>
 					<a href="http://www.gsi.go.jp/common/000195510.pdf" target="_blank">

@@ -15,14 +15,14 @@ import store, { storeDispatchMenu, storeGetMenuKey } from "./RStore";
  */
 export class indexView {
 	private init: { [key: string]: boolean } = {};
-	private title: ViewMenuTitle[] = [];
+	private titleData: ViewMenuTitle[] = [];
 
 	/**
 	 * 表示/非表示
 	 * @param key タイトルキー
 	 */
 	public display(key: string): void {
-		this.title.map((item: ViewMenuTitle) => {
+		this.titleData.map((item: ViewMenuTitle) => {
 			let disp = "none";
 			if (item.key === key) {
 				disp = "block";
@@ -42,7 +42,7 @@ export class indexView {
 	 */
 	public status(key: string, tkey: string): boolean {
 		let ret = true;
-		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.titleData.find((item: ViewMenuTitle) => item.key === key);
 		if (item && item.key === tkey) {
 			ret = this.init[item.key];
 			this.init[item.key] = true;
@@ -56,7 +56,7 @@ export class indexView {
 	 * @returns タイトル
 	 */
 	public getMenuTitle(key: string): string {
-		const item: ViewMenuTitle | undefined = this.title.find((item: ViewMenuTitle) => item.key === key);
+		const item: ViewMenuTitle | undefined = this.titleData.find((item: ViewMenuTitle) => item.key === key);
 		return item ? item.title : "";
 	}
 
@@ -65,7 +65,7 @@ export class indexView {
 	 * @param item タイトル
 	 */
 	public setMenuTitle(item: ViewMenuTitle): void {
-		this.title.push(item);
+		this.titleData.push(item);
 		this.init[item.key] = false;
 	}
 
@@ -84,7 +84,7 @@ export class indexView {
 	public renderApp(container: HTMLElement | null, key: string): void {
 		// 初期値
 		if (!key) {
-			key = this.title.length > 0 ? this.title[0].key : "";
+			key = this.titleData.length > 0 ? this.titleData[0].key : "";
 		}
 		if (container) {
 			store.subscribe(() => {
@@ -95,7 +95,7 @@ export class indexView {
 
 			ReactDOM.render(
 				<Provider store={store}>
-					<View titles={this.title} />
+					<View titleData={this.titleData} />
 				</Provider>,
 				container
 			);

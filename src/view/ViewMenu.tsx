@@ -14,9 +14,9 @@ export interface ViewMenuTitle {
  * React Component - ViewMenu - props
  */
 type Props = {
-	// タイトル
-	titles: ViewMenuTitle[];
-	// タイトルキー（選択値）
+	// タイトル：データ
+	titleData: ViewMenuTitle[];
+	// タイトル：キー（選択値）
 	titleKey: string;
 	// イベント
 	onChange: (titleKey: string) => void;
@@ -34,7 +34,7 @@ const ViewMenu: React.FC<Props> = (props) => {
 	 * 取得：タイトル
 	 */
 	const getTitle = () => {
-		const item: ViewMenuTitle[] = props.titles.filter((item: ViewMenuTitle) => {
+		const item: ViewMenuTitle[] = props.titleData.filter((item: ViewMenuTitle) => {
 			return item.key === key;
 		});
 		return item.length > 0 ? item[0].title : "";
@@ -51,7 +51,7 @@ const ViewMenu: React.FC<Props> = (props) => {
 
 	return (
 		<DropdownButton className="contentsSelect" title={getTitle()}>
-			{props.titles.map((item: ViewMenuTitle, index: number) => {
+			{props.titleData.map((item: ViewMenuTitle, index: number) => {
 				return (
 					<Dropdown.Item
 						key={index}
