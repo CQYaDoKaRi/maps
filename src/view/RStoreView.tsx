@@ -2,10 +2,18 @@ import { Dispatch } from "redux";
 import { ActionType, ActionUrl } from "./RAction";
 import { state } from "./RReducer";
 
+/**
+ * interface - propsState
+ * mapStateToProps により設定される
+ */
 export interface propsState {
 	storeKey: string;
 }
 
+/**
+ * interface - propsDispatch
+ * mapDispatchToProps により設定される
+ */
 export interface propsDispatch {
 	storeSetKey: (key: string) => void;
 }

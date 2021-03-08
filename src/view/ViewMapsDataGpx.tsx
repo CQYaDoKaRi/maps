@@ -40,12 +40,13 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	const vNameDefault = "[未選択]";
 	const vNameDropzone = "[アップロード]";
 
-	// state - GPX
+	// state
 	const [gpx, setGpx] = useState<ViewMapsDataGpxState[]>([{ fname: "", data: "" }]);
 	const [fileSelect, setFileSelect] = useState(vNameDropzone ? vNameDropzone : vNameDefault);
 	const [dropzone, setDropzone] = useState(vNameDropzone ? true : false);
+
 	/**
-	 * state - GPX - set
+	 * state - set
 	 * @param fname ファイル名
 	 * @param data GPX TEXT データ
 	 */
@@ -53,11 +54,11 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 		setGpx([{ fname: fname, data: "" }]);
 	};
 
-	// event - state - GPX - dropzone
+	// event - state - dropzone
 	let nStateGpxDropzone = 0;
 	let eStateGpxDropzone: ViewMapsDataGpxState[] = [];
 	/**
-	 * event - state - GPX - dropzone - init
+	 * event - state - dropzone - init
 	 * @param n ファイル数
 	 */
 	const eStateGpxDropzoneInit = (n: number) => {

@@ -5,7 +5,7 @@ export interface state {
 	key: string;
 }
 
-// state
+// state：初期値
 const stateInit: state = {
 	key: "",
 };
