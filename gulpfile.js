@@ -32,7 +32,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 
 // src
-const app = require("./dist/public/ts/app");
+const app = require("./dist/public.babel/ts/app");
 const oApp = new app.app();
 oApp.include();
 
