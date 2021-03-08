@@ -21,6 +21,7 @@
 - HTML5
 - TypeScript
 	+ [React](https://ja.reactjs.org/)
+	+ [Redux](https://redux.js.org/)
 - [JavaScript](https://www.typescriptlang.org/) (ES2015)
 - SCSS
 - [Swagger](https://swagger.io/) (OpenAPI v3)
