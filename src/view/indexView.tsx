@@ -16,7 +16,6 @@ import store, { storeDispatchMenu, storeGetMenuKey } from "./RStore";
 export class indexView {
 	private init: { [key: string]: boolean } = {};
 	private title: ViewMenuTitle[] = [];
-	private titleKey = "";
 
 	/**
 	 * 表示/非表示
@@ -71,17 +70,10 @@ export class indexView {
 	}
 
 	/**
-	 * イベント：メニュー
-	 * @param key 選択値
+	 * イベント
 	 */
-	private eChangeMenu(key: string): void {
-		this.titleKey = key;
-		window.location.hash = `#${key}`;
-	}
-
 	private evt(): void {
-		// FIXME:test redux
-		console.log("Get", storeGetMenuKey());
+		window.location.hash = `#${storeGetMenuKey()}`;
 	}
 
 	/**
@@ -89,23 +81,21 @@ export class indexView {
 	 * @param container Div
 	 * @param titleKey タイトルキー
 	 */
-	public renderApp(container: HTMLElement | null, titleKey: string): void {
-		this.titleKey = titleKey;
+	public renderApp(container: HTMLElement | null, key: string): void {
 		// 初期値
-		if (!this.titleKey) {
-			this.titleKey = this.title.length > 0 ? this.title[0].key : "";
+		if (!key) {
+			key = this.title.length > 0 ? this.title[0].key : "";
 		}
 		if (container) {
 			store.subscribe(() => {
 				this.evt();
 			});
 
-			// FIXME:test redux
-			storeDispatchMenu(this.titleKey);
+			storeDispatchMenu(key);
 
 			ReactDOM.render(
 				<Provider store={store}>
-					<View titles={this.title} titleKey={this.titleKey} onChange={(key: string) => this.eChangeMenu(key)} />
+					<View titles={this.title} />
 				</Provider>,
 				container
 			);

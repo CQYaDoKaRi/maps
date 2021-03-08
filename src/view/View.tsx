@@ -1,5 +1,7 @@
 // npm install --save-dev react @types/react
-import React, { useState } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "./RStoreView";
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
@@ -9,10 +11,10 @@ import ViewMapsDataGpx from "./ViewMapsDataGpx";
 type Props = {
 	// タイトル
 	titles: ViewMenuTitle[];
-	// タイトルキー（選択値）
-	titleKey: string;
-	// イベント
-	onChange: (titleKey: string) => void;
+	// mapStateToProps
+	storeKey: string;
+	// mapDispatchToProps
+	storeSetKey: (key: string) => void;
 };
 
 /**
@@ -25,21 +27,17 @@ const View: React.FC<Props> = (props) => {
 	const vGpxhartH = 500;
 	const vGpxhartXW = 150;
 
-	// state
-	const [titleKey, setTitleKey] = useState(props.titleKey);
-
 	/**
 	 * イベント：メニュー
 	 * @param key 選択値
 	 */
 	const eChangeMenu = (key: string) => {
-		setTitleKey(key);
-		props.onChange(key);
+		props.storeSetKey(key);
 	};
 
 	return (
 		<>
-			<ViewMenu titles={props.titles} titleKey={titleKey} onChange={eChangeMenu} />
+			<ViewMenu titles={props.titles} titleKey={props.storeKey} onChange={eChangeMenu} />
 			<div id="Distance" className="contents">
 				<div>
 					<a href="http://www.gsi.go.jp/common/000195510.pdf" target="_blank">
@@ -63,7 +61,7 @@ const View: React.FC<Props> = (props) => {
 				<div id="appTileTitleSub"></div>
 				<div id="appTile"></div>
 			</div>
-			{titleKey === "DataGpx" && <ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
+			{props.storeKey === "DataGpx" && <ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
 			<div id="MongoDB" className="contents">
 				<div id="appMongoDBMap"></div>
 			</div>
@@ -71,4 +69,4 @@ const View: React.FC<Props> = (props) => {
 	);
 };
 
-export default View;
+export default connect(mapStateToProps, mapDispatchToProps)(View);
