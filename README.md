@@ -7,8 +7,12 @@
 # 使用技術
 ## 環境
 - [Node.js](https://nodejs.org/ja/) (ts-node, ts-node-dev)
+	+ [Redux](https://redux.js.org/)
+	+ [React](https://ja.reactjs.org/)
 	+ [Express.js](https://expressjs.com/ja/)
+	+ [Next.js](https://nextjs.org/)
 - [docker](https://www.docker.com/)
+	+ [docker-compose](https://docs.docker.com/compose/)
 - [gulp](https://gulpjs.com/)
 	+ [prettier](https://prettier.io/)
 	+ [eslint](https://eslint.org/)
@@ -18,14 +22,12 @@
 - [husky](https://github.com/typicode/husky)
 - [lint-staged](https://github.com/okonet/lint-staged)
 ## 言語
-- HTML5
-- TypeScript
-	+ [React](https://ja.reactjs.org/)
-	+ [Redux](https://redux.js.org/)
+- [HTML5](https://dev.w3.org/html5/spec-LC/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [JavaScript](https://www.typescriptlang.org/) (ES2015)
-- SCSS
+- [SCSS](https://sass-lang.com/)
 - [Swagger](https://swagger.io/) (OpenAPI v3)
-- ShellScript (bash)
+- [ShellScript-bash](https://www.gnu.org/software/bash/)
 ## ライブラリー
 - [leaflet](https://leafletjs.com/)
 - [Char.js](https://www.chartjs.org/)
@@ -138,17 +140,24 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 		```
 		node dist/node/node/index.js
 		```
+- Next.js の起動  
+	```
+	npm run next
+	```
 
 - [docker コンテナ操作スクリプトの説明](./docker/README.md)
 
 # サイト表示
-- メインページ  
+- メインページ(Node.js)  
 	http://localhost:8080/  
 
-- メインページ（開発モード）  
+- メインページ - 開発モード(Node.js)  
 	http://localhost:8080/index.html?dev=1  
 
-- API  
+- メインページ(Next.js)  
+	http://localhost:3000/  
+
+- API(Node.js)  
 	http://localhost:8080/api/maps/docs/  
 
 - Mongo Express  

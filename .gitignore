@@ -17,3 +17,7 @@ bin/tile/app.GetTile/bin/Release/*pdb
 # mongo
 logs
 !logs/.gitkeep
+# nextjs
+.next
+next-env.d.ts
+public.next

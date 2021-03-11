@@ -11,6 +11,8 @@ import { FileRejection } from "react-dropzone";
  * React Component - ViewMapsDataGpx - props
  */
 type Props = {
+	// GPXファイルリスト取得 API
+	api: string;
 	// 幅[px]
 	w: number;
 	// 高[px]
@@ -122,6 +124,7 @@ const ViewMapsDataGpx: React.FC<Props> = (props) => {
 	return (
 		<div>
 			<ViewMapsDataGpxFileSelect
+				api={props.api}
 				nameDefault={vNameDefault}
 				nameDropzone={vNameDropzone}
 				value={fileSelect}

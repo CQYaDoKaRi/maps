@@ -1,7 +1,7 @@
 /**
  * アプリケーション
  */
-class app {
+export class app {
 	private SCRIPT: HTMLScriptElement[] = [];
 	private _css: string[] = [];
 	private _cssLib: string[] = [];

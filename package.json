@@ -17,6 +17,8 @@
 		"watch": "gulp watch",
 		"start": "ts-node --project ./tsconfig.node.json src/node/index.ts",
 		"startdev": "ts-node-dev --project ./tsconfig.node.json src/node/index.ts --respawn",
+		"next": "next",
+		"next_build": "next build && next export -o public.next",
 		"test": "jest",
 		"prepare": "husky install"
 	},
@@ -88,6 +90,7 @@
 		"lint-staged": "^10.5.4",
 		"log4js": "^6.3.0",
 		"mongodb": "^3.6.3",
+		"next": "^10.0.8",
 		"prettier": "^2.2.1",
 		"react": "^17.0.1",
 		"react-bootstrap": "^1.5.0",

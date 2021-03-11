@@ -7,6 +7,9 @@
 		"./src/view/*.tsx",
 		// nodde
 		"./src/node/*.ts",
+		// pages
+		"./src/pages/**/*.ts",
+		"./src/pages/**/*.tsx",
 		// eslint
 		".eslintrc.js"
 	],
