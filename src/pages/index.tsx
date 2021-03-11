@@ -1,6 +1,11 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 
+import { Provider } from "react-redux";
+
+import store, { storeDispatchMenu, storeGetMenuKey } from "../view/RStore";
+
+import View from "../view/View";
 import { ViewMenuTitle } from "../view/ViewMenu";
 
 type propsType = {
@@ -13,6 +18,13 @@ type propsGpxFiles = {
 	date: string;
 };
 
+const evt = () => {
+	if (typeof window !== "undefined") {
+		const hash = `#${storeGetMenuKey()}`;
+		window.location.hash = hash;
+	}
+};
+
 /**
  * ページ
  * @param param0
@@ -20,7 +32,8 @@ type propsGpxFiles = {
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const index = ({ gpx }: propsType) => {
-	const title: ViewMenuTitle[] = [
+	const api = "http://localhost:8080/";
+	const titleData: ViewMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
 		{ key: "Scale", title: "ズームレベルから縮尺を求める" },
 		{
@@ -36,20 +49,40 @@ const index = ({ gpx }: propsType) => {
 		{ key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" },
 	];
 
+	const getHash = () => {
+		let vHash = "";
+		let f = false;
+		if (typeof window !== "undefined") {
+			vHash = window.location.hash;
+			if (vHash.length > 0) {
+				vHash = vHash.substring(1);
+			}
+
+			titleData.map((item: ViewMenuTitle) => {
+				if (item.key.toLowerCase() === vHash.toLowerCase()) {
+					f = true;
+				}
+			});
+		}
+
+		if (!f) {
+			vHash = titleData[0].key;
+		}
+
+		return vHash;
+	};
+
+	store.subscribe(() => {
+		evt();
+	});
+
+	storeDispatchMenu(getHash());
+
 	return (
 		<>
-			<div>ページタイトル</div>
-			<ul>
-				{title.map((item: ViewMenuTitle) => {
-					return (
-						<li key={item.key}>
-							<Link href={`/items/${item.key}?title=${item.title}`}>
-								<a>{item.title}</a>
-							</Link>
-						</li>
-					);
-				})}
-			</ul>
+			<Provider store={store}>
+				<View api={api} titleData={titleData} />
+			</Provider>
 			<div>GPXデータ</div>
 			<ul>
 				{gpx.map((item: propsGpxFiles) => {
