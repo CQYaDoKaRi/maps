@@ -16,6 +16,7 @@ services:
       - link_maps
     links:
       - mongo
+      - redis
 
   mongo:
     image: maps_mongo:dev
@@ -60,6 +61,23 @@ services:
       - mongo
     command: /bin/bash -c '/usr/local/bin/node /node_modules/mongo-express/app.js'
 
+  redis:
+    image: maps_redis:dev
+    container_name: maps_redis
+    hostname: maps_redis
+    build:
+      context: .
+      dockerfile: Dockerfile_redis
+    restart: always
+    ports:
+      - 8379:6379
+    volumes:
+      - redis:/data
+    tty: true
+    networks:
+      - link_maps
+    command: redis-server --appendonly yes
+
 volumes:
   maps_data:
     driver_opts:
@@ -71,6 +89,12 @@ volumes:
     driver_opts:
       type: none
       device: ${PWD}/../mongo/
+      o: bind
+
+  redis:
+    driver_opts:
+      type: none
+      device: ${PWD}/../redis/
       o: bind
 
 networks:
