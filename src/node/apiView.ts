@@ -33,7 +33,7 @@ export class apiView {
 				const FileStatDateTHH = `00${dt.getHours()}`.slice(-2);
 				const FileStatDateTMM = `00${dt.getMinutes()}`.slice(-2);
 				const FileStatDateTDD = `00${dt.getSeconds()}`.slice(-2);
-				return `${FileStatDateYY}/${FileStatDateMM}/${FileStatDateDD} ${FileStatDateTHH}:${FileStatDateTMM}:${FileStatDateTDD}}`;
+				return `${FileStatDateYY}/${FileStatDateMM}/${FileStatDateDD} ${FileStatDateTHH}:${FileStatDateTMM}:${FileStatDateTDD}`;
 			};
 
 			const dir = path.join(__dirname, "./../../public/data");
