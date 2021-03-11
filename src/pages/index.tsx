@@ -1,9 +1,25 @@
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 
 import { ViewMenuTitle } from "../view/ViewMenu";
 
+type propsType = {
+	gpx: propsGpxFiles[];
+};
+
+type propsGpxFiles = {
+	name: string;
+	size: number;
+	date: string;
+};
+
+/**
+ * ページ
+ * @param param0
+ * @returns
+ */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const index = () => {
+const index = ({ gpx }: propsType) => {
 	const title: ViewMenuTitle[] = [
 		{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
 		{ key: "Scale", title: "ズームレベルから縮尺を求める" },
@@ -22,13 +38,25 @@ const index = () => {
 
 	return (
 		<>
-			<div>トップページ</div>
+			<div>ページタイトル</div>
 			<ul>
 				{title.map((item: ViewMenuTitle) => {
 					return (
-						<li>
+						<li key={item.key}>
 							<Link href={`/items/${item.key}?title=${item.title}`}>
 								<a>{item.title}</a>
+							</Link>
+						</li>
+					);
+				})}
+			</ul>
+			<div>GPXデータ</div>
+			<ul>
+				{gpx.map((item: propsGpxFiles) => {
+					return (
+						<li key={item.name}>
+							<Link href={`/items/${item.name}?size=${item.size}&date=${item.date}`}>
+								<a>{item.name}</a>
 							</Link>
 						</li>
 					);
@@ -39,3 +67,17 @@ const index = () => {
 };
 
 export default index;
+
+/**
+ * データ取得
+ * @returns gpx データ
+ */
+export const getServerSideProps: GetServerSideProps = async () => {
+	const res = await fetch(`http://localhost:8080/api/view/gpx/files`);
+	const gpx: propsGpxFiles[] = (await res.json()) as propsGpxFiles[];
+
+	// サーバー側へ出力されるログ
+	console.log(gpx);
+
+	return { props: { gpx } };
+};
