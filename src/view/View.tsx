@@ -9,6 +9,8 @@ import ViewMapsDataGpx from "./ViewMapsDataGpx";
  * React Component - View - props
  */
 type Props = {
+	// APIベースURL
+	api: string;
 	// タイトル：データ
 	titleData: ViewMenuTitle[];
 	// mapStateToProps
@@ -23,6 +25,7 @@ type Props = {
  */
 const View: React.FC<Props> = (props) => {
 	// 設定
+	const vGpxAPI = `${props.api}api/view/gpx/files`;
 	const vGpxChartW = 1100;
 	const vGpxhartH = 500;
 	const vGpxhartXW = 150;
@@ -61,7 +64,7 @@ const View: React.FC<Props> = (props) => {
 				<div id="appTileTitleSub"></div>
 				<div id="appTile"></div>
 			</div>
-			{props.storeKey === "DataGpx" && <ViewMapsDataGpx w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
+			{props.storeKey === "DataGpx" && <ViewMapsDataGpx api={vGpxAPI} w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
 			<div id="MongoDB" className="contents">
 				<div id="appMongoDBMap"></div>
 			</div>

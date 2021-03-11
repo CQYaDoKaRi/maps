@@ -95,7 +95,7 @@ export class indexView {
 
 			ReactDOM.render(
 				<Provider store={store}>
-					<View titleData={this.titleData} />
+					<View api="" titleData={this.titleData} />
 				</Provider>,
 				container
 			);

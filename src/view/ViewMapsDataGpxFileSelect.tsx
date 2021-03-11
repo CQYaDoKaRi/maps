@@ -15,6 +15,8 @@ interface gpxFile {
  * React Component - ViewMapsDataGpxFileSelect - props
  */
 type Props = {
+	// GPXファイルリスト取得 API
+	api: string;
 	// 選択：未選択
 	nameDefault: string;
 	// 選択：アップロード
@@ -48,7 +50,7 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 	 */
 	React.useEffect(() => {
 		if (props.refresh) {
-			fetch("api/view/gpx/files", {
+			fetch(props.api, {
 				method: "GET",
 			})
 				.then((response) => {
@@ -64,7 +66,7 @@ const ViewMapsDataGpxFileSelect: React.FC<Props> = (props) => {
 					}
 				})
 				.catch(() => {
-					console.error("[api]=[api/view/gpx/files] request error.");
+					console.error(`[api]=[${props.api}] request error.`);
 				});
 		}
 	}, [props.refresh]);
