@@ -6,37 +6,38 @@
 
 # 使用技術
 ## 環境
-- [Node.js](https://nodejs.org/ja/) (ts-node, ts-node-dev)
-	+ [Redux](https://redux.js.org/)
-	+ [React](https://ja.reactjs.org/)
-	+ [Express.js](https://expressjs.com/ja/)
-	+ [Next.js](https://nextjs.org/)
-- [docker](https://www.docker.com/)
-	+ [docker-compose](https://docs.docker.com/compose/)
-- [gulp](https://gulpjs.com/)
-	+ [prettier](https://prettier.io/)
-	+ [eslint](https://eslint.org/)
-	+ [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
-	+ [babel](https://babeljs.io/)
-	+ [webpack](https://webpack.js.org/)
-- [husky](https://github.com/typicode/husky)
-- [lint-staged](https://github.com/okonet/lint-staged)
+- [Node.js](https://nodejs.org/ja/) (ts-node, ts-node-dev)  
+	+ [Redux](https://redux.js.org/)  
+	+ [React](https://ja.reactjs.org/)  
+	+ [Express.js](https://expressjs.com/ja/)  
+	+ [Next.js](https://nextjs.org/)  
+	+ [PM2](https://pm2.keymetrics.io/)  
+- [docker](https://www.docker.com/)  
+	+ [docker-compose](https://docs.docker.com/compose/)  
+- [gulp](https://gulpjs.com/)  
+	+ [prettier](https://prettier.io/)  
+	+ [eslint](https://eslint.org/)  
+	+ [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)  
+	+ [babel](https://babeljs.io/)  
+	+ [webpack](https://webpack.js.org/)  
+- [husky](https://github.com/typicode/husky)  
+- [lint-staged](https://github.com/okonet/lint-staged)  
 ## 言語
-- [HTML5](https://dev.w3.org/html5/spec-LC/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [JavaScript](https://www.typescriptlang.org/) (ES2015)
-- [SCSS](https://sass-lang.com/)
-- [Swagger](https://swagger.io/) (OpenAPI v3)
-- [ShellScript-bash](https://www.gnu.org/software/bash/)
+- [HTML5](https://dev.w3.org/html5/spec-LC/)  
+- [TypeScript](https://www.typescriptlang.org/)  
+- [JavaScript](https://www.typescriptlang.org/) (ES2015)  
+- [SCSS](https://sass-lang.com/)  
+- [Swagger](https://swagger.io/) (OpenAPI v3)  
+- [ShellScript-bash](https://www.gnu.org/software/bash/)  
 ## ライブラリー
-- [leaflet](https://leafletjs.com/)
-- [Char.js](https://www.chartjs.org/)
+- [leaflet](https://leafletjs.com/)  
+- [Char.js](https://www.chartjs.org/)  
 ## テスト
-- [Jest](https://jestjs.io/ja/) (ts-jest)
-- [Cypress](https://www.cypress.io/)
+- [Jest](https://jestjs.io/ja/) (ts-jest)  
+- [Cypress](https://www.cypress.io/)  
 ## データベース
-- [MongoDB](https://www.mongodb.com/)
-- [Mongo Express](https://github.com/mongo-express)
+- [MongoDB](https://www.mongodb.com/)  
+- [Mongo Express](https://github.com/mongo-express)  
 
 # インストール
 ```
@@ -47,53 +48,53 @@ npm install
 ```
 build.sh
 ```
-- gulp + prettier
-	- [./src] のソースファイルを自動整形して保存
-- gulp + eslint
-	- [./src] のソースファイルを構文チェック
-- gulp + tsc
-	- TypeScript を tsconfig.json の設定でコンパイルして出力 [./dist/public]
-	- TypeScript を tsconfig.node.json の設定でコンパイル [./dist/node]
-- gulp + babel
-	- tsc でコンパイルした JavaScript[./dist/public] を変換して出力 [./dist/public.babel]
-- gulp + webpack
-	- babel で変換した JavaScript[./dist/public.babel] を結合・圧縮して出力 [./public/js]
-- gulp + uglify
-	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力 [./public/js/appp.min.js]
-- gulp + sass
-	- scss をコンパイル、結合、圧縮して出力 [./public/css]
+- gulp + prettier  
+	- [./src] のソースファイルを自動整形して保存  
+- gulp + eslint  
+	- [./src] のソースファイルを構文チェック  
+- gulp + tsc  
+	- TypeScript を tsconfig.json の設定でコンパイルして出力 [./dist/public]  
+	- TypeScript を tsconfig.node.json の設定でコンパイル [./dist/node]  
+- gulp + babel  
+	- tsc でコンパイルした JavaScript[./dist/public] を変換して出力 [./dist/public.babel]  
+- gulp + webpack  
+	- babel で変換した JavaScript[./dist/public.babel] を結合・圧縮して出力 [./public/js]  
+- gulp + uglify  
+	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力 [./public/js/appp.min.js]  
+- gulp + sass  
+	- scss をコンパイル、結合、圧縮して出力 [./public/css]  
 
 # ビルド - 開発モード(TypeScript)
 ```
 build.sh dev
 ```
-- gulp + eslint
-	- [./src] のソースファイルを構文チェック
-- gulp + tsc
-	- TypeScript を tsconfig.json の設定でコンパイルして出力[./dist/public]
-- gulp + uglify
-	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力[./public/js/appp.min.js]
-- gulp + tsc
-	- TypeScript のファイルを監視しコンパイル
+- gulp + eslint  
+	- [./src] のソースファイルを構文チェック  
+- gulp + tsc  
+	- TypeScript を tsconfig.json の設定でコンパイルして出力[./dist/public]  
+- gulp + uglify  
+	- tsc でコンパイルした JavaScript[./dist/public/js/app.js] を圧縮して出力[./public/js/appp.min.js]  
+- gulp + tsc  
+	- TypeScript のファイルを監視しコンパイル  
 
 # ソースコードのチェック
-- 構文チェック＋自動整形
+- 構文チェック＋自動整形  
 	```
 	npm run check
 	```
 
-- 構文チェック
+- 構文チェック  
 	```
 	npm run formatter
 	```
 
-- 自動整形
+- 自動整形  
 	```
 	npm run linter
 	```
 
-- git commit
-	- husky + lint-staged
+- git commit  
+	- husky + lint-staged  
 		```
 		# 構文チェック
 		eslint --fix --max-warnings=0
@@ -103,43 +104,65 @@ build.sh dev
 		```
 
 # 起動
-docker コンテナで Node.js、MongoDB, Mongo Express を起動します  
-```
-./start.sh
-```
-
-- docker コンテナの Node.js のみ起動する  
-	ts-node 起動  
+docker コンテナで Node.js、MongoDB, Mongo Express, Redis を起動します  
+- 本番モード（pm2）  
 	```
-	./start.sh www
+	./start.sh
 	```
 
-- docker コンテナの Node.js のみ起動する（開発モード）  
-	ts-node-dev 起動  
+- 開発モード（ts-node）  
 	```
-	./start.sh www_dev
+	./start.sh tsn
+	```
+
+- 開発モード（ts-node-dev)  
+	```
+	./start.sh tsndev
 	```
 
 - Node.js のみ起動  
 	docker コンテナを使わない＝ docker コンテナが停止している状態で動作します  
 	Node.js の実行するホスト名が docker コンテナのホスト名 [maps] でない場合、  
 	docker コンテナにより動作する MongoDB に関係する処理のみ機能させずに起動します  
-	- ts-node
+	- ts-node  
 		```
-		npm run start
+		npm run tsn_start
 		```
 		= `npm run ts-node --project ./tsconfig.node.json src/node/index.ts`
 
-	- ts-node-dev
+	- ts-node-dev  
 		```
-		npm run startdev
+		npm run tsn_start_dev
 		```
 		= `npm run-dev ts-node --project ./tsconfig.node.json src/node/index.ts`
 
-	- node（トランスパイル済み js）
+	- node（トランスパイル済み js）  
 		```
 		node dist/node/node/index.js
 		```
+
+- PM2 により Node.js 制御  
+	- 起動  
+		```
+		npm run prod_start
+		```
+
+	- 起動状況のモニター  
+		```
+		npm run prod_moni
+		```
+
+	- 停止  
+		```
+		npm run prod_stop
+		```
+
+	- 削除  
+		```
+		npm run prod_delete
+		```
+
+
 - Next.js の起動  
 	```
 	npm run next
@@ -164,17 +187,17 @@ docker コンテナで Node.js、MongoDB, Mongo Express を起動します
 	http://localhost:8581/  
 
 # テスト
-- JEST
+- JEST  
 	```
 	npm run test
 	```
 
-- Cypress - GUI
+- Cypress - GUI  
 	```
 	npx cypress open
 	```
 
-- Cypress - CUI
+- Cypress - CUI  
 	```
 	npx cypress run
 	```
