@@ -1,0 +1,5 @@
+{
+	"name": "maps",
+	"script": "./dist/node/node/index.js",
+	"time": true
+}
