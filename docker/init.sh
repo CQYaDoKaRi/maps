@@ -14,14 +14,22 @@ function start() {
 
 	#docker image history ${APP}:${APPTAG}
 
-	exec_mongo
-	exec_run
+	exec_mongo_start
+
+	if [ "${1}" = "tsn" ]; then
+		exec_start_tsn
+	elif [ "${1}" = "tsndev" ]; then
+		exec_start_tsndev
+	else
+		exec_start
+	fi
 }
 
 # -------
 # stop
 # -------
 function stop() {
+	npm_run_stop
 	exec_mongo_stop
 
 	#docker stop ${APP}
@@ -35,25 +43,41 @@ function stop() {
 }
 
 # -------
-# run
+# npm run
 # -------
-# run node
-function run() {
+# npm run prod
+function npm_run() {
 	cd ${DIR}/../
-	# - dev
-	npm run start
-	# - release
-	#node index.js
+	npm run prod_docker_start
+	npm run prod_docker_moni
+	cd ${DIR}
 }
 
-# -------
-# run dev
-# -------
-# run node-dev
-function run_dev() {
+# npm run ts-node
+function npm_run_tsn() {
 	cd ${DIR}/../
-	# - dev
-	npm run startdev
+	npm run tsn_start
+	cd ${DIR}
+}
+
+# npm run ts-node-dev
+function npm_run_tsndev() {
+	cd ${DIR}/../
+	npm run tsn_start_dev
+	cd ${DIR}
+}
+
+# npm run prod - stop
+function npm_run_stop() {
+	cd ${DIR}/../
+	npm run prod_docker_stop
+	npm run prod_docker_delete
+
+	if [ -e .pm2.docker ]; then
+		rm -Rf .pm2.docker
+	fi
+
+	cd ${DIR}
 }
 
 # -------
@@ -64,22 +88,33 @@ function exec() {
 	docker exec -it ${APP} /bin/bash
 }
 
-# docker exec - run node
-function exec_run() {
-	echo -e "\033[0;34m[${APP}] start node\033[0;39m"
+# docker exec - start - prod = pm2
+function exec_start() {
+	echo -e "\033[0;34m[${APP}] start node[pm2]\033[0;39m"
 
-	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh run'"
+	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start'"
+
 	eval ${CMD}
 }
 
-function exec_run_dev() {
-	echo -e "\033[0;34m[${APP}] start node[dev]\033[0;39m"
+# docker exec - start - ts-node
+function exec_start_tsn() {
+	echo -e "\033[0;34m[${APP}] start ts-node\033[0;39m"
 
-	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh run_dev'"
+	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start_tsn'"
 	eval ${CMD}
 }
 
-function exec_mongo() {
+# docker exec - start - ts-node-dev
+function exec_start_tsndev() {
+	echo -e "\033[0;34m[${APP}] start ts-node-dev\033[0;39m"
+
+	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start_tsndev'"
+	eval ${CMD}
+}
+
+# docker exec - mongo - start
+function exec_mongo_start() {
 	echo -e "\033[0;34m[${APP}] start mongod ...\033[0;39m"
 
 	DB="/data"
@@ -90,6 +125,7 @@ function exec_mongo() {
 	echo -e "\033[0;34m[${APP}] start mongod ... completed\033[0;39m"
 }
 
+# docker exec - mongo - stop
 function exec_mongo_stop() {
 	echo -e "\033[0;34m[${APP}] stop mongod ...\033[0;39m"
 
@@ -103,25 +139,23 @@ function exec_mongo_stop() {
 
 
 if [ "${1}" = "start" ]; then
-	start
+	stop
+	start "${2}"
 
 elif [ "${1}" = "stop" ]; then
 	stop
 
-elif [ "${1}" = "run" ]; then
-	run
-
-elif [ "${1}" = "run_dev" ]; then
-	run_dev
-
 elif [ "${1}" = "exec" ]; then
 	exec
 
-elif [ "${1}" = "exec_run" ]; then
-	exec_run
+elif [ "${1}" = "exec_start" ]; then
+	npm_run
 
-elif [ "${1}" = "exec_run_dev" ]; then
-	exec_run_dev
+elif [ "${1}" = "exec_start_tsn" ]; then
+	npm_run_tsn
+
+elif [ "${1}" = "exec_start_tsndev" ]; then
+	npm_run_tsndev
 
 else
 	stop
@@ -131,5 +165,5 @@ else
 	docker build -t maps:dev .
 	docker images
 
-	start
+	start "${2}"
 fi
