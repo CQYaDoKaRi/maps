@@ -1,4 +1,7 @@
 node_modules
+# pm2
+.pm2
+.pm2.docker
 # tsc, babel -> js
 dist
 # public - tsc, babel, webpack -> js
