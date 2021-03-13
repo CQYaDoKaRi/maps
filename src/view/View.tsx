@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { mapStateToProps, mapDispatchToProps } from "./RStoreView";
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
+import ViewMapsDistance from "./ViewMapsDistance";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
@@ -25,11 +26,13 @@ type Props = {
  */
 const View: React.FC<Props> = (props) => {
 	// 設定
+	const vMapLat = 35.681236;
+	const vMapLon = 139.767125;
+	const vMapZ = 5;
 	const vGpxAPI = `${props.api}api/view/gpx/files`;
 	const vGpxChartW = 1100;
 	const vGpxhartH = 500;
 	const vGpxhartXW = 150;
-
 	/**
 	 * イベント：メニュー
 	 * @param key 選択値
@@ -41,21 +44,7 @@ const View: React.FC<Props> = (props) => {
 	return (
 		<>
 			<ViewMenu titleData={props.titleData} titleKey={props.storeKey} onChange={eChangeMenu} />
-			<div id="Distance" className="contents">
-				<div>
-					<a href="http://www.gsi.go.jp/common/000195510.pdf" target="_blank">
-						国土地理院：都道府県庁間の距離（2018/01/15）
-					</a>
-				</div>
-				｜&emsp;と比較すると、
-				<br />
-				↓&emsp;ヒュベニによる計算が国土地理の計算とほぼ一致
-				<br />
-				<div className="contentsDistanceTable">
-					<div id="appDistance" className="contentsDistanceTableWidth"></div>
-				</div>
-				<div id="appDistanceMap"></div>
-			</div>
+			{props.storeKey === "Distance" && <ViewMapsDistance mapLat={vMapLat} mapLon={vMapLon} mapZ={vMapZ} />}
 			<div id="Scale" className="contents">
 				<div id="appScaleTitleSub"></div>
 				<div id="appScale"></div>
