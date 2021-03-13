@@ -13,7 +13,6 @@
 		"allowJs": true,
 		"jsx": "preserve",
 		"outDir": "./dist/public",
-		"noEmit": true,
 		"isolatedModules": true,
 
 		// = Strict Type-Checking Options
