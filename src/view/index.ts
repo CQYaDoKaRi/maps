@@ -29,53 +29,6 @@ function page(oView: indexView): void {
 	};
 
 	/*==============================================================================================*/
-	if (!oView.status("Scale", vHash)) {
-		const vDPI = 96;
-
-		_MapLat = 35.65809922;
-		_MapLon = 139.741357472;
-
-		const oDiv: HTMLElement | null = document.getElementById("Scale");
-		if (oDiv) {
-			oDiv.style.width = "800px";
-		}
-
-		const oDivTitleSub: HTMLElement | null = document.getElementById("appScaleTitleSub");
-		if (oDivTitleSub) {
-			oDivTitleSub.innerHTML = `日本経緯度原点（東京都港区麻布台2 - 18 - 1）<br>緯度[ ${_MapLat} ]、解像度 [ ${vDPI} ] dpi で計算`;
-		}
-
-		const oTable: HTMLElement = document.createElement("table");
-
-		let oTableTr: HTMLElement = document.createElement("tr");
-		let oTableTd: HTMLElement = document.createElement("th");
-		oTableTd.innerHTML = "ズームレベル";
-		oTableTr.append(oTableTd);
-
-		oTableTd = document.createElement("th");
-		oTableTd.innerHTML = "縮尺";
-		oTableTr.append(oTableTd);
-
-		oTable.append(oTableTr);
-
-		for (let i = 0; i < 29; i++) {
-			oTableTr = document.createElement("tr");
-
-			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = `${i}`;
-			oTableTr.append(oTableTd);
-
-			oTableTd = document.createElement("td");
-			oTableTd.innerHTML = "1 / " + Math.floor(oMaps.tileScale(i, _MapLat, vDPI)).toLocaleString();
-			oTableTr.append(oTableTd);
-
-			oTable.append(oTableTr);
-		}
-		if (oDiv) {
-			oDiv.append(oTable);
-		}
-	}
-	/*==============================================================================================*/
 	if (!oView.status("Tile", vHash)) {
 		_MapZ = 4;
 		_MapLat = 35.360771305;
