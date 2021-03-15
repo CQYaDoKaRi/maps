@@ -10,8 +10,8 @@
 		"tsc_build": "tsc",
 		"tsc_build_w": "tsc -w",
 		"formatter": "prettier --write '*/**'",
-		"linter": "eslint --fix src",
-		"check": "eslint --fix src && prettier --write '*/**'",
+		"linter": "eslint --fix src/**/*.{js,ts,jsx,tsx}",
+		"check": "eslint --fix src/**/*.{js,ts,jsx,tsx} && prettier --write '*/**'",
 		"gulp": "gulp",
 		"build": "gulp build",
 		"watch": "gulp watch",
@@ -31,7 +31,7 @@
 		"prepare": "husky install"
 	},
 	"lint-staged": {
-		"src/**/*": [
+		"src/**/*.{js,ts,jsx,tsx}": [
 			"eslint --fix --max-warnings=0",
 			"git add"
 		],
@@ -61,6 +61,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.12.10",
 		"@babel/preset-env": "^7.12.11",
+		"@babel/preset-react": "^7.12.13",
 		"@types/chalk": "^2.2.0",
 		"@types/chart.js": "^2.9.30",
 		"@types/express": "^4.17.11",

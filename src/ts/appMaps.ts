@@ -227,8 +227,19 @@ export class appMaps {
 			this.dPrefCity.set(this.oMap);
 		}
 	}
-}
 
+	/**
+	 * クリアー
+	 */
+	public clear(): void {
+		if (!this.oMap) {
+			return;
+		}
+		this.oMap.eachLayer((layer: L.Layer) => {
+			this.oMap?.removeLayer(layer);
+		});
+	}
+}
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface module {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

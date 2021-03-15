@@ -31,11 +31,6 @@ const uglify = require("gulp-uglify");
 const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 
-// src
-const app = require("./dist/public.babel/ts/app");
-const oApp = new app.app();
-oApp.include();
-
 // 環境設定
 const env = {
 	root: "./",
@@ -45,7 +40,7 @@ const env = {
 	},
 	babel: {
 		path: "./dist/public.babel",
-		src: ["./dist/public/**/*.js"],
+		src: ["./dist/public/**/*.js", "./dist/public/**/*.jsx"],
 	},
 	webpack: {
 		src: "./dist/public.babel/view/index.js",
@@ -58,8 +53,8 @@ const env = {
 	js: {
 		path: "./public/js",
 		srcApp: ["./dist/public.babel/ts/app.js"],
-		srcIndex: oApp.getJs(),
-		srcLib: oApp.getJsLib(),
+		srcIndex: ["js/index.js"],
+		srcLib: [],
 		minApp: "app.min.js",
 		minIndex: "index.min.js",
 		uglify: {},
@@ -67,8 +62,8 @@ const env = {
 	css: {
 		path: "./public/css",
 		src: ["./src/scss/*.scss"],
-		srcIndex: oApp.getCss(),
-		srcLib: oApp.getCssLib(),
+		srcIndex: ["css/index.css"],
+		srcLib: ["css/font-awesome.css"],
 		minIndex: "index.min.css",
 	},
 };
@@ -107,7 +102,7 @@ const jsBabel = () => {
 		.src(env.babel.src)
 		.pipe(
 			babel({
-				presets: ["@babel/preset-env"],
+				presets: ["@babel/preset-env","@babel/preset-react"],
 			})
 		)
 		.pipe(gulp.dest(env.babel.path));
