@@ -26,8 +26,7 @@ const ViewMapsDistance: React.FC<Props> = (props) => {
 	// state - データ
 	const oMapsDataPrefCapital = new mapsDataPrefCapital();
 	const [dataPrefCapital] = useState<mapsDataPrefCapitalItem[]>(oMapsDataPrefCapital.get());
-	const [dataPrefCapitalIndex, setDataPrefCapitalIndex] = useState(12);
-	const [dataPrefCapitalBase, setDataPrefCapitalBase] = useState(dataPrefCapital[dataPrefCapitalIndex]);
+	const [dataPrefCapitalBase, setDataPrefCapitalBase] = useState(dataPrefCapital[12]);
 	// state - 地図
 	const [oAppMaps, setAppMaps] = useState<appMaps | undefined>(undefined);
 
@@ -62,14 +61,7 @@ const ViewMapsDistance: React.FC<Props> = (props) => {
 	 * @param index 都道府県県庁データインデックス
 	 */
 	const onChange = (index: number) => {
-		setDataPrefCapitalIndex(index);
 		setDataPrefCapitalBase(dataPrefCapital[index]);
-
-		// FIXME：地図更新処理を実装する
-		if (oAppMaps) {
-			//mapView(oAppMaps);
-			console.log("地図更新", `${index}===${dataPrefCapitalIndex}`);
-		}
 	};
 
 	useEffect(() => {
@@ -80,20 +72,28 @@ const ViewMapsDistance: React.FC<Props> = (props) => {
 			hUnit: "px",
 		};
 
+		// 地図：初期化
 		const oDiv = (oMap.current as unknown) as HTMLElement;
 		const oAppMaps = new appMaps(oDiv.id, props.mapLat, props.mapLon, props.mapZ, _MapOptions);
-		oAppMaps.layerBase();
 		setAppMaps(oAppMaps);
-
-		mapView(oAppMaps);
 	}, []);
+
+	useEffect(() => {
+		if (oAppMaps) {
+			// 地図：表示
+			mapView(oAppMaps);
+		}
+	}, [oAppMaps, dataPrefCapitalBase]);
 
 	/**
 	 * 地図表示
-	 * @param oAppMaps leaflet
+	 * @param oAppMaps appMaps(leaflet)
 	 */
 	const mapView = (oAppMaps: appMaps) => {
 		if (oAppMaps) {
+			oAppMaps.clear();
+			oAppMaps.layerBase();
+
 			dataPrefCapital.map((item: mapsDataPrefCapitalItem) => {
 				item = dataPrefCapitalItem(item);
 				let options = {
@@ -132,7 +132,7 @@ const ViewMapsDistance: React.FC<Props> = (props) => {
 							return (
 								<Dropdown.Item
 									key={n}
-									active={n === dataPrefCapitalIndex}
+									active={dataPrefCapitalBase.pref === item.pref}
 									onSelect={() => {
 										onChange(n);
 									}}
@@ -190,7 +190,7 @@ const ViewMapsDistance: React.FC<Props> = (props) => {
 						</dd>
 					</dl>
 					{dataPrefCapital.map((item: mapsDataPrefCapitalItem, n: number) => {
-						if (n !== dataPrefCapitalIndex) {
+						if (dataPrefCapitalBase.pref !== item.pref) {
 							item = dataPrefCapitalItem(item);
 
 							return (
