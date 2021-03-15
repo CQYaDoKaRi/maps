@@ -1,12 +1,16 @@
-# フォルダ
+# フォルダー
+node_modules
 bin
 cypress
 dist
 logs
 mongo
-node_modules
+redis
 public
+public.next
 .husky
+.next
+.pm2
 
 # ファイル
 .gitignore
@@ -15,5 +19,6 @@ README.md
 package.json
 package-lock.json
 
+# docker
 docker/Dockerfile*
 *.sh
