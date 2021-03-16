@@ -189,83 +189,64 @@ const ViewMapsTitle: React.FC<Props> = (props) => {
 				/>
 			</InputGroup>
 			<hr />
-			<InputGroup className="mb-3" style={{ width: "400px", paddingLeft: "5px" }}>
-				<InputGroup.Prepend>
-					<InputGroup.Text id="lat">ズームレベル</InputGroup.Text>
-				</InputGroup.Prepend>
-				<DropdownButton title={zView}>
-					{scale.map((z: number) => {
-						return (
-							<Dropdown.Item
-								key={z}
-								onSelect={() => {
-									onChangeZ(z);
-								}}
-							>
-								{z}
-							</Dropdown.Item>
-						);
-					})}
-				</DropdownButton>
-			</InputGroup>
-			<hr />
 			<Table striped bordered hover size="sm" style={{ width: "1100px" }}>
 				<tbody>
 					<tr>
-						<th rowSpan={6} style={{ width: "270px", verticalAlign: "middle" }}>
+						<th rowSpan={7} style={{ width: "270px", verticalAlign: "middle" }}>
 							<img ref={oTile} src={tileUrl} />
 							<div ref={oTileSymbol}></div>
 						</th>
-						<th style={{ width: "250px" }}>縮尺</th>
+						<th style={{ width: "250px", verticalAlign: "middle" }}>ズームレベル</th>
+						<td>
+							<DropdownButton title={zView}>
+								{scale.map((z: number) => {
+									return (
+										<Dropdown.Item
+											key={z}
+											onSelect={() => {
+												onChangeZ(z);
+											}}
+										>
+											{z}
+										</Dropdown.Item>
+									);
+								})}
+							</DropdownButton>
+						</td>
+					</tr>
+					<tr>
+						<th>縮尺</th>
 						<td>{`1 / ${Math.floor(oMaps.tileScale(zView, lat, dpi)).toLocaleString()}`}</td>
 					</tr>
 					<tr>
-						<th style={{ width: "250px" }}>
-							タイル座標X
-							<br />
-							タイル座標Y
-						</th>
+						<th>タイル座標(X,Y)</th>
 						<td>
-							{tile.x}
-							<br />
-							{tile.y}
+							{tile.x},{tile.y}
 						</td>
 					</tr>
 					<tr>
-						<th style={{ width: "150px" }}>
-							タイル左上からX方向のpixel値
-							<br />
-							タイル左上からY方向のpixel値
-						</th>
+						<th>タイル左上からのPixel座標(X,Y)</th>
 						<td>
-							{tile.px_x} px
-							<br />
-							{tile.px_y} px
+							{tile.px_x} px, {tile.px_y} px
 						</td>
 					</tr>
 					<tr>
-						<th style={{ width: "150px" }}>
-							タイル左上の緯度
-							<br />
-							タイル左上の緯経度
-						</th>
+						<th>タイル左上の座標(緯度,経度)</th>
 						<td>
-							{tileLatLon.lat}
-							<br />
-							{tileLatLon.lon}
+							{tileLatLon.lat}, {tileLatLon.lon}
 						</td>
 					</tr>
 					<tr>
-						<th style={{ width: "150px" }}>
-							標高（TXT形式）
+						<th>
+							標高（TXTデータ）
 							<br />
 							標高タイル
 						</th>
 						<td ref={oDemTxt}></td>
 					</tr>
 					<tr>
-						<th style={{ width: "150px" }}>
-							標高（PNG形式）
+						<th>
+							標高（PNGデータ）
 							<br />
 							標高タイル
 						</th>
