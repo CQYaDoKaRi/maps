@@ -72,7 +72,7 @@ const ViewMapsScale: React.FC<Props> = (props) => {
 							<tr key={n}>
 								<td style={{ textAlign: "center" }}>{n}</td>
 								<td style={{ textAlign: "right" }}>
-									{"1 / " + Math.floor(oMaps.tileScale(n, lat, dpi)).toLocaleString()}
+									{`1 / ${Math.floor(oMaps.tileScale(n, lat, dpi)).toLocaleString()}`}
 								</td>
 							</tr>
 						);
