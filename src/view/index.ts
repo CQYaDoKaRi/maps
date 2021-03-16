@@ -1,4 +1,3 @@
-import { appMaps } from "../ts/appMaps";
 import { indexView } from "./indexView";
 import { ViewMenuTitle } from "./ViewMenu";
 
@@ -7,28 +6,8 @@ import { ViewMenuTitle } from "./ViewMenu";
  * @param oView indexView
  */
 function page(oView: indexView): void {
-	let oAppMaps: appMaps | null = null;
-
 	const vHash = getHash();
 	oView.display(vHash);
-
-	/*==============================================================================================*/
-	// 地図
-	const _MapLat = 35.681236;
-	const _MapLon = 139.767125;
-	const _MapZ = 5;
-	const _MapOptions = {
-		w: 100,
-		wUnit: "%",
-		h: 600,
-		hUnit: "px",
-	};
-
-	/*==============================================================================================*/
-	if (!oView.status("MongoDB", vHash)) {
-		oAppMaps = new appMaps("appMongoDBMap", _MapLat, _MapLon, _MapZ, _MapOptions);
-		oAppMaps.layerPref();
-	}
 }
 
 const title: ViewMenuTitle[] = [

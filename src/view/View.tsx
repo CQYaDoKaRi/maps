@@ -7,6 +7,7 @@ import ViewMapsDistance from "./ViewMapsDistance";
 import ViewMapsScale from "./ViewMapsScale";
 import ViewMapsTile from "./ViewMapsTile";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
+import ViewMapsMongoDB from "./ViewMapsMongoDB";
 
 /**
  * React Component - View - props
@@ -40,6 +41,7 @@ const View: React.FC<Props> = (props) => {
 	const vGpxChartW = 1100;
 	const vGpxhartH = 500;
 	const vGpxhartXW = 150;
+
 	/**
 	 * イベント：メニュー
 	 * @param key 選択値
@@ -55,9 +57,7 @@ const View: React.FC<Props> = (props) => {
 			{props.storeKey === "Scale" && <ViewMapsScale lat={vMapBaseLat} lon={vMapBaseLon} dpi={vMapDPI} />}
 			{props.storeKey === "Tile" && <ViewMapsTile lat={vMapTileLat} lon={vMapTileLon} dpi={vMapDPI} />}
 			{props.storeKey === "DataGpx" && <ViewMapsDataGpx api={vGpxAPI} w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
-			<div id="MongoDB" className="contents">
-				<div id="appMongoDBMap"></div>
-			</div>
+			{props.storeKey === "MongoDB" && <ViewMapsMongoDB mapLat={vMapLat} mapLon={vMapLon} mapZ={vMapZ} />}
 		</>
 	);
 };
