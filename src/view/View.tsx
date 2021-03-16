@@ -5,6 +5,7 @@ import { mapStateToProps, mapDispatchToProps } from "./RStoreView";
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
 import ViewMapsDistance from "./ViewMapsDistance";
 import ViewMapsScale from "./ViewMapsScale";
+import ViewMapsTile from "./ViewMapsTile";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
 
 /**
@@ -31,6 +32,8 @@ const View: React.FC<Props> = (props) => {
 	const vMapLon = 139.767125;
 	const vMapBaseLat = 35.65809922; // 日本経緯度原点（東京都港区麻布台2 - 18 - 1）
 	const vMapBaseLon = 139.741357472; // 日本経緯度原点（東京都港区麻布台2 - 18 - 1）
+	const vMapTileLat = 35.360771305; // 富士山頂
+	const vMapTileLon = 138.7273035; // 富士山頂
 	const vMapDPI = 96;
 	const vMapZ = 5;
 	const vGpxAPI = `${props.api}api/view/gpx/files`;
@@ -50,10 +53,7 @@ const View: React.FC<Props> = (props) => {
 			<ViewMenu titleData={props.titleData} titleKey={props.storeKey} onChange={eChangeMenu} />
 			{props.storeKey === "Distance" && <ViewMapsDistance mapLat={vMapLat} mapLon={vMapLon} mapZ={vMapZ} />}
 			{props.storeKey === "Scale" && <ViewMapsScale lat={vMapBaseLat} lon={vMapBaseLon} dpi={vMapDPI} />}
-			<div id="Tile" className="contents">
-				<div id="appTileTitleSub"></div>
-				<div id="appTile"></div>
-			</div>
+			{props.storeKey === "Tile" && <ViewMapsTile lat={vMapTileLat} lon={vMapTileLon} dpi={vMapDPI} />}
 			{props.storeKey === "DataGpx" && <ViewMapsDataGpx api={vGpxAPI} w={vGpxChartW} h={vGpxhartH} xw={vGpxhartXW} />}
 			<div id="MongoDB" className="contents">
 				<div id="appMongoDBMap"></div>
