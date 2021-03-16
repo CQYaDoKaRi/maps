@@ -28,15 +28,19 @@ type Props = {
  * @param props props
  */
 const View: React.FC<Props> = (props) => {
-	// 設定
+	// 設定：地図：初期表示設定
 	const vMapLat = 35.681236;
 	const vMapLon = 139.767125;
-	const vMapBaseLat = 35.65809922; // 日本経緯度原点（東京都港区麻布台2 - 18 - 1）
-	const vMapBaseLon = 139.741357472; // 日本経緯度原点（東京都港区麻布台2 - 18 - 1）
-	const vMapTileLat = 35.360771305; // 富士山頂
-	const vMapTileLon = 138.7273035; // 富士山頂
-	const vMapDPI = 96;
 	const vMapZ = 5;
+	// 設定：地図：日本経緯度原点（東京都港区麻布台2 - 18 - 1）
+	const vMapBaseLat = 35.65809922;
+	const vMapBaseLon = 139.741357472;
+	// 設定：地図：富士山頂
+	const vMapTileLat = 35.360771305;
+	const vMapTileLon = 138.7273035;
+	// 設定 - 解像度
+	const vMapDPI = 96;
+	// 設定：GPX
 	const vGpxAPI = `${props.api}api/view/gpx/files`;
 	const vGpxChartW = 1100;
 	const vGpxhartH = 500;
