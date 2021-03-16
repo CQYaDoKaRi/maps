@@ -38,6 +38,10 @@ const env = {
 	src: {
 		dist: "./src",
 	},
+	json: {
+		path: "./dist/public.babel/json",
+		src: ["./dist/public/json/*.json"],
+	},
 	babel: {
 		path: "./dist/public.babel",
 		src: ["./dist/public/**/*.js", "./dist/public/**/*.jsx"],
@@ -94,6 +98,13 @@ const tsc = () => {
 // typescript - comple - for node
 const tscNode = () => {
 	return tsProjectNode.src().pipe(tsProjectNode()).js.pipe(gulp.dest(tsProjectNode.options.outDir));
+};
+
+// json
+const json = () => {
+	return gulp
+	.src(env.json.src)
+	.pipe(gulp.dest(env.json.path));
 };
 
 // js(6) - js(5)
@@ -164,6 +175,10 @@ const scssLibMinify = () => {
 const task_tsc = gulp.parallel(tsc, tscNode);
 exports.tsc = task_tsc;
 
+// task - json
+const task_json = gulp.series(json);
+exports.json = task_json;
+
 // task - babel
 const task_babel = gulp.series(jsBabel);
 exports.babel = task_babel;
@@ -187,6 +202,7 @@ const task_build = gulp.series(
 			formatter,
 			linter,
 			gulp.parallel(tsc, tscNode),
+			json,
 			jsBabel,
 			gulp.parallel(jsWebpack, jsWebpackDev),
 			jsAppMinify
@@ -206,7 +222,7 @@ const watch_build = () => {
 	// webpack, js-app
 	gulp
 		.watch(tsProject.config.include)
-		.on("change", gulp.series(tsc, jsBabel, jsAppMinify, gulp.parallel(jsWebpack, jsWebpackDev)));
+		.on("change", gulp.series(tsc, json, jsBabel, jsAppMinify, gulp.parallel(jsWebpack, jsWebpackDev)));
 
 	// tsc for node
 	gulp.watch(tsProjectNode.config.include).on("change", gulp.series(tscNode));
