@@ -6,11 +6,14 @@ import dTitle from "../json/dTitle.json";
  * ページ
  * @param oView indexView
  */
-function page(oView: indexView): void {
-	const vHash = getHash();
-	oView.display(vHash);
-}
+const page = (oView: indexView) => {
+	oView.display(getHash());
+};
 
+/**
+ * URL ハッシュ値の取得
+ * @returns ハッシュ値
+ */
 const getHash = () => {
 	let vHash: string = window.location.hash;
 	if (vHash.length > 0) {
