@@ -1,5 +1,6 @@
 import { indexView } from "./indexView";
 import { ViewMenuTitle } from "./ViewMenu";
+import dTitle from "../json/dTitle.json";
 
 /**
  * ページ
@@ -10,20 +11,6 @@ function page(oView: indexView): void {
 	oView.display(vHash);
 }
 
-const title: ViewMenuTitle[] = [
-	{ key: "Distance", title: "２地点間の距離と角度を求め、その地点からの距離と角度から緯度経度を求める" },
-	{ key: "Scale", title: "ズームレベルから縮尺を求める" },
-	{
-		key: "Tile",
-		title: "緯度経度から地図タイルを取得し、タイル左上原点の「緯度、経度」と標高タイル（TXT、PNG）から「標高」を求める",
-	},
-	{
-		key: "DataGpx",
-		title: "GPS ログデータ（GPX）を読み込み、「時間、経度、緯度、標高」に加え「距離、角度、勾配、速度」を算出して表示",
-	},
-	{ key: "MongoDB", title: "MongoDB（地理空間データ）によるデータ検索" },
-];
-
 const getHash = () => {
 	let vHash: string = window.location.hash;
 	if (vHash.length > 0) {
@@ -31,14 +18,14 @@ const getHash = () => {
 	}
 
 	let f = false;
-	title.map((item: ViewMenuTitle) => {
+	dTitle.map((item: ViewMenuTitle) => {
 		if (item.key.toLowerCase() === vHash.toLowerCase()) {
 			f = true;
 		}
 	});
 
 	if (!f) {
-		vHash = title[0].key;
+		vHash = dTitle[0].key;
 	}
 
 	return vHash;
@@ -49,7 +36,7 @@ const getHash = () => {
  */
 window.onload = () => {
 	const oView: indexView = new indexView();
-	title.map((item: ViewMenuTitle) => {
+	dTitle.map((item: ViewMenuTitle) => {
 		oView.setMenuTitle(item);
 	});
 
