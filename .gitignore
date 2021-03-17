@@ -24,3 +24,5 @@ logs
 .next
 next-env.d.ts
 public.next
+# redis
+redis/*

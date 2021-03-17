@@ -1,43 +1,40 @@
 {
-	"compilerOptions": {
-		// https://aka.ms/tsconfig.json
-
-		// = Basic Options
-		"target": "ES5",
-		"module": "ESNext",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"esnext"
-		],
-		"allowJs": true,
-		"jsx": "preserve",
-		"outDir": "./dist/public",
-		"isolatedModules": true,
-
-		// = Strict Type-Checking Options
-		"strict": true,
-
-		// = Module Resolution Options
-		"moduleResolution": "node",
-		"typeRoots": [
-			"src/ts.types",
-			"node_modules/@types"
-		],
-		"esModuleInterop": true,
-
-		// = Advanced Options
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true
-	},
-	"include": [
-		"./src/ts/*.ts",
-		"./src/ts.types/**/*.ts",
-		"./src/view/*.ts",
-		"./src/view/*.tsx"
-	],
-	"exclude": [
-		"./src/ts/*.test.ts"
-	]
+  "compilerOptions": {
+    // https://aka.ms/tsconfig.json
+    // = Basic Options
+    "target": "ES5",
+    "module": "ESNext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "jsx": "preserve",
+    "outDir": "./dist/public",
+    "isolatedModules": true,
+    // = Strict Type-Checking Options
+    "strict": true,
+    // = Module Resolution Options
+    "moduleResolution": "node",
+    "typeRoots": [
+      "src/ts.types",
+      "node_modules/@types"
+    ],
+    "esModuleInterop": true,
+    // = Advanced Options
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": [
+    "./src/ts/*.ts",
+    "./src/ts.types/**/*.ts",
+    "./src/view/*.ts",
+    "./src/view/*.tsx"
+  ],
+  "exclude": [
+    "./src/ts/*.test.ts"
+  ]
 }
