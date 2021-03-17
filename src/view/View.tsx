@@ -2,12 +2,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { mapStateToProps, mapDispatchToProps } from "./RStoreView";
+
+import dynamic from "next/dynamic";
+
 import ViewMenu, { ViewMenuTitle } from "./ViewMenu";
-import ViewMapsDistance from "./ViewMapsDistance";
+const ViewMapsDistance = dynamic(() => import("./ViewMapsDistance"), { ssr: false });
 import ViewMapsScale from "./ViewMapsScale";
 import ViewMapsTile from "./ViewMapsTile";
 import ViewMapsDataGpx from "./ViewMapsDataGpx";
-import ViewMapsMongoDB from "./ViewMapsMongoDB";
+const ViewMapsMongoDB = dynamic(() => import("./ViewMapsMongoDB"), { ssr: false });
 
 /**
  * React Component - View - props
