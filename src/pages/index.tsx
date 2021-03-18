@@ -1,16 +1,23 @@
+// next
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+// react-redux
 import { Provider } from "react-redux";
-
 import store, { storeDispatchMenu, storeGetMenuKey } from "../view/RStore";
-
+// react：view
 import View from "../view/View";
 import { ViewMenuTitle } from "../view/ViewMenu";
 
-type propsType = {
+/**
+ * ページ：props
+ */
+type indexPropsType = {
 	titleData: ViewMenuTitle[];
 };
 
-const evt = () => {
+/**
+ * ページ：イベント
+ */
+const indexEvt = () => {
 	if (typeof window !== "undefined") {
 		const hash = `#${storeGetMenuKey()}`;
 		window.location.hash = hash;
@@ -23,7 +30,7 @@ const evt = () => {
  * @returns
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const index = ({ titleData }: propsType) => {
+const index = ({ titleData }: indexPropsType) => {
 	const api = "http://localhost:8080/";
 
 	const getHash = () => {
@@ -50,7 +57,7 @@ const index = ({ titleData }: propsType) => {
 	};
 
 	store.subscribe(() => {
-		evt();
+		indexEvt();
 	});
 
 	storeDispatchMenu(getHash());
