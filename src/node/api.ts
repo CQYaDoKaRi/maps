@@ -1,7 +1,6 @@
 import os from "os";
 // express
 import express from "express";
-import bodyParser from "body-parser";
 // swagger
 import swaggerUi from "swagger-ui-express";
 import yamljs from "yamljs";
@@ -45,13 +44,13 @@ export class api {
 		});
 
 		app.use(
-			bodyParser.urlencoded({
+			express.urlencoded({
 				extended: true,
 				limit: "10mb",
 			})
 		);
 		app.use(
-			bodyParser.json({
+			express.json({
 				limit: "10mb",
 			})
 		);
