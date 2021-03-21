@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mapsApiDistance } from "../../../api/maps";
+import { apiMapsDistance } from "../../../api/maps";
 
 /**
  * ２地点間の距離：測地線航海算法
@@ -7,7 +7,7 @@ import { mapsApiDistance } from "../../../api/maps";
 export default (req: NextApiRequest, res: NextApiResponse): void => {
 	res.status(200);
 	res.json(
-		mapsApiDistance(
+		apiMapsDistance(
 			"S",
 			req.query.lat1 ? +req.query.lat1 : undefined,
 			req.query.lon1 ? +req.query.lon1 : undefined,

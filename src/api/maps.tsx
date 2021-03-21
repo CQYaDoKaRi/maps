@@ -1,33 +1,33 @@
 import { maps, mapsLatLon, mapsTileUrl, mapsTile } from "../ts/maps";
 
-export type mapsApiDeg2NameData = {
+export type apiMapsDeg2NameData = {
 	status: boolean;
 	name: string;
 };
 
-export type mapsApiLatLonData = {
+export type apiMapsLatLonData = {
 	status: boolean;
 	lat: number;
 	lon: number;
 };
 
-export type mapsApiDistanceData = {
+export type apiMapsDistanceData = {
 	status: boolean;
 	distance: number;
 };
 
-export type mapsApiDirectionData = {
+export type apiMapsDirectionData = {
 	status: boolean;
 	a: number;
 };
 
-export type mapsApiDistanceToData = {
+export type apiMapsDistanceToData = {
 	status: boolean;
 	lat: number;
 	lon: number;
 };
 
-export type mapsApiTileData = {
+export type apiMapsTileData = {
 	status: boolean;
 	x: number;
 	y: number;
@@ -36,14 +36,14 @@ export type mapsApiTileData = {
 	px_y: number;
 };
 
-export type mapsApiTileUrlData = {
+export type apiMapsTileUrlData = {
 	status: boolean;
 	x: number;
 	y: number;
 	z: number;
 };
 
-export type mapsApiTileUrlInfoData = {
+export type apiMapsTileUrlInfoData = {
 	x: number;
 	y: number;
 	z: number;
@@ -51,12 +51,12 @@ export type mapsApiTileUrlInfoData = {
 	url: string;
 };
 
-export type mapsApiTileUrlsData = {
+export type apiMapsTileUrlsData = {
 	status: boolean;
-	urls: mapsApiTileUrlInfoData[];
+	urls: apiMapsTileUrlInfoData[];
 };
 
-export type mapsApiTileScale = {
+export type apiMapsTileScale = {
 	status: boolean;
 	scale: number;
 };
@@ -64,10 +64,10 @@ export type mapsApiTileScale = {
 /**
  * 方位角を12方位名に変換
  * @param deg 方位の角度
- * @returns mapsApiDeg2NameData
+ * @returns apiMapsDeg2NameData
  */
-export const mapsApiDeg2Name = (deg: number | undefined): mapsApiDeg2NameData => {
-	const ret: mapsApiDeg2NameData = {
+export const apiMapsDeg2Name = (deg: number | undefined): apiMapsDeg2NameData => {
+	const ret: apiMapsDeg2NameData = {
 		status: false,
 		name: "",
 	};
@@ -91,8 +91,8 @@ export const mapsApiDeg2Name = (deg: number | undefined): mapsApiDeg2NameData =>
  * @param lon 十進経度（世界測地系[GSR80]）
  * @returns JSON
  */
-export const mapsApiTky2jgdG = (lat: number | undefined, lon: number | undefined): mapsApiLatLonData => {
-	const data: mapsApiLatLonData = {
+export const apiMapsTky2jgdG = (lat: number | undefined, lon: number | undefined): apiMapsLatLonData => {
+	const data: apiMapsLatLonData = {
 		status: false,
 		lat: 0,
 		lon: 0,
@@ -120,8 +120,8 @@ export const mapsApiTky2jgdG = (lat: number | undefined, lon: number | undefined
  * @param lon 十進経度（世界測地系[GSR80]）
  * @returns JSON
  */
-export const mapsApiJgd2tky2G = (lat: number | undefined, lon: number | undefined): mapsApiLatLonData => {
-	const data: mapsApiLatLonData = {
+export const apiMapsJgd2tky2G = (lat: number | undefined, lon: number | undefined): apiMapsLatLonData => {
+	const data: apiMapsLatLonData = {
 		status: false,
 		lat: 0,
 		lon: 0,
@@ -152,14 +152,14 @@ export const mapsApiJgd2tky2G = (lat: number | undefined, lon: number | undefine
  * @param lon2 十進経度（世界測地系[GSR80]）
  * @returns JSON
  */
-export const mapsApiDistance = (
+export const apiMapsDistance = (
 	type: string,
 	lat1: number | undefined,
 	lon1: number | undefined,
 	lat2: number | undefined,
 	lon2: number | undefined
-): mapsApiDistanceData => {
-	const data: mapsApiDistanceData = {
+): apiMapsDistanceData => {
+	const data: apiMapsDistanceData = {
 		status: false,
 		distance: 0,
 	};
@@ -201,13 +201,13 @@ export const mapsApiDistance = (
  * @param len 距離(m)
  * @returns JSON
  */
-export const mapsApiDistanceTo = (
+export const apiMapsDistanceTo = (
 	lat: number | undefined,
 	lon: number | undefined,
 	a: number | undefined,
 	len: number | undefined
-): mapsApiDistanceToData => {
-	const data: mapsApiDistanceToData = {
+): apiMapsDistanceToData => {
+	const data: apiMapsDistanceToData = {
 		status: false,
 		lat: 0,
 		lon: 0,
@@ -239,13 +239,13 @@ export const mapsApiDistanceTo = (
  * @param lon2 十進経度（世界測地系[GSR80]）
  * @returns JSON
  */
-export const mapsApiDirection = (
+export const apiMapsDirection = (
 	lat1: number | undefined,
 	lon1: number | undefined,
 	lat2: number | undefined,
 	lon2: number | undefined
-): mapsApiDirectionData => {
-	const data: mapsApiDirectionData = {
+): apiMapsDirectionData => {
+	const data: apiMapsDirectionData = {
 		status: false,
 		a: 0,
 	};
@@ -274,12 +274,12 @@ export const mapsApiDirection = (
  * @param z ズームレベル
  * @returns JSON
  */
-export const mapsApiTile = (
+export const apiMapsTile = (
 	lat: number | undefined,
 	lon: number | undefined,
 	z: number | undefined
-): mapsApiTileData => {
-	const data: mapsApiTileData = {
+): apiMapsTileData => {
+	const data: apiMapsTileData = {
 		status: false,
 		x: 0,
 		y: 0,
@@ -315,12 +315,12 @@ export const mapsApiTile = (
  * @param z ズームレベル
  * @returns JSON
  */
-export const mapsApiTile2latlon = (
+export const apiMapsTile2latlon = (
 	x: number | undefined,
 	y: number | undefined,
 	z: number | undefined
-): mapsApiLatLonData => {
-	const data: mapsApiLatLonData = {
+): apiMapsLatLonData => {
+	const data: apiMapsLatLonData = {
 		status: false,
 		lat: 0,
 		lon: 0,
@@ -350,12 +350,12 @@ export const mapsApiTile2latlon = (
  * @param dpi 解像度
  * @returns JSON
  */
-export const mapsApiTileScale = (
+export const apiMapsTileScale = (
 	lat: number | undefined,
 	z: number | undefined,
 	dpi: number | undefined
-): mapsApiTileScale => {
-	const data: mapsApiTileScale = {
+): apiMapsTileScale => {
+	const data: apiMapsTileScale = {
 		status: false,
 		scale: 0,
 	};
@@ -384,13 +384,13 @@ export const mapsApiTileScale = (
  * @param toz 変更するズームレベル
  * @returns JSON
  */
-export const mapsApiTile2z = (
+export const apiMapsTile2z = (
 	x: number | undefined,
 	y: number | undefined,
 	z: number | undefined,
 	toz: number | undefined
-): mapsApiTileUrlData => {
-	const data: mapsApiTileUrlData = {
+): apiMapsTileUrlData => {
+	const data: apiMapsTileUrlData = {
 		status: false,
 		x: 0,
 		y: 0,
@@ -424,13 +424,13 @@ export const mapsApiTile2z = (
  * @param z ズームレベル
  * @returns JSON
  */
-export const mapApiTileDemUrl = (
+export const apiMapsTileDemUrl = (
 	type: string,
 	x: number | undefined,
 	y: number | undefined,
 	z: number | undefined
-): mapsApiTileUrlsData => {
-	const data: mapsApiTileUrlsData = {
+): apiMapsTileUrlsData => {
+	const data: apiMapsTileUrlsData = {
 		status: false,
 		urls: [],
 	};

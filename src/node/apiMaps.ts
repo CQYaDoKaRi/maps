@@ -1,16 +1,16 @@
 import express from "express";
 import {
-	mapsApiDeg2Name,
-	mapsApiTky2jgdG,
-	mapsApiJgd2tky2G,
-	mapsApiDistance,
-	mapsApiDistanceTo,
-	mapsApiDirection,
-	mapsApiTile,
-	mapsApiTile2latlon,
-	mapsApiTileScale,
-	mapsApiTile2z,
-	mapApiTileDemUrl,
+	apiMapsDeg2Name,
+	apiMapsTky2jgdG,
+	apiMapsJgd2tky2G,
+	apiMapsDistance,
+	apiMapsDistanceTo,
+	apiMapsDirection,
+	apiMapsTile,
+	apiMapsTile2latlon,
+	apiMapsTileScale,
+	apiMapsTile2z,
+	apiMapsTileDemUrl,
 } from "../api/maps";
 export class apiMaps {
 	private uri = "";
@@ -30,20 +30,20 @@ export class apiMaps {
 	public regist(router: express.Router): void {
 		// 方位角を12方位名に変換
 		router.get(this.uri + "/deg2name", (req: express.Request, res: express.Response) => {
-			res.json(mapsApiDeg2Name(req.query.deg ? +req.query.deg : undefined));
+			res.json(apiMapsDeg2Name(req.query.deg ? +req.query.deg : undefined));
 			res.end();
 		});
 
 		// 日本測地系を世界測地系に変換（1次式）
 		router.get(this.uri + "/tky2jgdg", (req: express.Request, res: express.Response) => {
-			res.json(mapsApiTky2jgdG(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined));
+			res.json(apiMapsTky2jgdG(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined));
 			res.end();
 		});
 
 		// 世界測地系を日本測地系に変換（1次式）
 		router.get(this.uri + "/jgd2tkyg", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiJgd2tky2G(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined)
+				apiMapsJgd2tky2G(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined)
 			);
 			res.end();
 		});
@@ -51,7 +51,7 @@ export class apiMaps {
 		// ２地点間の距離：球面三角法
 		router.get(this.uri + "/distancet", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiDistance(
+				apiMapsDistance(
 					"T",
 					req.query.lat1 ? +req.query.lat1 : undefined,
 					req.query.lon1 ? +req.query.lon1 : undefined,
@@ -65,7 +65,7 @@ export class apiMaps {
 		// ２地点間の距離：ヒュベニ
 		router.get(this.uri + "/distanceh", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiDistance(
+				apiMapsDistance(
 					"H",
 					req.query.lat1 ? +req.query.lat1 : undefined,
 					req.query.lon1 ? +req.query.lon1 : undefined,
@@ -79,7 +79,7 @@ export class apiMaps {
 		// ２地点間の距離：測地線航海算法
 		router.get(this.uri + "/distances", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiDistance(
+				apiMapsDistance(
 					"S",
 					req.query.lat1 ? +req.query.lat1 : undefined,
 					req.query.lon1 ? +req.query.lon1 : undefined,
@@ -93,7 +93,7 @@ export class apiMaps {
 		// 角度・距離から緯度経度を取得
 		router.get(this.uri + "/distanceto", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiDistanceTo(
+				apiMapsDistanceTo(
 					req.query.lat ? +req.query.lat : undefined,
 					req.query.lon ? +req.query.lon : undefined,
 					req.query.a ? +req.query.a : undefined,
@@ -106,7 +106,7 @@ export class apiMaps {
 		// ２地点間の角度
 		router.get(this.uri + "/direction", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiDirection(
+				apiMapsDirection(
 					req.query.lat1 ? +req.query.lat1 : undefined,
 					req.query.lon1 ? +req.query.lon1 : undefined,
 					req.query.lat2 ? +req.query.lat2 : undefined,
@@ -119,7 +119,7 @@ export class apiMaps {
 		// 緯度経度・ズームレベルからタイル座標を取得
 		router.get(this.uri + "/tile", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiTile(
+				apiMapsTile(
 					req.query.lat ? +req.query.lat : undefined,
 					req.query.lon ? +req.query.lon : undefined,
 					req.query.z ? +req.query.z : undefined
@@ -131,7 +131,7 @@ export class apiMaps {
 		// タイル座標から緯度経度を取得
 		router.get(this.uri + "/tile2latlon", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiTile2latlon(
+				apiMapsTile2latlon(
 					req.query.x ? +req.query.x : undefined,
 					req.query.y ? +req.query.y : undefined,
 					req.query.z ? +req.query.z : undefined
@@ -143,7 +143,7 @@ export class apiMaps {
 		// タイル座標のズームレベルから縮尺を取得
 		router.get(this.uri + "/tilescale", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiTileScale(
+				apiMapsTileScale(
 					req.query.lat ? +req.query.lat : undefined,
 					req.query.z ? +req.query.z : undefined,
 					req.query.dpi ? +req.query.dpi : undefined
@@ -155,7 +155,7 @@ export class apiMaps {
 		// タイル座標のズームレベルを変更した場合のタイル座標を取得
 		router.get(this.uri + "/tile2z", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapsApiTile2z(
+				apiMapsTile2z(
 					req.query.x ? +req.query.x : undefined,
 					req.query.y ? +req.query.y : undefined,
 					req.query.z ? +req.query.z : undefined,
@@ -168,7 +168,7 @@ export class apiMaps {
 		// 標高タイルURLを取得[png]
 		router.get(this.uri + "/tiledemurl/png", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapApiTileDemUrl(
+				apiMapsTileDemUrl(
 					"png",
 					req.query.x ? +req.query.x : undefined,
 					req.query.y ? +req.query.y : undefined,
@@ -181,7 +181,7 @@ export class apiMaps {
 		// 標高タイルURLを取得[txt]
 		router.get(this.uri + "/tiledemurl/txt", (req: express.Request, res: express.Response) => {
 			res.json(
-				mapApiTileDemUrl(
+				apiMapsTileDemUrl(
 					"txt",
 					req.query.x ? +req.query.x : undefined,
 					req.query.y ? +req.query.y : undefined,

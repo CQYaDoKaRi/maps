@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mapsApiTile2z } from "../../../api/maps";
+import { apiMapsTile2z } from "../../../api/maps";
 
 /**
  * タイル座標のズームレベルを変更した場合のタイル座標を取得
@@ -7,7 +7,7 @@ import { mapsApiTile2z } from "../../../api/maps";
 export default (req: NextApiRequest, res: NextApiResponse): void => {
 	res.status(200);
 	res.json(
-		mapsApiTile2z(
+		apiMapsTile2z(
 			req.query.x ? +req.query.x : undefined,
 			req.query.y ? +req.query.y : undefined,
 			req.query.z ? +req.query.z : undefined,

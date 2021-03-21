@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mapApiTileDemUrl } from "../../../../api/maps";
+import { apiMapsTileDemUrl } from "../../../../api/maps";
 
 /**
  * 標高タイルURLを取得[txt]
@@ -7,7 +7,7 @@ import { mapApiTileDemUrl } from "../../../../api/maps";
 export default (req: NextApiRequest, res: NextApiResponse): void => {
 	res.status(200);
 	res.json(
-		mapApiTileDemUrl(
+		apiMapsTileDemUrl(
 			"txt",
 			req.query.x ? +req.query.x : undefined,
 			req.query.y ? +req.query.y : undefined,
