@@ -1,5 +1,6 @@
 # 概要
 docker によりサービスを起動制御します  
+- Next.js
 - Node.js  
 - MongoDB  
 - Mongo Express  
@@ -15,6 +16,16 @@ docker によりサービスを起動制御します
 - Redis 起動  
 - Node.js 起動(PM2, ts-node, ts-node-dev)  
 
+# 起動（オプション）
+```
+./init.sh start [next[pm2|tsn|tsndev]
+```
+- docker image 作成（作成済みの場合は削除して再作成）  
+- docker コンテナ起動  
+- MongoDB 起動  
+- Mongo Express 起動  
+- Redis 起動  
+- Next.js or Node.js (PM2, ts-node, ts-node-dev)起動  
 # 停止
 ```
 ./init.sh stop

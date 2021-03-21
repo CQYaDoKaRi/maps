@@ -11,7 +11,7 @@
 		"tsc_build_w": "tsc -w",
 		"formatter": "prettier --write '*/**'",
 		"linter": "eslint --fix src/**/*.{js,ts,jsx,tsx}",
-		"check": "eslint --fix src/**/*.{js,ts,jsx,tsx} && prettier --write '*/**'",
+		"check": "eslint --fix src/**/*.{js,ts,jsx,tsx} && prettier --write '*/**.{js,ts,jsx,tsx}'",
 		"gulp": "gulp",
 		"build": "gulp build",
 		"watch": "gulp watch",
@@ -35,7 +35,7 @@
 			"eslint --fix --max-warnings=0",
 			"git add"
 		],
-		"*/**": [
+		"*/**.{js,ts,jsx,tsx}": [
 			"prettier --write",
 			"git add"
 		]

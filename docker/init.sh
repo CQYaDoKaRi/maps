@@ -20,6 +20,8 @@ function start() {
 		exec_start_tsn
 	elif [ "${1}" = "tsndev" ]; then
 		exec_start_tsndev
+	elif [ "${1}" = "next" ]; then
+		exec_start_next
 	else
 		exec_start
 	fi
@@ -45,7 +47,7 @@ function stop() {
 # -------
 # npm run
 # -------
-# npm run prod
+# npm run node.js[pm2] - prod
 function npm_run() {
 	cd ${DIR}/../
 	npm run prod_docker_start
@@ -53,21 +55,21 @@ function npm_run() {
 	cd ${DIR}
 }
 
-# npm run ts-node
+# npm run node.js[ts-node]
 function npm_run_tsn() {
 	cd ${DIR}/../
 	npm run tsn_start
 	cd ${DIR}
 }
 
-# npm run ts-node-dev
+# npm run node.js[ts-node-dev]
 function npm_run_tsndev() {
 	cd ${DIR}/../
 	npm run tsn_start_dev
 	cd ${DIR}
 }
 
-# npm run prod - stop
+# npm run node.js[pm2] - prod - stop
 function npm_run_stop() {
 	cd ${DIR}/../
 	npm run prod_docker_stop
@@ -80,6 +82,12 @@ function npm_run_stop() {
 	cd ${DIR}
 }
 
+# npm run next.js
+function npm_run_next() {
+	cd ${DIR}/../
+	npm run next
+}
+
 # -------
 # exec
 # -------
@@ -88,28 +96,36 @@ function exec() {
 	docker exec -it ${APP} /bin/bash
 }
 
-# docker exec - start - prod = pm2
+# docker exec - start - node.js[pm2] - prod
 function exec_start() {
-	echo -e "\033[0;34m[${APP}] start node[pm2]\033[0;39m"
+	echo -e "\033[0;34m[${APP}] start node.js[pm2]\033[0;39m"
 
 	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start'"
 
 	eval ${CMD}
 }
 
-# docker exec - start - ts-node
+# docker exec - start - node.js[ts-node]
 function exec_start_tsn() {
-	echo -e "\033[0;34m[${APP}] start ts-node\033[0;39m"
+	echo -e "\033[0;34m[${APP}] start node.js[ts-node]\033[0;39m"
 
 	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start_tsn'"
 	eval ${CMD}
 }
 
-# docker exec - start - ts-node-dev
+# docker exec - start - node.js[ts-node-dev]
 function exec_start_tsndev() {
-	echo -e "\033[0;34m[${APP}] start ts-node-dev\033[0;39m"
+	echo -e "\033[0;34m[${APP}] start node.js[ts-node-dev]\033[0;39m"
 
 	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start_tsndev'"
+	eval ${CMD}
+}
+
+# docker exec - start - next.js
+function exec_start_next() {
+	echo -e "\033[0;34m[${APP}] start next.js\033[0;39m"
+
+	CMD="docker exec -it ${APP} /bin/bash -c '/usr/local/${APP}/docker/init.sh exec_start_next'"
 	eval ${CMD}
 }
 
@@ -156,6 +172,9 @@ elif [ "${1}" = "exec_start_tsn" ]; then
 
 elif [ "${1}" = "exec_start_tsndev" ]; then
 	npm_run_tsndev
+
+elif [ "${1}" = "exec_start_next" ]; then
+	npm_run_next
 
 else
 	stop
