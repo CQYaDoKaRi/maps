@@ -5,10 +5,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import yamljs from "yamljs";
 // api
-import { apiMapsDeg } from "./apiMapsDeg";
-import { apiMapsLatLon } from "./apiMapsLatLon";
-import { apiMapsDistance } from "./apiMapsDistance";
-import { apiMapsTile } from "./apiMapsTile";
+import { apiMaps } from "./apiMaps";
 import { apiView } from "./apiView";
 // api - mongoDB
 import { mongoCreate } from "./mongoCreate";
@@ -74,17 +71,8 @@ export class api {
 		}
 
 		// api - maps
-		const oApiMapsDeg: apiMapsDeg = new apiMapsDeg(this.uriMaps);
-		oApiMapsDeg.regist(router);
-
-		const oApiMapsLatLon: apiMapsLatLon = new apiMapsLatLon(this.uriMaps);
-		oApiMapsLatLon.regist(router);
-
-		const oApiMapsDistance: apiMapsDistance = new apiMapsDistance(this.uriMaps);
-		oApiMapsDistance.regist(router);
-
-		const oApiMapsTile: apiMapsTile = new apiMapsTile(this.uriMaps);
-		oApiMapsTile.regist(router);
+		const oApiMap: apiMaps = new apiMaps(this.uriMaps);
+		oApiMap.regist(router);
 
 		// api - view
 		const oApiView: apiView = new apiView(this.uri);

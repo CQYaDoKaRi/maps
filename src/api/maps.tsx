@@ -1,30 +1,64 @@
-import { maps, mapsLatLon } from "../ts/maps";
+import { maps, mapsLatLon, mapsTileUrl, mapsTile } from "../ts/maps";
 
 export type mapsApiDeg2NameData = {
 	status: boolean;
 	name: string;
 };
 
-type mapsApiLatLonData = {
+export type mapsApiLatLonData = {
 	status: boolean;
 	lat: number;
 	lon: number;
 };
 
-type mapsApiDistanceData = {
+export type mapsApiDistanceData = {
 	status: boolean;
 	distance: number;
 };
 
-type mapsApiDirectionData = {
+export type mapsApiDirectionData = {
 	status: boolean;
 	a: number;
 };
 
-type mapsApiDistanceToData = {
+export type mapsApiDistanceToData = {
 	status: boolean;
 	lat: number;
 	lon: number;
+};
+
+export type mapsApiTileData = {
+	status: boolean;
+	x: number;
+	y: number;
+	z: number;
+	px_x: number;
+	px_y: number;
+};
+
+export type mapsApiTileUrlData = {
+	status: boolean;
+	x: number;
+	y: number;
+	z: number;
+};
+
+export type mapsApiTileUrlInfoData = {
+	x: number;
+	y: number;
+	z: number;
+	ext: string;
+	url: string;
+};
+
+export type mapsApiTileUrlsData = {
+	status: boolean;
+	urls: mapsApiTileUrlInfoData[];
+};
+
+export type mapsApiTileScale = {
+	status: boolean;
+	scale: number;
 };
 
 /**
@@ -227,6 +261,206 @@ export const mapsApiDirection = (
 			const a: number = oMaps.direction(lat1, lon1, lat2, lon2);
 			data.status = true;
 			data.a = a;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * 緯度経度・ズームレベルからタイル座標を取得
+ * @param lat 十進緯度（世界測地系[GSR80]）
+ * @param lon 十進経度（世界測地系[GSR80]）
+ * @param z ズームレベル
+ * @returns JSON
+ */
+export const mapsApiTile = (
+	lat: number | undefined,
+	lon: number | undefined,
+	z: number | undefined
+): mapsApiTileData => {
+	const data: mapsApiTileData = {
+		status: false,
+		x: 0,
+		y: 0,
+		z: 0,
+		px_x: 0,
+		px_y: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (lat && lon && z) {
+		lat = +lat;
+		lon = +lon;
+		z = +z;
+		if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(z)) {
+			const tile: mapsTile = oMaps.tile(lat, lon, z);
+			data.status = true;
+			data.x = tile.x;
+			data.y = tile.y;
+			data.z = tile.z;
+			data.px_x = tile.px_x;
+			data.px_y = tile.px_y;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * タイル座標から緯度経度を取得
+ * @param x タイル座標X
+ * @param y タイル座標Y
+ * @param z ズームレベル
+ * @returns JSON
+ */
+export const mapsApiTile2latlon = (
+	x: number | undefined,
+	y: number | undefined,
+	z: number | undefined
+): mapsApiLatLonData => {
+	const data: mapsApiLatLonData = {
+		status: false,
+		lat: 0,
+		lon: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (x && y && z) {
+		x = +x;
+		y = +y;
+		z = +z;
+		if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
+			const pos: mapsLatLon = oMaps.tile2LatLon(x, y, z);
+			data.status = true;
+			data.lat = pos.lat;
+			data.lon = pos.lon;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * タイル座標のズームレベルから縮尺を取得
+ * @param lat 十進緯度（世界測地系[GSR80]）
+ * @param z ズームレベル
+ * @param dpi 解像度
+ * @returns JSON
+ */
+export const mapsApiTileScale = (
+	lat: number | undefined,
+	z: number | undefined,
+	dpi: number | undefined
+): mapsApiTileScale => {
+	const data: mapsApiTileScale = {
+		status: false,
+		scale: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (lat && z && dpi) {
+		lat = +lat;
+		z = +z;
+		dpi = +dpi;
+		if (!Number.isNaN(lat) && !Number.isNaN(z) && !Number.isNaN(dpi)) {
+			const scale: number = oMaps.tileScale(z, lat, dpi);
+			data.status = true;
+			data.scale = scale;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * タイル座標のズームレベルを変更した場合のタイル座標を取得
+ * @param x タイル座標X
+ * @param y タイル座標Y
+ * @param z ズームレベル
+ * @param toz 変更するズームレベル
+ * @returns JSON
+ */
+export const mapsApiTile2z = (
+	x: number | undefined,
+	y: number | undefined,
+	z: number | undefined,
+	toz: number | undefined
+): mapsApiTileUrlData => {
+	const data: mapsApiTileUrlData = {
+		status: false,
+		x: 0,
+		y: 0,
+		z: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (x && y && z && toz) {
+		x = +x;
+		y = +y;
+		z = +z;
+		toz = +toz;
+		if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z) && !Number.isNaN(toz)) {
+			const tile: mapsTile = oMaps.tile2z(x, y, z, toz);
+			data.status = true;
+			data.x = tile.x;
+			data.y = tile.y;
+			data.z = tile.z;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * 標高タイルURLを取得
+ * @param type type png,txt
+ * @param x タイル座標X
+ * @param y タイル座標Y
+ * @param z ズームレベル
+ * @returns JSON
+ */
+export const mapApiTileDemUrl = (
+	type: string,
+	x: number | undefined,
+	y: number | undefined,
+	z: number | undefined
+): mapsApiTileUrlsData => {
+	const data: mapsApiTileUrlsData = {
+		status: false,
+		urls: [],
+	};
+
+	const oMaps: maps = new maps();
+
+	if (x && y && z) {
+		x = +x;
+		y = +y;
+		z = +z;
+		if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
+			let tileUrls: mapsTileUrl[] = [];
+			if (type === "png") {
+				tileUrls = oMaps.tileDemUrlPng(x, y, z);
+			} else {
+				tileUrls = oMaps.tileDemUrlTxt(x, y, z);
+			}
+
+			tileUrls.map((tileUrl: mapsTileUrl) => {
+				if (tileUrl.tile) {
+					data.status = true;
+					data.urls.push({
+						x: tileUrl.tile.x,
+						y: tileUrl.tile.y,
+						z: tileUrl.tile.z,
+						ext: tileUrl.ext,
+						url: tileUrl.url,
+					});
+				}
+			});
 		}
 	}
 
