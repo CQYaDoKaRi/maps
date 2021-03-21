@@ -5,7 +5,7 @@ import { page } from "./page";
 // api
 import { api } from "./api";
 // log
-import { log } from "./log";
+import { log } from "../ts/log";
 const syslog: log = new log("maps");
 
 // express

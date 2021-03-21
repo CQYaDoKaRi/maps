@@ -1,10 +1,10 @@
 import fs from "fs";
 import chalk from "chalk";
-import { mongo } from "./mongo";
+import { mapsMongo } from "../ts/mapsMongo";
 import { Collection } from "mongodb";
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
 
-import { log } from "./log";
+import { log } from "../ts/log";
 const syslog: log = new log("maps.mongo");
 
 interface geojson {
@@ -18,17 +18,16 @@ interface geojsonFeatures {
 	geometry: any;
 }
 
-export class mongoCreate extends mongo {
+export class mongoCreate extends mapsMongo {
 	private pathGeoJSON = "./public/data/";
 
 	/**
 	 * コンストラクター
-	 * @param uri API URI
 	 * @param host ホスト名
 	 * @param port ポート番号
 	 */
-	constructor(uri: string, host: string, port: number) {
-		super(uri, host, port);
+	constructor(host: string, port: number) {
+		super(host, port);
 	}
 
 	/**

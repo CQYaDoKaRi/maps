@@ -5,16 +5,15 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import yamljs from "yamljs";
 // api
+import { apiMongoHost, apiMongoPort } from "../api/config";
 import { apiMaps } from "./apiMaps";
 import { apiView } from "./apiView";
 // api - mongoDB
 import { mongoCreate } from "./mongoCreate";
-import { mongoApi } from "./mongoApi";
+import { apiMapsMongo } from "./apiMapsMongo";
 export class api {
 	private uri = "";
 	private uriMaps = "";
-	private mongoHost = "mongo";
-	private mongoPort = 8517;
 
 	/**
 	 * コンストラクター
@@ -62,12 +61,12 @@ export class api {
 		// MongoDB
 		if (hostname === "maps") {
 			// - Create
-			const oMongoCreate: mongoCreate = new mongoCreate(this.uriMaps, this.mongoHost, this.mongoPort);
+			const oMongoCreate: mongoCreate = new mongoCreate(apiMongoHost, apiMongoPort);
 			void oMongoCreate.collections();
 
 			// - api
-			const oMongoApi: mongoApi = new mongoApi(this.uriMaps, this.mongoHost, this.mongoPort);
-			void oMongoApi.regist(router);
+			const oApiMapsMongo: apiMapsMongo = new apiMapsMongo(this.uriMaps, apiMongoHost, apiMongoPort);
+			void oApiMapsMongo.regist(router);
 		}
 
 		// api - maps
