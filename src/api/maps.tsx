@@ -5,6 +5,12 @@ export type mapsApiDeg2NameData = {
 	name: string;
 };
 
+type mapsApiLatLonData = {
+	status: boolean;
+	lat: number;
+	lon: number;
+};
+
 type mapsApiDistanceData = {
 	status: boolean;
 	distance: number;
@@ -43,6 +49,64 @@ export const mapsApiDeg2Name = (deg: number | undefined): mapsApiDeg2NameData =>
 	}
 
 	return ret;
+};
+
+/**
+ * 日本測地系を世界測地系に変換（1次式）
+ * @param lat 十進緯度（世界測地系[GSR80]）
+ * @param lon 十進経度（世界測地系[GSR80]）
+ * @returns JSON
+ */
+export const mapsApiTky2jgdG = (lat: number | undefined, lon: number | undefined): mapsApiLatLonData => {
+	const data: mapsApiLatLonData = {
+		status: false,
+		lat: 0,
+		lon: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (lat && lon) {
+		lat = +lat;
+		lon = +lon;
+		if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
+			const pos: mapsLatLon = oMaps.tky2jgdG(lat, lon);
+			data.status = true;
+			data.lat = pos.lat;
+			data.lon = pos.lon;
+		}
+	}
+
+	return data;
+};
+
+/**
+ * 世界測地系を日本測地系に変換（1次式）
+ * @param lat 十進緯度（世界測地系[GSR80]）
+ * @param lon 十進経度（世界測地系[GSR80]）
+ * @returns JSON
+ */
+export const mapsApiJgd2tky2G = (lat: number | undefined, lon: number | undefined): mapsApiLatLonData => {
+	const data: mapsApiLatLonData = {
+		status: false,
+		lat: 0,
+		lon: 0,
+	};
+
+	const oMaps: maps = new maps();
+
+	if (lat && lon) {
+		lat = +lat;
+		lon = +lon;
+		if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
+			const pos: mapsLatLon = oMaps.jgd2tkyG(lat, lon);
+			data.status = true;
+			data.lat = pos.lat;
+			data.lon = pos.lon;
+		}
+	}
+
+	return data;
 };
 
 /**

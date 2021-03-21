@@ -1,12 +1,5 @@
 import express from "express";
-import { maps, mapsLatLon } from "../ts/maps";
-
-interface apiMapsLatLonData {
-	status: boolean;
-	lat: number;
-	lon: number;
-}
-
+import { mapsApiTky2jgdG, mapsApiJgd2tky2G } from "../api/maps";
 export class apiMapsLatLon {
 	private uri = "";
 
@@ -24,50 +17,14 @@ export class apiMapsLatLon {
 	 */
 	public regist(router: express.Router): void {
 		router.get(this.uri + "/tky2jgdg", (req: express.Request, res: express.Response) => {
-			const data: apiMapsLatLonData = {
-				status: false,
-				lat: 0,
-				lon: 0,
-			};
-
-			const oMaps: maps = new maps();
-
-			if (req.query.lat && req.query.lon) {
-				const lat: number = +req.query.lat;
-				const lon: number = +req.query.lon;
-				if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
-					const pos: mapsLatLon = oMaps.tky2jgdG(lat, lon);
-					data.status = true;
-					data.lat = pos.lat;
-					data.lon = pos.lon;
-				}
-			}
-
-			res.json(data);
+			res.json(mapsApiTky2jgdG(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined));
 			res.end();
 		});
 
 		router.get(this.uri + "/jgd2tkyg", (req: express.Request, res: express.Response) => {
-			const data: apiMapsLatLonData = {
-				status: false,
-				lat: 0,
-				lon: 0,
-			};
-
-			const oMaps: maps = new maps();
-
-			if (req.query.lat && req.query.lon) {
-				const lat: number = +req.query.lat;
-				const lon: number = +req.query.lon;
-				if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
-					const pos: mapsLatLon = oMaps.jgd2tkyG(lat, lon);
-					data.status = true;
-					data.lat = pos.lat;
-					data.lon = pos.lon;
-				}
-			}
-
-			res.json(data);
+			res.json(
+				mapsApiJgd2tky2G(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined)
+			);
 			res.end();
 		});
 	}
