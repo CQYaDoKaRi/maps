@@ -7,6 +7,11 @@ APPTAG="dev"
 # start
 # -------
 function start() {
+	if [ ! -d ../logs ];then
+		mkdir ../logs
+	fi
+	chmod 777 ../logs
+
 	echo -e "\033[0;34m[${APP}] start\033[0;39m"
 	docker-compose build
 	docker-compose up -d
