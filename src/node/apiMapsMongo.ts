@@ -1,26 +1,7 @@
 import express from "express";
-import { apiMapsMongoPointInPolygon } from "../api/mapsMongo";
-import { mapsMongo, mapsMongoPointInPolygonData, mapsMongoPointInPolygonErrorMessage } from "../ts/mapsMongo";
-import { Collection, MongoClient } from "mongodb";
-
-import { log } from "../ts/log";
-const syslog: log = new log("maps.mongo");
-
-interface mongoCollectionPrefcapital {
-	pref: string;
-	addr: string;
-	loc: number[];
-	distance: string;
-}
-
-interface apiResponsePrefcapitalNear {
-	pref: string;
-	addr: string;
-	lat: number;
-	lon: number;
-	distance: string;
-}
-
+import { syslogDir } from "./config";
+import { apiMapsMongoNear, apiMapsMongoPointInPolygon } from "../api/mapsMongo";
+import { mapsMongo, mapsMongoNearData, mapsMongoPointInPolygonData, mapsMongoErrorMessage } from "../ts/mapsMongo";
 export class apiMapsMongo extends mapsMongo {
 	private uri = "";
 	private host = "";
@@ -33,7 +14,7 @@ export class apiMapsMongo extends mapsMongo {
 	 * @param port ポート番号
 	 */
 	constructor(uri: string, host: string, port: number) {
-		super(host, port);
+		super(host, port, syslogDir);
 
 		this.uri = uri;
 		this.host = host;
@@ -47,18 +28,27 @@ export class apiMapsMongo extends mapsMongo {
 	public regist(router: express.Router): void {
 		// 指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得
 		router.get(this.uri + "/mongo/prefcapital/near", (req: express.Request, res: express.Response) => {
-			if (req.query.lat && req.query.lon && req.query.n) {
-				const lat: number = +req.query.lat;
-				const lon: number = +req.query.lon;
-				const n: number = +req.query.n;
-				if (!Number.isNaN(lat) && !Number.isNaN(lon) && !Number.isNaN(n)) {
-					void this.prefcapitalNear(lat, lon, n, res);
-					return;
-				}
+			if (
+				!apiMapsMongoNear(
+					this.host,
+					this.port,
+					syslogDir,
+					req.query.lat ? +req.query.lat : 0,
+					req.query.lon ? +req.query.lon : 0,
+					req.query.n ? +req.query.n : 0,
+					(r: mapsMongoNearData[]) => {
+						res.send(r);
+						res.end();
+					},
+					(e: mapsMongoErrorMessage) => {
+						res.status(400).send(e);
+						res.end();
+					}
+				)
+			) {
+				res.json({});
+				res.end();
 			}
-
-			res.json({});
-			res.end();
 		});
 
 		// 指定したポリゴンに含まれる郵便局を取得
@@ -74,6 +64,7 @@ export class apiMapsMongo extends mapsMongo {
 				!apiMapsMongoPointInPolygon(
 					this.host,
 					this.port,
+					syslogDir,
 					"PostOffice",
 					d_gtype,
 					d_gcoordinates,
@@ -82,7 +73,7 @@ export class apiMapsMongo extends mapsMongo {
 						res.send(r);
 						res.end();
 					},
-					(e: mapsMongoPointInPolygonErrorMessage) => {
+					(e: mapsMongoErrorMessage) => {
 						res.status(400).send(e);
 						res.end();
 					}
@@ -106,6 +97,7 @@ export class apiMapsMongo extends mapsMongo {
 				!apiMapsMongoPointInPolygon(
 					this.host,
 					this.port,
+					syslogDir,
 					"RoadsiteStation",
 					d_gtype,
 					d_gcoordinates,
@@ -114,7 +106,7 @@ export class apiMapsMongo extends mapsMongo {
 						res.send(r);
 						res.end();
 					},
-					(e: mapsMongoPointInPolygonErrorMessage) => {
+					(e: mapsMongoErrorMessage) => {
 						res.status(400).send(e);
 						res.end();
 					}
@@ -124,74 +116,5 @@ export class apiMapsMongo extends mapsMongo {
 				res.end();
 			}
 		});
-	}
-
-	/**
-	 * 指定した緯度経度に近い都道府県庁の緯度経度と距離（m）を取得
-	 * @param lat 緯度
-	 * @param lon 経度
-	 * @param n 取得件数0 = 全件, 1 <= n <= 100
-	 * @param res レスポンス
-	 */
-	public async prefcapitalNear(lat: number, lon: number, n: number, res: express.Response): Promise<void> {
-		// 接続
-		const collection: Collection | null = await this.connectPrefCapital();
-		if (!collection) {
-			return;
-		}
-
-		let client: MongoClient | null = this.client;
-		try {
-			await collection
-				.aggregate([
-					{
-						$geoNear: {
-							near: {
-								type: "Point",
-								coordinates: [lon, lat],
-							},
-							distanceField: "distance",
-							spherical: true,
-						},
-					},
-					{
-						$limit: this.paramN(n, 100),
-					},
-				])
-				.toArray()
-				.then((data: mongoCollectionPrefcapital[]) => {
-					const r: apiResponsePrefcapitalNear[] = data.map(
-						(v: mongoCollectionPrefcapital): apiResponsePrefcapitalNear => {
-							return {
-								// 都道府県名
-								pref: v.pref,
-								// 住所
-								addr: v.addr,
-								// 緯度
-								lat: v.loc[1],
-								// 経度
-								lon: v.loc[0],
-								// m
-								distance: v.distance,
-							};
-						}
-					);
-					res.json(r);
-					res.end();
-
-					if (client) {
-						void client.close();
-						client = null;
-					}
-				});
-		} catch (e) {
-			syslog.error(e);
-			res.status(400).send({ message: "param error" });
-			res.end();
-		} finally {
-			if (client) {
-				void client.close();
-			}
-		}
 	}
 }

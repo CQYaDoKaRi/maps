@@ -1,41 +1,93 @@
 import { MongoClient, MongoClientOptions, Db, Collection } from "mongodb";
 import { log } from "./log";
-export const mapsMongoSyslog: log = new log("maps.mongo");
 
-export type mapsMongoPointInPolygonData = {
-	name: string;
-	lat: number;
-	lon: number;
+// 定義：Collection：PrefCapita
+type mapsMongoCollectionPrefcapital = {
+	pref: string;
+	addr: string;
+	loc: number[];
+	distance: string;
 };
 
-export type mapsMongoPointInPolygonSuccess = {
-	(r: mapsMongoPointInPolygonData[]): void;
+// 定義：エラー
+export type mapsMongoError = {
+	(argv: mapsMongoErrorMessage): void;
 };
 
-export type mapsMongoPointInPolygonError = {
-	(argv: mapsMongoPointInPolygonErrorMessage): void;
-};
-
-export type mapsMongoPointInPolygonErrorMessage = {
+// 定義：エラー：メッセージ
+export type mapsMongoErrorMessage = {
 	message: string;
 };
 
+// 定義：Near：Data
+export type mapsMongoNearData = {
+	// 都道府県名
+	pref: string;
+	// 住所
+	addr: string;
+	// 緯度
+	lat: number;
+	// 経度
+	lon: number;
+	// 距離[m]
+	distance: string;
+};
+
+// 定義：Near：リクエスト成功結果
+export type mapsMongoNearSuccess = {
+	(r: mapsMongoNearData[]): void;
+};
+
+// 定義：PointInPolygon：Data
+export type mapsMongoPointInPolygonData = {
+	// ポリゴンタイトル
+	name: string;
+	// 緯度
+	lat: number;
+	// 経度
+	lon: number;
+};
+
+// 定義：PointInPolygon：リクエスト成功結果
+export type mapsMongoPointInPolygonSuccess = {
+	(r: mapsMongoPointInPolygonData[]): void;
+};
 export class mapsMongo {
 	private dbName = "maps";
 	private dbURL = "";
 	public client: MongoClient | null = null;
 	private clientOptions: MongoClientOptions = {};
+	private syslog: log;
 
 	/**
 	 * コンストラクター
 	 * @param host ホスト名
 	 * @param port ポート番号
+	 * @param dirLogs ログフォルダー
 	 */
-	constructor(host: string, port: number) {
+	constructor(host: string, port: number, dirLogs: string) {
 		this.dbURL = `mongodb://${host}:${port}`;
 
 		this.clientOptions.useNewUrlParser = true;
 		this.clientOptions.useUnifiedTopology = true;
+
+		this.syslog = new log(dirLogs);
+	}
+
+	/**
+	 * ログ：情報
+	 * @param message メッセージ
+	 */
+	public logInfo(message: string): void {
+		this.syslog.info(message);
+	}
+
+	/**
+	 * ログ：エラー
+	 * @param message メッセージ
+	 */
+	public logError(message: string): void {
+		this.syslog.error(message);
 	}
 
 	/**
@@ -122,6 +174,74 @@ export class mapsMongo {
 	}
 
 	/**
+	 * 指定した緯度経度に近いポイントの緯度経度と距離（m）を取得
+	 * @param lat 緯度
+	 * @param lon 経度
+	 * @param n 取得件数0 = 全件, 1 <= n <= 100
+	 * @param resSucces レスポンス（成功）
+	 * @param resError レスポンス（失敗）
+	 */
+	public async near(
+		lat: number,
+		lon: number,
+		n: number,
+		resSucces: mapsMongoNearSuccess,
+		resError: mapsMongoError
+	): Promise<void> {
+		const collection: Collection | null = await this.connectPrefCapital();
+		if (!collection) {
+			return;
+		}
+
+		let client: MongoClient | null = this.client;
+		try {
+			await collection
+				.aggregate([
+					{
+						$geoNear: {
+							near: {
+								type: "Point",
+								coordinates: [lon, lat],
+							},
+							distanceField: "distance",
+							spherical: true,
+						},
+					},
+					{
+						$limit: this.paramN(n, 100),
+					},
+				])
+				.toArray()
+				.then((data: mapsMongoCollectionPrefcapital[]) => {
+					const r: mapsMongoNearData[] = data.map(
+						(v: mapsMongoCollectionPrefcapital): mapsMongoNearData => {
+							return {
+								pref: v.pref,
+								addr: v.addr,
+								lat: v.loc[1],
+								lon: v.loc[0],
+								distance: v.distance,
+							};
+						}
+					);
+					resSucces(r);
+
+					if (client) {
+						void client.close();
+						client = null;
+					}
+				});
+		} catch (e) {
+			this.logError(e);
+			resError({ message: "param[coordinates] error" });
+		} finally {
+			if (client) {
+				void client.close();
+			}
+		}
+	}
+
+	/**
 	 * ポリゴンに含まれるポイントを取得
 	 * @param type 検索対象[PostOffice, RoadsiteStation]
 	 * @param gtype タイプ[Polygon, MultiPolygon]
@@ -136,9 +256,8 @@ export class mapsMongo {
 		gcoordinates: [],
 		n: number,
 		resSucces: mapsMongoPointInPolygonSuccess,
-		resError: mapsMongoPointInPolygonError
+		resError: mapsMongoError
 	): Promise<void> {
-		// 接続
 		let collection: Collection | null = null;
 		if (type == "PostOffice") {
 			collection = await this.connectPostOffice();
@@ -217,7 +336,7 @@ export class mapsMongo {
 					}
 				);
 		} catch (e) {
-			mapsMongoSyslog.error(e);
+			this.logError(e);
 			resError({ message: "param[coordinates] error" });
 		} finally {
 			if (client) {
