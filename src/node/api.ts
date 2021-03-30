@@ -9,7 +9,6 @@ import { apiMongoHost, apiMongoPort } from "../api/config";
 import { apiMaps } from "./apiMaps";
 import { apiView } from "./apiView";
 // api - mongoDB
-import { mongoCreate } from "./mongoCreate";
 import { apiMapsMongo } from "./apiMapsMongo";
 export class api {
 	private uri = "";
@@ -60,11 +59,7 @@ export class api {
 
 		// MongoDB
 		if (hostname === "maps") {
-			// - Create
-			const oMongoCreate: mongoCreate = new mongoCreate(apiMongoHost, apiMongoPort);
-			void oMongoCreate.collections();
-
-			// - api
+			// api
 			const oApiMapsMongo: apiMapsMongo = new apiMapsMongo(this.uriMaps, apiMongoHost, apiMongoPort);
 			void oApiMapsMongo.regist(router);
 		}

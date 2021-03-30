@@ -1,7 +1,8 @@
 import express from "express";
+import { mapsMongo, mapsMongoNearData, mapsMongoPointInPolygonData, mapsMongoErrorMessage } from "../ts/mapsMongo";
 import { syslogDir } from "./config";
 import { apiMapsMongoNear, apiMapsMongoPointInPolygon } from "../api/mapsMongo";
-import { mapsMongo, mapsMongoNearData, mapsMongoPointInPolygonData, mapsMongoErrorMessage } from "../ts/mapsMongo";
+import { apiMapsMongoCreate } from "../api/mapsMongoCreate";
 export class apiMapsMongo extends mapsMongo {
 	private uri = "";
 	private host = "";
@@ -19,6 +20,10 @@ export class apiMapsMongo extends mapsMongo {
 		this.uri = uri;
 		this.host = host;
 		this.port = port;
+
+		// Create
+		const oMongoCreate: apiMapsMongoCreate = new apiMapsMongoCreate(host, port, syslogDir);
+		void oMongoCreate.collections();
 	}
 
 	/**

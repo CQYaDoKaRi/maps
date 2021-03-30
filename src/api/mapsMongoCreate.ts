@@ -1,9 +1,9 @@
 import fs from "fs";
 import chalk from "chalk";
-import { syslogDir } from "./config";
-import { mapsMongo } from "../ts/mapsMongo";
 import { Collection } from "mongodb";
+import { mapsMongo } from "../ts/mapsMongo";
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
+
 interface geojson {
 	features: geojsonFeatures[];
 }
@@ -15,16 +15,17 @@ interface geojsonFeatures {
 	geometry: any;
 }
 
-export class mongoCreate extends mapsMongo {
+export class apiMapsMongoCreate extends mapsMongo {
 	private pathGeoJSON = "./public/data/";
 
 	/**
 	 * コンストラクター
 	 * @param host ホスト名
 	 * @param port ポート番号
+	 * @param logDir ログフォルダー
 	 */
-	constructor(host: string, port: number) {
-		super(host, port, syslogDir);
+	constructor(host: string, port: number, logDir: string) {
+		super(host, port, logDir);
 	}
 
 	/**
