@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { mapsMongoPointInPolygonData, mapsMongoErrorMessage } from "../../../../../ts/mapsMongo";
 import { apiMongoHost, apiMongoPort } from "../../../../../api/config";
+import { apiLogDir } from "../../../../../api/config.next";
 import { apiMapsMongoPointInPolygon } from "../../../../../api/mapsMongo";
 
 /**
@@ -18,7 +19,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
 		!apiMapsMongoPointInPolygon(
 			apiMongoHost,
 			apiMongoPort,
-			`${process.cwd()}/logs`,
+			apiLogDir,
 			"RoadsiteStation",
 			d_gtype,
 			d_gcoordinates,

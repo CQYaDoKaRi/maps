@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { mapsMongoNearData, mapsMongoErrorMessage } from "../../../../../ts/mapsMongo";
 import { apiMongoHost, apiMongoPort } from "../../../../../api/config";
+import { apiLogDir } from "../../../../../api/config.next";
 import { apiMapsMongoNear } from "../../../../../api/mapsMongo";
 
 /**
@@ -11,7 +12,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
 		!apiMapsMongoNear(
 			apiMongoHost,
 			apiMongoPort,
-			`${process.cwd()}/logs`,
+			apiLogDir,
 			req.query.lat ? +req.query.lat : 0,
 			req.query.lon ? +req.query.lon : 0,
 			req.query.n ? +req.query.n : 0,
