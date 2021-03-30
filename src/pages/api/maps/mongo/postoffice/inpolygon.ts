@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mapsMongoPointInPolygonData, mapsMongoPointInPolygonErrorMessage } from "../../../../../ts/mapsMongo";
+import { mapsMongoPointInPolygonData, mapsMongoErrorMessage } from "../../../../../ts/mapsMongo";
 import { apiMongoHost, apiMongoPort } from "../../../../../api/config";
 import { apiMapsMongoPointInPolygon } from "../../../../../api/mapsMongo";
 
@@ -18,6 +18,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
 		!apiMapsMongoPointInPolygon(
 			apiMongoHost,
 			apiMongoPort,
+			`${process.cwd()}/logs`,
 			"PostOffice",
 			d_gtype,
 			d_gcoordinates,
@@ -27,7 +28,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
 				res.send(r);
 				res.end();
 			},
-			(e: mapsMongoPointInPolygonErrorMessage) => {
+			(e: mapsMongoErrorMessage) => {
 				res.status(400).send(e);
 				res.end();
 			}
