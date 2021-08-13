@@ -120,7 +120,7 @@ export const apiMapsTky2jgdG = (lat: number | undefined, lon: number | undefined
  * @param lon 十進経度（世界測地系[GSR80]）
  * @returns JSON
  */
-export const apiMapsJgd2tky2G = (lat: number | undefined, lon: number | undefined): apiMapsLatLonData => {
+export const apiMapsJgd2tkyG = (lat: number | undefined, lon: number | undefined): apiMapsLatLonData => {
 	const data: apiMapsLatLonData = {
 		status: false,
 		lat: 0,
