@@ -25,3 +25,8 @@ npm install
 ```
 ./init test
  ```
+
+ # AWS ECR へ push
+```
+./init ecr
+```

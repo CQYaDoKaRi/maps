@@ -3,18 +3,33 @@ DIR=$(cd $(dirname $0); pwd)
 APP="maps-aws-lambda"
 APPTAG="dev"
 
+AWS_ACCOUNT_ID="360733559741"
+AWS_REGION="ap-northeast-1"
+AWS_ECR_REP="maps.lambda"
+
+if [ -e "${DIR}/init.env.sh" ]; then
+	source ${DIR}/init.env.sh
+fi
+
 # -------
 # start
 # -------
 function start() {
-	cp ../../dist/node/ts/maps.js ./src/maps.js
 
 	echo -e "\033[0;34m[${APP}] start\033[0;39m"
-	docker-compose build
+	build
 	docker-compose up -d
 	docker ps
 
 	#docker image history ${APP}:${APPTAG}
+}
+
+function build() {
+	down
+
+	cp ../../dist/node/ts/maps.js ./src/maps.js
+
+	docker-compose build
 }
 
 # -------
@@ -27,19 +42,54 @@ function stop() {
 
 	# down
 	echo -e "\033[0;34m[${APP}] stop ...\033[0;39m"
-	docker-compose down --rmi all --volumes
+	down
 	echo -e "\033[0;34m[${APP}] stop ... completed\033[0;39m"
+}
+
+function down() {
+	docker-compose down --rmi all --volumes &> /dev/null
 }
 
 # -------
 # test
-# ------
+# -------
 function test() {
 	FILES="./test/*.json"
 	for JSON in ${FILES}; do
 		curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" -d $(printf '%s' $(cat ${JSON}))
 		echo ""
 	done
+}
+
+# -------
+# ECR
+# -------
+function ecr() {
+	if [ -z "${AWS_ACCOUNT_ID}" ]; then
+		echo -e "\033[0;34m[${APP}] set variable [AWS_ACCOUNT_ID]\033[0;39m"
+		exit
+	fi
+
+	# build
+	build
+
+	# create an ECR repository
+	aws ecr describe-repositories --repository-names ${AWS_ECR_REP} --region ${AWS_REGION} &> /dev/null
+	if [ ${?} -ne 0 ]; then
+		aws ecr create-repository --repository-name ${AWS_ECR_REP} --region ${AWS_REGION}
+	fi
+	
+	# sign in to AWS
+	aws ecr get-login-password | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com
+
+	# tag the image
+	docker tag ${APP}:${APPTAG} "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com/"${AWS_ECR_REP}":latest
+
+	# push the image to ECR
+	docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com/"${AWS_ECR_REP}":latest
+
+	# clean the image
+	docker rmi "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com/"${AWS_ECR_REP}":latest
 }
 
 # -------
@@ -62,6 +112,9 @@ elif [ "${1}" = "exec" ]; then
 
 elif [ "${1}" = "test" ]; then
 	test
+
+elif [ "${1}" = "ecr" ]; then
+	ecr
 
 else
 	stop
