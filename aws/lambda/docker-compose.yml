@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  maps-aws-lambda:
+    image: maps-aws-lambda:dev
+    container_name: maps-aws-lambda
+    hostname: maps-aws-lambda
+    build: .
+    ports:
+      - 9001:8080
+    tty: true
+    working_dir: /var/task/
