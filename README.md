@@ -104,23 +104,29 @@ build.sh dev
 		```
 
 # 起動
-docker コンテナで Node.js、MongoDB, Mongo Express, Redis を起動します  
-- 本番モード（pm2）  
-	```
-	./start.sh
-	```
+- docker コンテナで Next.js, Node.js, MongoDB, Mongo Express, Redis を起動します  
+	- Next.js  
+		```
+		./start.sh next
+		```
 
-- 開発モード（ts-node）  
-	```
-	./start.sh tsn
-	```
+	- Node.js[PM2]：本番モード  
+		```
+		./start.sh
+		```
 
-- 開発モード（ts-node-dev)  
-	```
-	./start.sh tsndev
-	```
+	- Node.js[ts-node]：開発モード  
+		```
+		./start.sh tsn
+		```
 
-- Node.js のみ起動  
+	- Node.js[ts-node-dev]：開発モード  
+		```
+		./start.sh tsndev
+		```
+
+
+- Node.js の起動
 	docker コンテナを使わない＝ docker コンテナが停止している状態で動作します  
 	Node.js の実行するホスト名が docker コンテナのホスト名 [maps] でない場合、  
 	docker コンテナにより動作する MongoDB に関係する処理のみ機能させずに起動します  
@@ -141,7 +147,12 @@ docker コンテナで Node.js、MongoDB, Mongo Express, Redis を起動しま�
 		node dist/node/node/index.js
 		```
 
-- PM2 により Node.js 制御  
+- Next.js の起動  
+	```
+	npm run next
+	```
+
+- Node.js の起動と制御[PM2]
 	- 起動  
 		```
 		npm run prod_start
@@ -161,12 +172,6 @@ docker コンテナで Node.js、MongoDB, Mongo Express, Redis を起動しま�
 		```
 		npm run prod_delete
 		```
-
-
-- Next.js の起動  
-	```
-	npm run next
-	```
 
 - [docker コンテナ操作スクリプトの説明](./docker/README.md)
 

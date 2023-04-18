@@ -5,10 +5,13 @@ services:
     image: maps:dev
     container_name: maps
     hostname: maps
-    build: .
+    build:
+      context: .
+      dockerfile: node/Dockerfile
     restart: always
     ports:
       - 8080:8080
+      - 3000:3000
     volumes:
       - maps_data:/usr/local/maps
     tty: true
@@ -24,7 +27,7 @@ services:
     hostname: maps_mongo
     build:
       context: .
-      dockerfile: Dockerfile_mongo
+      dockerfile: mongo/Dockerfile
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: maps
@@ -43,7 +46,7 @@ services:
     hostname: maps_mongo_express
     build:
       context: .
-      dockerfile: Dockerfile_mongo_express
+      dockerfile: mongoExpress/Dockerfile
     restart: always
     ports:
       - 8581:8081
@@ -67,7 +70,7 @@ services:
     hostname: maps_redis
     build:
       context: .
-      dockerfile: Dockerfile_redis
+      dockerfile: redis/Dockerfile
     restart: always
     ports:
       - 8379:6379

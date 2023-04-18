@@ -11,7 +11,7 @@
 		"tsc_build_w": "tsc -w",
 		"formatter": "prettier --write '*/**'",
 		"linter": "eslint --fix src/**/*.{js,ts,jsx,tsx}",
-		"check": "eslint --fix src/**/*.{js,ts,jsx,tsx} && prettier --write '*/**'",
+		"check": "eslint --fix src/**/*.{js,ts,jsx,tsx} && prettier --write '*/**.{js,ts,jsx,tsx}'",
 		"gulp": "gulp",
 		"build": "gulp build",
 		"watch": "gulp watch",
@@ -35,7 +35,7 @@
 			"eslint --fix --max-warnings=0",
 			"git add"
 		],
-		"*/**": [
+		"*/**.{js,ts,jsx,tsx}": [
 			"prettier --write",
 			"git add"
 		]
@@ -94,13 +94,17 @@
 		"gulp-uglify": "^3.0.2",
 		"husky": "^5.1.3",
 		"jest": "^26.6.3",
+		"jquery": "^1.9.1",
 		"leaflet": "^1.7.1",
 		"leaflet.awesome-markers": "^2.0.5",
 		"lint-staged": "^10.5.4",
 		"log4js": "^6.3.0",
 		"mongodb": "^3.6.3",
 		"next": "^10.0.8",
+		"node-sass": "^4.14.1",
 		"pm2": "^4.5.5",
+		"popper.js": "^1.16.1",
+		"postcss": "^8.2.9",
 		"prettier": "^2.2.1",
 		"react": "^17.0.1",
 		"react-bootstrap": "^1.5.0",

@@ -1,11 +1,8 @@
 import fs from "fs";
 import chalk from "chalk";
-import { mongo } from "./mongo";
 import { Collection } from "mongodb";
+import { mapsMongo } from "../ts/mapsMongo";
 import { mapsDataPrefCapital, mapsDataPrefCapitalItem } from "../ts/mapsDataPrefCapital";
-
-import { log } from "./log";
-const syslog: log = new log("maps.mongo");
 
 interface geojson {
 	features: geojsonFeatures[];
@@ -18,17 +15,17 @@ interface geojsonFeatures {
 	geometry: any;
 }
 
-export class mongoCreate extends mongo {
+export class apiMapsMongoCreate extends mapsMongo {
 	private pathGeoJSON = "./public/data/";
 
 	/**
 	 * コンストラクター
-	 * @param uri API URI
 	 * @param host ホスト名
 	 * @param port ポート番号
+	 * @param logDir ログフォルダー
 	 */
-	constructor(uri: string, host: string, port: number) {
-		super(uri, host, port);
+	constructor(host: string, port: number, logDir: string) {
+		super(host, port, logDir);
 	}
 
 	/**
@@ -62,7 +59,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue("MongoDB > create - pref ..."));
+			this.logInfo(chalk.blue("MongoDB > create - pref ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -79,14 +76,14 @@ export class mongoCreate extends mongo {
 							loc: item.geometry,
 						});
 					} catch (e) {
-						syslog.error(e);
+						this.logError(e);
 					}
 				})
 			);
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			syslog.info(chalk.blue("MongoDB > create - pref ... completed"));
+			this.logInfo(chalk.blue("MongoDB > create - pref ... completed"));
 		} finally {
 			if (this.client) {
 				void this.client.close();
@@ -113,7 +110,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue("MongoDB > create - prefCapital ..."));
+			this.logInfo(chalk.blue("MongoDB > create - prefCapital ..."));
 			// - データ：都道府県庁
 			const oMapsDataPrefCapital: mapsDataPrefCapital = new mapsDataPrefCapital();
 			const dMapsDataPrefCapital: mapsDataPrefCapitalItem[] = oMapsDataPrefCapital.get();
@@ -127,7 +124,7 @@ export class mongoCreate extends mongo {
 							loc: [item.lon, item.lat],
 						});
 					} catch (e) {
-						syslog.error(e);
+						this.logError(e);
 					}
 				})
 			);
@@ -136,7 +133,7 @@ export class mongoCreate extends mongo {
 			await collection.createIndex({
 				loc: "2dsphere",
 			});
-			syslog.info(chalk.blue("MongoDB > create - prefCapital ... completed"));
+			this.logInfo(chalk.blue("MongoDB > create - prefCapital ... completed"));
 		} finally {
 			if (this.client) {
 				void this.client.close();
@@ -163,7 +160,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue("MongoDB > create - prefCity ..."));
+			this.logInfo(chalk.blue("MongoDB > create - prefCity ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -180,14 +177,14 @@ export class mongoCreate extends mongo {
 							loc: item.geometry,
 						});
 					} catch (e) {
-						syslog.error(e);
+						this.logError(e);
 					}
 				})
 			);
 
 			// インデックス
 			// - Polygon へのインデックスは [Duplicate vertices] になるため作成しない
-			syslog.info(chalk.blue("MongoDB > create - prefCity ... completed"));
+			this.logInfo(chalk.blue("MongoDB > create - prefCity ... completed"));
 		} finally {
 			if (this.client) {
 				void this.client.close();
@@ -214,7 +211,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue("MongoDB > create - postOffice ..."));
+			this.logInfo(chalk.blue("MongoDB > create - postOffice ..."));
 
 			// - データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -231,7 +228,7 @@ export class mongoCreate extends mongo {
 							loc: item.geometry,
 						});
 					} catch (e) {
-						syslog.error(e);
+						this.logError(e);
 					}
 				})
 			);
@@ -240,7 +237,7 @@ export class mongoCreate extends mongo {
 			await collection.createIndex({
 				loc: "2dsphere",
 			});
-			syslog.info(chalk.blue("MongoDB > create - postOffice ... completed"));
+			this.logInfo(chalk.blue("MongoDB > create - postOffice ... completed"));
 		} finally {
 			if (this.client) {
 				void this.client.close();
@@ -267,7 +264,7 @@ export class mongoCreate extends mongo {
 			}
 
 			// 件数がない場合：データを挿入
-			syslog.info(chalk.blue("MongoDB > create - roadsiteStation ..."));
+			this.logInfo(chalk.blue("MongoDB > create - roadsiteStation ..."));
 
 			// - 地図：データ
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -284,7 +281,7 @@ export class mongoCreate extends mongo {
 							loc: item.geometry,
 						});
 					} catch (e) {
-						syslog.error(e);
+						this.logError(e);
 					}
 				})
 			);
@@ -293,7 +290,7 @@ export class mongoCreate extends mongo {
 			await collection.createIndex({
 				loc: "2dsphere",
 			});
-			syslog.info(chalk.blue("MongoDB > create - roadsiteStation ... completed"));
+			this.logInfo(chalk.blue("MongoDB > create - roadsiteStation ... completed"));
 		} finally {
 			if (this.client) {
 				void this.client.close();

@@ -1,4 +1,3 @@
-import path from "path";
 import log4js from "log4js";
 
 export class log {
@@ -6,9 +5,10 @@ export class log {
 
 	/**
 	 * コンストラクター
+	 * @dir ログフォルダー
 	 * @param name ログファイル名
 	 */
-	constructor(name: string) {
+	constructor(dir: string) {
 		log4js.configure({
 			appenders: {
 				console: {
@@ -21,7 +21,7 @@ export class log {
 				},
 				system: {
 					type: "file",
-					filename: path.join(__dirname, `./../../logs/${name}.log`),
+					filename: `${dir}/maps.log`,
 					layout: {
 						type: "pattern",
 						pattern: "[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %m",
