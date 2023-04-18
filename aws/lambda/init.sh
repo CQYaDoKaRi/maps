@@ -40,8 +40,7 @@ function stop() {
 	#docker rm ${APP}
 	#docker rmi ${APP}:${APPTAG}
 
-	# down
-	echo -e "\033[0;34m[${APP}] stop ...\033[0;39m"
+	# down	echo -e "\033[0;34m[${APP}] stop ...\033[0;39m"
 	down
 	echo -e "\033[0;34m[${APP}] stop ... completed\033[0;39m"
 }
@@ -92,6 +91,32 @@ function ecr() {
 	docker rmi "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com/"${AWS_ECR_REP}":latest
 }
 
+
+# -------
+# make for CodeCommit
+# -------
+function makeForCodeCommit() {
+	SRC="src.codecommit"
+	if [ ! -d ${SRC} ]; then
+		mkdir ${SRC}
+	fi
+
+	rm -Rf ${SRC}/src
+
+	# redme
+	cp  ReadMe-CodeCommit.md ${SRC}/ReadMe.md
+
+	# sources
+	cp Dockerfile ${SRC}/
+	cp package.json ${SRC}/
+	cp -pR src ${SRC}/
+
+	# aws codebuild
+	cp -pR buildspec.yml ${SRC}/
+
+	echo "make [${SRC}]"
+}
+
 # -------
 # exec
 # -------
@@ -115,6 +140,9 @@ elif [ "${1}" = "test" ]; then
 
 elif [ "${1}" = "ecr" ]; then
 	ecr
+
+elif [ "${1}" = "make" ]; then
+	makeForCodeCommit
 
 else
 	stop

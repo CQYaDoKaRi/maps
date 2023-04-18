@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      # env
+      - APP="maps.lambda"
+      - APPTAG=$(date "+%Y%m%d%H%M%S")
+      - ECR=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REP}
+      # ecr:login
+      - aws ecr get-login-password | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com
+  build:
+    commands:
+      # build
+      - docker build -t ${APP}:${APPTAG} .
+      - docker tag ${APP}:${APPTAG} ${ECR}
+  post_build:
+    commands:
+      # ecr:push
+      - echo "docker push ${ECR}"
+      - docker push ${ECR}
+      # deploy
+      - aws lambda update-function-code --function-name ${AWS_LAMBDA} --image-uri ${ECR}
