@@ -2,7 +2,7 @@ import express from "express";
 import {
 	apiMapsDeg2Name,
 	apiMapsTky2jgdG,
-	apiMapsJgd2tky2G,
+	apiMapsJgd2tkyG,
 	apiMapsDistance,
 	apiMapsDistanceTo,
 	apiMapsDirection,
@@ -42,9 +42,7 @@ export class apiMaps {
 
 		// 世界測地系を日本測地系に変換（1次式）
 		router.get(this.uri + "/jgd2tkyg", (req: express.Request, res: express.Response) => {
-			res.json(
-				apiMapsJgd2tky2G(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined)
-			);
+			res.json(apiMapsJgd2tkyG(req.query.lat ? +req.query.lat : undefined, req.query.lon ? +req.query.lon : undefined));
 			res.end();
 		});
 
